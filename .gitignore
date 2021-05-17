@@ -102,3 +102,19 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Additional ignores
+.idea
+public
+.DS_Store
+dump.rdb
+build
+test/coverage
+functional-output
+output
+_output
+.huskyrc
+logs.json
+logs*.json
+*.csv
+*.xlsx
