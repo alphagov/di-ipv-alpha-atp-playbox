@@ -1,0 +1,166 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "components/languageLink/macro.njk" import languageLink %}
+{% extends "common/layout/view.njk" %}
+{% set pageTitleName = 'pages.passport.start.title' | translate %}
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {% set errorList = errorList | lastErrors(["#dob","#issued","#expiry"]) %}
+            {% include "common/errorSummary/errorSummary.njk" %}
+            <h1 class="govuk-heading-xl">{{ 'pages.passport.start.header' | translate }}</h1>
+            <p>{{ 'pages.passport.start.info' | translate }}</p>
+            <form action="/passport" method="post" class="form">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+                {{ govukInput({
+                label: {
+                    html: 'pages.passport.start.number.label' | translate
+                },
+                id: "number",
+                name: "number",
+                value: number,
+                errorMessage: {
+                        text: errors['number'].text
+                    } if (errors['number'])
+                }) }}
+                {{ govukInput({
+                label: {
+                    html: 'pages.passport.start.surname.label' | translate
+                },
+                id: "surname",
+                name: "surname",
+                value: surname,
+                errorMessage: {
+                        text: errors['surname'].text
+                    } if (errors['surname'])
+                }) }}
+
+                {{ govukInput({
+                label: {
+                    html: 'pages.passport.start.givenNames.label' | translate
+                },
+                id: "givenNames",
+                name: "givenNames",
+                value: givenNames,
+                errorMessage: {
+                        text: errors['givenNames'].text
+                    } if (errors['givenNames'])
+                }) }}
+
+                {{ govukDateInput({
+                id: "dob",
+                namePrefix: "",
+                items: [
+                    {
+                        id:"dobDay",
+                        name:"dobDay", 
+                        label: "common.dateInput.day" | translate,
+                        classes: 'govuk-input--width-2 govuk-input--error' if (errors['dobDay'] or errors['dob']) else 'govuk-input--width-2',
+                        value: dobDay
+                    },
+                    {
+                        id:"dobMonth",
+                        name:"dobMonth", 
+                        label: "common.dateInput.month" | translate,
+                        classes: 'govuk-input--width-2 govuk-input--error' if (errors['dobMonth'] or errors['dob']) else 'govuk-input--width-2',
+                        value: dobMonth
+                    },
+                    {
+                        id:"dobYear",
+                        name:"dobYear", 
+                        label: "common.dateInput.year" | translate,
+                        classes: 'govuk-input--width-4 govuk-input--error' if (errors['dobYear'] or errors['dob']) else 'govuk-input--width-4',
+                        value: dobYear
+                    }
+                ],
+                fieldset: {
+                    legend: {
+                        text: "pages.passport.start.dob.label" | translate
+                    }
+                },
+                errorMessage: {
+                        text: errors['dobDay'].text or errors['dobMonth'].text or errors['dobYear'].text or errors['dob'].text
+                    } if (errors['dobDay'] or errors['dobMonth'] or errors['dobYear'] or errors['dob'])
+                }) }}   
+
+                {{ govukDateInput({
+                id: "issued",
+                namePrefix: "",
+                items: [
+                    {
+                        id:"issuedDay",
+                        name:"issuedDay", 
+                        label: "common.dateInput.day" | translate,
+                        classes: 'govuk-input--width-2 govuk-input--error' if (errors['issuedDay'] or errors['issued']) else 'govuk-input--width-2',
+                        value: issuedDay
+                    },
+                    {
+                        id:"issuedMonth",
+                        name:"issuedMonth", 
+                        label: "common.dateInput.month" | translate,
+                        classes: 'govuk-input--width-2 govuk-input--error' if (errors['issuedMonth'] or errors['issued']) else 'govuk-input--width-2',
+                        value: issuedMonth
+                    },
+                    {
+                        id:"issuedYear",
+                        name:"issuedYear", 
+                        label: "common.dateInput.year" | translate,
+                        classes: 'govuk-input--width-4 govuk-input--error' if (errors['issuedYear'] or errors['issued']) else 'govuk-input--width-4',
+                        value: issuedYear
+                    }
+                ],
+                fieldset: {
+                    legend: {
+                        text: "pages.passport.start.issued.label" | translate
+                    }
+                },
+                errorMessage: {
+                        text: errors['issuedDay'].text or errors['issuedMonth'].text or errors['issuedYear'].text or errors['issued'].text
+                    } if (errors['issuedDay'] or errors['issuedMonth'] or errors['issuedYear'] or errors['issued'])
+                }) }}  
+
+                {{ govukDateInput({
+                id: "expiry",
+                namePrefix: "",
+                items: [
+                    {
+                        id:"expiryDay",
+                        name:"expiryDay", 
+                        label: "common.dateInput.day" | translate,
+                        classes: 'govuk-input--width-2 govuk-input--error' if (errors['expiryDay'] or errors['expiry']) else 'govuk-input--width-2',
+                        value: expiryDay
+                    },
+                    {
+                        id:"expiryMonth",
+                        name:"expiryMonth", 
+                        label: "common.dateInput.month" | translate,
+                        classes: 'govuk-input--width-2 govuk-input--error' if (errors['expiryMonth'] or errors['expiry']) else 'govuk-input--width-2',
+                        value: expiryMonth
+                    },
+                    {
+                        id:"expiryYear",
+                        name:"expiryYear", 
+                        label: "common.dateInput.year" | translate,
+                        classes: 'govuk-input--width-4 govuk-input--error' if (errors['expiryYear'] or errors['expiry']) else 'govuk-input--width-4',
+                        value: expiryYear
+                    }
+                ],
+                fieldset: {
+                    legend: {
+                        text: "pages.passport.start.expiry.label" | translate
+                    }
+                },
+                errorMessage: {
+                        text: errors['expiryDay'].text or errors['expiryMonth'].text or errors['expiryYear'].text or errors['expiry'].text
+                    } if (errors['expiryDay'] or errors['expiryMonth'] or errors['expiryYear'] or errors['expiry'])
+                }) }}                             
+
+                {{ govukButton({
+                    text: "common.buttons.continue" | translate
+                }) }}
+            </form>
+        </div>
+    </div>
+{% endblock %}

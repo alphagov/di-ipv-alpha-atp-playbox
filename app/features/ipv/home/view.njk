@@ -1,0 +1,35 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "components/languageLink/macro.njk" import languageLink %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% extends "common/layout/view.njk" %}
+{% set pageTitleName = 'pages.start.title' | translate %}
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form action="/" method="post" class="form">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+                {{ govukTextarea({
+                    name: "jsonObj",
+                    id: "jsonObj",
+                    classes: "mono-space",
+                    rows: 20,
+                    value: jsonObj,
+                    label: {
+                        text: "Please supply the data in JSON format",
+                        classes: "govuk-label--l",
+                        isPageHeading: true
+                    },
+                    hint: {
+                        text: "Your data should include the object type, for example \"_type\": \"passport\" "
+                    },
+                    errorMessage: { text: errors['jsonObj'].text } if (errors['jsonObj'])
+                }) }}      
+                {{ govukButton({
+                    text: "common.buttons.continue" | translate
+                }) }}
+            </form>
+        </div>
+    </div>
+    
+{% endblock %}
