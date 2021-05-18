@@ -12,7 +12,7 @@
             {% include "common/errorSummary/errorSummary.njk" %}
             <h1 class="govuk-heading-xl">{{ 'pages.passport.start.header' | translate }}</h1>
             <p>{{ 'pages.passport.start.info' | translate }}</p>
-            <form action="/passport" method="post" class="form">
+            <form action="/passport" method="post" class="form" novalidate>
                 <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
                 {{ govukInput({
                 label: {

@@ -9,8 +9,8 @@ module.exports = {
     });
 
     Given("I am on the home page", async () => {
-      await I.amOnPage(`${testUrl}${pathName.public.HOME}`);
-      await I.runPa11yOn(`${testUrl}${pathName.public.HOME}`);
+      await I.amOnPage(`${testUrl}${pathName.public.JSON}`);
+      await I.runPa11yOn(`${testUrl}${pathName.public.JSON}`);
     });
 
     Then(/^I see "([^"]*)" in title$/, async (title: string) => {

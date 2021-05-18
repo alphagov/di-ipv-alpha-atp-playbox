@@ -1,0 +1,147 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "components/languageLink/macro.njk" import languageLink %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% extends "common/layout/view.njk" %}
+{% set pageTitleName = 'pages.ipv.info.title' | translate %}
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">{{ 'pages.ipv.info.header' | translate }}</h1>
+            <p>{{ 'pages.ipv.info.info' | translate }}</p>
+            <form action="/ipv/info" method="post" class="form" novalidate>
+                <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+                {{ govukInput({
+                label: {
+                    html: 'pages.passport.start.surname.label' | translate
+                },
+                classes: "govuk-!-width-two-thirds",
+                id: "surname",
+                name: "surname",
+                value: surname,
+                errorMessage: {
+                        text: errors['surname'].text
+                    } if (errors['surname'])
+                }) }}
+
+                {{ govukInput({
+                label: {
+                    html: 'pages.passport.start.givenNames.label' | translate
+                },
+                classes: "govuk-!-width-two-thirds",
+                id: "givenNames",
+                name: "givenNames",
+                value: givenNames,
+                errorMessage: {
+                        text: errors['givenNames'].text
+                    } if (errors['givenNames'])
+                }) }}
+
+                {{ govukDateInput({
+                id: "dob",
+                namePrefix: "",
+                items: [
+                    {
+                        id:"dobDay",
+                        name:"dobDay", 
+                        label: "common.dateInput.day" | translate,
+                        classes: 'govuk-input--width-2 govuk-input--error' if (errors['dobDay'] or errors['dob']) else 'govuk-input--width-2',
+                        value: dobDay
+                    },
+                    {
+                        id:"dobMonth",
+                        name:"dobMonth", 
+                        label: "common.dateInput.month" | translate,
+                        classes: 'govuk-input--width-2 govuk-input--error' if (errors['dobMonth'] or errors['dob']) else 'govuk-input--width-2',
+                        value: dobMonth
+                    },
+                    {
+                        id:"dobYear",
+                        name:"dobYear", 
+                        label: "common.dateInput.year" | translate,
+                        classes: 'govuk-input--width-4 govuk-input--error' if (errors['dobYear'] or errors['dob']) else 'govuk-input--width-4',
+                        value: dobYear
+                    }
+                ],
+                fieldset: {
+                    legend: {
+                        text: "pages.passport.start.dob.label" | translate
+                    }
+                },
+                errorMessage: {
+                        text: errors['dobDay'].text or errors['dobMonth'].text or errors['dobYear'].text or errors['dob'].text
+                    } if (errors['dobDay'] or errors['dobMonth'] or errors['dobYear'] or errors['dob'])
+                }) }}   
+
+                {% call govukFieldset({
+                    legend: {
+                    text: "What is your address?",
+                    classes: "govuk-fieldset__legend--l",
+                    isPageHeading: true
+                    }
+                }) %}
+
+                {{ govukInput({
+                    label: {
+                    html: 'Building and street <span class="govuk-visually-hidden">line 1 of 2</span>'
+                    },
+                    id: "addressLine1",
+                    name: "addressLine1",
+                    value: addressLine1,
+                    autocomplete: "address-line1"
+                }) }}
+
+                {{ govukInput({
+                    label: {
+                    html: '<span class="govuk-visually-hidden">Building and street line 2 of 2</span>'
+                    },
+                    id: "addressLine2",
+                    name: "addressLine2",
+                    value: addressLine2,
+                    autocomplete: "address-line2"
+                }) }}
+
+                {{ govukInput({
+                    label: {
+                    text: "Town or city"
+                    },
+                    classes: "govuk-!-width-two-thirds",
+                    id: "addressTown",
+                    name: "addressTown",
+                    value: addressTown,
+                    autocomplete: "address-level2"
+                }) }}
+
+                {{ govukInput({
+                    label: {
+                    text: "County"
+                    },
+                    classes: "govuk-!-width-two-thirds",
+                    id: "addressCounty",
+                    name: "addressCounty",
+                    value: addressCounty,
+                    autocomplete: "address-county"
+                }) }}
+
+                {{ govukInput({
+                    label: {
+                    text: "Postcode"
+                    },
+                    classes: "govuk-input--width-10",
+                    id: "addressPostcode",
+                    name: "addressPostcode",
+                    value: addressPostcode,
+                    autocomplete: "postal-code"                    
+                }) }}
+
+                {% endcall %}
+
+                {{ govukButton({
+                    text: "common.buttons.continue" | translate
+                }) }}
+            </form>
+        </div>
+    </div>
+    
+{% endblock %}

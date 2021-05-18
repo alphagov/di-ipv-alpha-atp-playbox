@@ -25,7 +25,9 @@
 const pathName = {
   public: {
     PASSPORT_START: "/passport",
-    HOME: "/",
+    JSON: "/ipv/json",
+    INFO: "/ipv/info",
+    IPV: "/",
     ACCESSIBILITY_STATEMENT: "/accessibility",
     TERMS_AND_CONDITIONS: "/terms-and-conditions",
     PRIVACY_POLICY: "/privacy",

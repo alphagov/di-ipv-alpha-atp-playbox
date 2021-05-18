@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /*!
  * MIT License
  *
@@ -22,17 +23,26 @@
  * SOFTWARE.
  */
 
-import "./common/accessibiltyStatement";
-import "./common/appIcons";
-import "./common/cookies";
-import "./common/extendSession";
-import "./common/forbidden";
-import "./common/googleAnalyticsDataLayer";
-import "./common/privacyPolicy";
-import "./common/signOutSession";
-import "./common/termsAndConditions";
-import "./common/timeOutSession";
-import "./ipv/idx";
-import "./ipv/info";
-import "./ipv/json";
-import "./passport/start";
+import { Request, Response, Router } from "express";
+import { PageSetup } from "../../../interfaces/PageSetup";
+import { pathName } from "../../../paths";
+import { Engine } from "../../engine";
+
+// This is the root route and will redirect back to the appropriate gov.uk start page
+const getIPV = (req: Request, res: Response): void => {
+  const engine = new Engine();
+  const url = engine.start(req);
+  return res.redirect(url);
+};
+
+@PageSetup.register
+class SetupIPVController {
+  initialise(): Router {
+    const router = Router();
+    router.get(pathName.public.IPV, getIPV);
+
+    return router;
+  }
+}
+
+export { SetupIPVController, getIPV };
