@@ -55,61 +55,55 @@ const passportValidationMiddleware = [
         value,
       });
     }),
-]
-  .concat(
-    dateValidation(
-      "dob",
-      "pages.passport.start.dob.validationError",
-      (year, month, day, req) => {
-        const momentDate = dateInputAsMoment(year, month, day).startOf("day");
-        const todaysDate = moment().startOf("day");
-        if (momentDate.isAfter(todaysDate)) {
-          throw new Error(
-            req.t("pages.passport.start.dob.validationError.futureDate", {
-              value: momentDate.format("LL"),
-              today: todaysDate.format("LL"),
-            })
-          );
-        }
+  ...dateValidation(
+    "dob",
+    "pages.passport.start.dob.validationError",
+    (year, month, day, req) => {
+      const momentDate = dateInputAsMoment(year, month, day).startOf("day");
+      const todaysDate = moment().startOf("day");
+      if (momentDate.isAfter(todaysDate)) {
+        throw new Error(
+          req.t("pages.passport.start.dob.validationError.futureDate", {
+            value: momentDate.format("LL"),
+            today: todaysDate.format("LL"),
+          })
+        );
       }
-    )
-  )
-  .concat(
-    dateValidation(
-      "issued",
-      "pages.passport.start.issued.validationError",
-      (year, month, day, req) => {
-        const momentDate = dateInputAsMoment(year, month, day).startOf("day");
-        const todaysDate = moment().startOf("day");
-        if (momentDate.isAfter(todaysDate)) {
-          throw new Error(
-            req.t("pages.passport.start.issued.validationError.futureDate", {
-              value: momentDate.format("LL"),
-              today: todaysDate.format("LL"),
-            })
-          );
-        }
+    }
+  ),
+  ...dateValidation(
+    "issued",
+    "pages.passport.start.issued.validationError",
+    (year, month, day, req) => {
+      const momentDate = dateInputAsMoment(year, month, day).startOf("day");
+      const todaysDate = moment().startOf("day");
+      if (momentDate.isAfter(todaysDate)) {
+        throw new Error(
+          req.t("pages.passport.start.issued.validationError.futureDate", {
+            value: momentDate.format("LL"),
+            today: todaysDate.format("LL"),
+          })
+        );
       }
-    )
-  )
-  .concat(
-    dateValidation(
-      "expiry",
-      "pages.passport.start.expiry.validationError",
-      (year, month, day, req) => {
-        const momentDate = dateInputAsMoment(year, month, day).startOf("day");
-        const todaysDate = moment().startOf("day");
-        if (momentDate.isBefore(todaysDate)) {
-          throw new Error(
-            req.t("pages.passport.start.expiry.validationError.pastDate", {
-              value: momentDate.format("LL"),
-              today: todaysDate.format("LL"),
-            })
-          );
-        }
+    }
+  ),
+  ...dateValidation(
+    "expiry",
+    "pages.passport.start.expiry.validationError",
+    (year, month, day, req) => {
+      const momentDate = dateInputAsMoment(year, month, day).startOf("day");
+      const todaysDate = moment().startOf("day");
+      if (momentDate.isBefore(todaysDate)) {
+        throw new Error(
+          req.t("pages.passport.start.expiry.validationError.pastDate", {
+            value: momentDate.format("LL"),
+            today: todaysDate.format("LL"),
+          })
+        );
       }
-    )
-  );
+    }
+  ),
+];
 
 const getStart = (req: Request, res: Response): void => {
   if (!req.session.passport) {
