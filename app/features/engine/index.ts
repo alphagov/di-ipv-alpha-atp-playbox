@@ -21,6 +21,8 @@ export class Engine extends Object {
       res.redirect(
         "http://localhost:8081/orchestrator/callback?token=" + token
       );
+      req.session.basicInfo = null;
+      req.session.passport = null;
       return;
     }
     res.redirect("/500");
