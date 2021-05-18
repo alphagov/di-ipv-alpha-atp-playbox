@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /*!
  * MIT License
  *
@@ -22,26 +23,24 @@
  * SOFTWARE.
  */
 
-const pathName = {
-  public: {
-    PASSPORT_START: "/passport",
-    JSON: "/ipv/json",
-    INFO: "/ipv/info",
-    OUT: "/ipv/out",
-    IPV: "/",
-    ACCESSIBILITY_STATEMENT: "/accessibility",
-    TERMS_AND_CONDITIONS: "/terms-and-conditions",
-    PRIVACY_POLICY: "/privacy",
-    COOKIES: "/cookies",
-    GA_DATA_LAYER_JS: "/gaDataLayer.js",
-    EXTEND_SESSION: "/extend-session",
-    TIMEOUT_SESSION: "/timeout-session",
-    SIGNOUT_SESSION: "/signout-session",
-    FORBIDDEN: "/forbidden",
-  },
-  tracked: {
-    LOGGED_IN: "/logged-in",
-  },
+import { Request, Response, Router } from "express";
+import { PageSetup } from "../../../interfaces/PageSetup";
+import { pathName } from "../../../paths";
+
+const template = "ipv/out/view.njk";
+// This is the root route and will redirect back to the appropriate gov.uk start page
+const getOut = (req: Request, res: Response): void => {
+  return res.render(template, { language: req.i18n.language });
 };
 
-export { pathName };
+@PageSetup.register
+class SetupOutController {
+  initialise(): Router {
+    const router = Router();
+    router.get(pathName.public.OUT, getOut);
+
+    return router;
+  }
+}
+
+export { SetupOutController, getOut };

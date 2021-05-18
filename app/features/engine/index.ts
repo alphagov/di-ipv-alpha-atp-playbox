@@ -1,3 +1,5 @@
+import { jwtSecret } from "../../../config";
+
 /* eslint-disable no-console */
 export class Engine extends Object {
   start = (req, res): string => {
@@ -14,8 +16,10 @@ export class Engine extends Object {
         basicInfo: req.session.basicInfo,
         passport: req.session.passport,
       };
+      const jwt = require("jsonwebtoken");
+      const token = jwt.sign(output, jwtSecret(), { expiresIn: "1800s" });
       res.redirect(
-        "/output?data=" + encodeURIComponent(JSON.stringify(output))
+        "http://localhost:8081/orchestrator/callback?token=" + token
       );
       return;
     }
