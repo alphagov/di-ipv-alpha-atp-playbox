@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /*!
  * MIT License
  *
@@ -22,19 +23,24 @@
  * SOFTWARE.
  */
 
-import "./common/accessibiltyStatement";
-import "./common/appIcons";
-import "./common/cookies";
-import "./common/extendSession";
-import "./common/forbidden";
-import "./common/googleAnalyticsDataLayer";
-import "./common/privacyPolicy";
-import "./common/signOutSession";
-import "./common/termsAndConditions";
-import "./common/timeOutSession";
-import "./ipv/idx";
-import "./ipv/info";
-import "./ipv/json";
-import "./ipv/oauth/token";
-import "./ipv/userinfo";
-import "./passport/start";
+import { Request, Response, Router } from "express";
+import { PageSetup } from "../../../interfaces/PageSetup";
+import { pathName } from "../../../paths";
+import { Engine } from "../../engine";
+// This is the root route and will redirect back to the appropriate gov.uk start page
+const getUserInfo = (req: Request, res: Response): void => {
+  const engine = new Engine();
+  engine.next("userinfo", { id: "fake" }, req, res);
+};
+
+@PageSetup.register
+class SetupUserinfoController {
+  initialise(): Router {
+    const router = Router();
+    router.get(pathName.public.USER_INFO, getUserInfo);
+
+    return router;
+  }
+}
+
+export { SetupUserinfoController, getUserInfo };

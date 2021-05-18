@@ -29,6 +29,9 @@ import { PageSetup } from "../../../interfaces/PageSetup";
 import { bodyValidate as validate } from "../../../middleware/form-validation-middleware";
 import { pathName } from "../../../paths";
 import { dateInputAsMoment, dateValidation } from "../../common/dateValidation";
+import { Engine } from "../../engine";
+
+const template = "passport/start/view.njk";
 
 const passportValidationMiddleware = [
   body("number")
@@ -107,7 +110,7 @@ const passportValidationMiddleware = [
 
 const getStart = (req: Request, res: Response): void => {
   if (!req.session.passport) {
-    req.session.passport = { dob: "", issued: "", expiry: "" };
+    req.session.passport = {};
   }
   const {
     number,
@@ -121,17 +124,17 @@ const getStart = (req: Request, res: Response): void => {
     number,
     surname,
     givenNames,
-    dobDay: dob.day,
-    dobMonth: dob.month,
-    dobYear: dob.year,
-    issuedDay: issued.day,
-    issuedMonth: issued.month,
-    issuedYear: issued.year,
-    expiryDay: expiry.day,
-    expiryMonth: expiry.month,
-    expiryYear: expiry.year,
+    dobDay: dob ? dob.day : null,
+    dobMonth: dob ? dob.month : null,
+    dobYear: dob ? dob.year : null,
+    issuedDay: issued ? issued.day : null,
+    issuedMonth: issued ? issued.month : null,
+    issuedYear: issued ? issued.year : null,
+    expiryDay: expiry ? expiry.day : null,
+    expiryMonth: expiry ? expiry.month : null,
+    expiryYear: expiry ? expiry.year : null,
   };
-  return res.render("passport/start/view.njk", { ...values });
+  return res.render(template, { ...values });
 };
 
 const postStart = (req: Request, res: Response, next: NextFunction): void => {
@@ -157,7 +160,8 @@ const postStart = (req: Request, res: Response, next: NextFunction): void => {
         year: req.body["expiryYear"],
       },
     };
-    return res.redirect(pathName.public.FORBIDDEN);
+    const engine = new Engine();
+    engine.next("passport", req.session.passport, req, res);
   } catch (e) {
     next(e);
   }
@@ -175,7 +179,7 @@ class SetupStartController {
     router.post(
       pathName.public.PASSPORT_START,
       passportValidationMiddleware,
-      validate("passport/start/view.njk", validationData),
+      validate(template, validationData),
       postStart
     );
     return router;

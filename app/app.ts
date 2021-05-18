@@ -61,6 +61,7 @@ import { existsSync } from "fs";
 import { setLocalVars } from "./middleware/set-locals";
 import useragent from "express-useragent";
 import { pathName } from "./paths";
+import { postOAuthToken } from "./features/ipv/oauth/token";
 
 const crypto = require("crypto");
 const fs = require("fs");
@@ -137,6 +138,7 @@ const createApp = (): express.Application => {
   app.use(nocache());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  app.post(pathName.public.OAUTH_TOKEN, postOAuthToken);
   app.use(csurf());
   app.use(setupCsrfToken);
   app.post("*", filterRequest);
