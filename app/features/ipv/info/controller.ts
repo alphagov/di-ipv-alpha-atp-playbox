@@ -28,10 +28,70 @@ import { bodyValidate as validate } from "../../../middleware/form-validation-mi
 import { PageSetup } from "../../../interfaces/PageSetup";
 import { pathName } from "../../../paths";
 import { Engine } from "../../engine";
+import { body } from "express-validator";
+import { dateInputAsMoment, dateValidation } from "../../common/dateValidation";
+import moment from "moment";
 
 const template = "ipv/info/view.njk";
 
-const infoValidationMiddleware = [];
+const infoValidationMiddleware = [
+  body("surname")
+    .not()
+    .isEmpty()
+    .withMessage((value, { req }) => {
+      return req.t("pages.passport.start.surname.validationError.required", {
+        value,
+      });
+    }),
+  body("givenNames")
+    .not()
+    .isEmpty()
+    .withMessage((value, { req }) => {
+      return req.t("pages.passport.start.givenNames.validationError.required", {
+        value,
+      });
+    }),
+  ...dateValidation(
+    "dob",
+    "pages.passport.start.dob.validationError",
+    (year, month, day, req) => {
+      const momentDate = dateInputAsMoment(year, month, day).startOf("day");
+      const todaysDate = moment().startOf("day");
+      if (momentDate.isAfter(todaysDate)) {
+        throw new Error(
+          req.t("pages.passport.start.dob.validationError.futureDate", {
+            value: momentDate.format("LL"),
+            today: todaysDate.format("LL"),
+          })
+        );
+      }
+    }
+  ),
+  body("addressLine1")
+    .not()
+    .isEmpty()
+    .withMessage((value, { req }) => {
+      return req.t("pages.ipv.info.addressLine1.validationError.required", {
+        value,
+      });
+    }),
+  body("addressTown")
+    .not()
+    .isEmpty()
+    .withMessage((value, { req }) => {
+      return req.t("pages.ipv.info.addressTown.validationError.required", {
+        value,
+      });
+    }),
+  body("addressPostcode")
+    .not()
+    .isEmpty()
+    .withMessage((value, { req }) => {
+      return req.t("pages.ipv.info.addressPostcode.validationError.required", {
+        value,
+      });
+    }),
+];
 
 // This is the root route and will redirect back to the appropriate gov.uk start page
 const getInfo = (req: Request, res: Response): void => {

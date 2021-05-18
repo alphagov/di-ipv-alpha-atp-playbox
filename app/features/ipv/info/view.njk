@@ -8,6 +8,8 @@
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
+            {% set errorList = errorList | lastErrors(["#dob"]) %}
+            {% include "common/errorSummary/errorSummary.njk" %}
         <h1 class="govuk-heading-xl">{{ 'pages.ipv.info.header' | translate }}</h1>
             <p>{{ 'pages.ipv.info.info' | translate }}</p>
             <form action="/ipv/info" method="post" class="form" novalidate>
@@ -76,7 +78,7 @@
 
                 {% call govukFieldset({
                     legend: {
-                    text: "What is your address?",
+                    text: 'pages.ipv.info.address.legend' | translate,
                     classes: "govuk-fieldset__legend--l",
                     isPageHeading: true
                     }
@@ -84,17 +86,20 @@
 
                 {{ govukInput({
                     label: {
-                    html: 'Building and street <span class="govuk-visually-hidden">line 1 of 2</span>'
+                        html: 'pages.ipv.info.addressLine1.label' | translate | safe
                     },
                     id: "addressLine1",
                     name: "addressLine1",
                     value: addressLine1,
-                    autocomplete: "address-line1"
+                    autocomplete: "address-line1",
+                    errorMessage: {
+                            text: errors['addressLine1'].text
+                        } if (errors['addressLine1'])
                 }) }}
 
                 {{ govukInput({
                     label: {
-                    html: '<span class="govuk-visually-hidden">Building and street line 2 of 2</span>'
+                    html: 'pages.ipv.info.addressLine2.label' | translate | safe
                     },
                     id: "addressLine2",
                     name: "addressLine2",
@@ -104,18 +109,21 @@
 
                 {{ govukInput({
                     label: {
-                    text: "Town or city"
+                    text: 'pages.ipv.info.addressTown.label' | translate
                     },
                     classes: "govuk-!-width-two-thirds",
                     id: "addressTown",
                     name: "addressTown",
                     value: addressTown,
-                    autocomplete: "address-level2"
+                    autocomplete: "address-level2",
+                    errorMessage: {
+                            text: errors['addressTown'].text
+                        } if (errors['addressTown'])
                 }) }}
 
                 {{ govukInput({
                     label: {
-                    text: "County"
+                    text: 'pages.ipv.info.addressCounty.label' | translate
                     },
                     classes: "govuk-!-width-two-thirds",
                     id: "addressCounty",
@@ -126,14 +134,17 @@
 
                 {{ govukInput({
                     label: {
-                    text: "Postcode"
+                    text: 'pages.ipv.info.addressPostcode.label' | translate
                     },
                     classes: "govuk-input--width-10",
                     id: "addressPostcode",
                     name: "addressPostcode",
                     value: addressPostcode,
-                    autocomplete: "postal-code"                    
-                }) }}
+                    autocomplete: "postal-code" ,
+                    errorMessage: {
+                            text: errors['addressPostcode'].text
+                        } if (errors['addressPostcode'])
+                }) }}                   
 
                 {% endcall %}
 

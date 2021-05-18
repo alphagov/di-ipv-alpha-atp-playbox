@@ -117,11 +117,69 @@
     }
   },
   "pages": {
+    "ipv": {
+      "info": {
+        "title": "Please enter the following information",
+        "header": "Please enter the following information",
+        "info": "Entering the information below will help us start to verify your identity. You may be asked additional questions as part of this process.",
+        "surname": {
+          "label": "Surname",
+          "validationError": {
+            "required": "Surname is required"
+          }
+        },
+        "givenNames": {
+          "label": "Given names",
+          "validationError": {
+            "required": "Given names are required"
+          }
+        },
+        "dob": {
+          "label": "Date of birth",
+          "validationError": {
+            "emptyDay": "Date of birth must include a day",
+            "emptyMonth": "Date of birth must include a month",
+            "emptyYear": "Date of birth must include a year",
+            "emptyDayAndMonth": "Date of birth must include a day and a month",
+            "emptyDayAndYear": "Date of birth must include a day and a year",
+            "emptyMonthAndYear": "Date of birth must include a month and a year",
+            "emptyDate": "Enter Date of birth",
+            "realDate": "Date of birth must be a real date",
+            "futureDate": "Date of birth must be be in the past"
+          }
+        },
+        "address": { "legend": "What is your address?" },
+        "addressLine1": {
+          "label": "Building and street <span class=\"govuk-visually-hidden\">line 1 of 2</span>",
+          "validationError": {
+            "required": "Building and street are required"
+          }
+        },
+        "addressLine2": {
+          "label": "<span class=\"govuk-visually-hidden\">Building and street line 2 of 2</span>"
+        },
+        "addressTown": {
+          "label": "Town or city",
+          "validationError": {
+            "required": "Town or city is required"
+          }
+        },
+        "addressCounty": {
+          "label": "County"
+        },
+        "addressPostcode": {
+          "label": "Postcode",
+          "validationError": {
+            "required": "Postcode is required"
+          }
+        }
+      }
+    },
     "passport": {
       "start": {
         "title": "Add the details from your passport",
         "header": "Add the details from your passport",
-        "info": "Rnter the details exactly as stated on your document even if you have since changed your name",
+        "info": "Enter the details exactly as stated on your document even if you have since changed your name.",
         "number": {
           "label": "Passport number",
           "validationError": {
