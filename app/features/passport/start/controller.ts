@@ -29,6 +29,7 @@ import { PageSetup } from "../../../interfaces/PageSetup";
 import { bodyValidate as validate } from "../../../middleware/form-validation-middleware";
 import { pathName } from "../../../paths";
 import { dateInputAsMoment, dateValidation } from "../../common/dateValidation";
+import { Engine } from "../../engine";
 
 const passportValidationMiddleware = [
   body("number")
@@ -107,7 +108,7 @@ const passportValidationMiddleware = [
 
 const getStart = (req: Request, res: Response): void => {
   if (!req.session.passport) {
-    req.session.passport = { dob: "", issued: "", expiry: "" };
+    req.session.passport = { dob: {}, issued: {}, expiry: {} };
   }
   const {
     number,
@@ -157,7 +158,8 @@ const postStart = (req: Request, res: Response, next: NextFunction): void => {
         year: req.body["expiryYear"],
       },
     };
-    return res.redirect(pathName.public.FORBIDDEN);
+    const engine = new Engine();
+    engine.next("passport", req.session.passport, req, res);
   } catch (e) {
     next(e);
   }

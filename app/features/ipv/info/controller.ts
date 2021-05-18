@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-import { Request, Response, Router } from "express";
+import { Request, Response, Router, NextFunction } from "express";
 import { bodyValidate as validate } from "../../../middleware/form-validation-middleware";
 import { PageSetup } from "../../../interfaces/PageSetup";
 import { pathName } from "../../../paths";
@@ -95,14 +95,58 @@ const infoValidationMiddleware = [
 
 // This is the root route and will redirect back to the appropriate gov.uk start page
 const getInfo = (req: Request, res: Response): void => {
-  return res.render(template, { language: req.i18n.language });
+  if (req.session.basicInfo) {
+    req.session.basicInfo = { dob: {} };
+  }
+  const {
+    surname,
+    givenNames,
+    dob,
+    addressLine1,
+    addressLine2,
+    addressTown,
+    addressCounty,
+    addressPostcode,
+  } = req.session.basicInfo;
+  console.log(req.session.basicInfo);
+  const values = {
+    surname,
+    givenNames,
+    dobDay: dob.day,
+    dobMonth: dob.month,
+    dobYear: dob.year,
+    addressLine1: addressLine1,
+    addressLine2: addressLine2,
+    addressTown: addressTown,
+    addressCounty: addressCounty,
+    addressPostcode: addressPostcode,
+  };
+  return res.render(template, { language: req.i18n.language, ...values });
 };
 
-const postInfo = (req: Request, res: Response): void => {
+const postInfo = (req: Request, res: Response, next: NextFunction): void => {
   // call something
-  const engine = new Engine();
-  const url = engine.next("info", {}, req);
-  return res.redirect(url);
+  try {
+    req.session.basicInfo = {
+      ...req.session.basicInfo,
+      surname: req.body["surname"],
+      givenNames: req.body["givenNames"],
+      dob: {
+        day: req.body["dobDay"],
+        month: req.body["dobMonth"],
+        year: req.body["dobYear"],
+      },
+      addressLine1: req.body["addressLine1"],
+      addressLine2: req.body["addressLine2"],
+      addressTown: req.body["addressTown"],
+      addressCounty: req.body["addressCounty"],
+      addressPostcode: req.body["addressPostcode"],
+    };
+    const engine = new Engine();
+    engine.next("info", req.session.basicInfo, req, res);
+  } catch (e) {
+    next(e);
+  }
 };
 
 const validationData = (): any => {

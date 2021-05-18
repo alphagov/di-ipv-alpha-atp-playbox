@@ -31,8 +31,7 @@ import { Engine } from "../../engine";
 // This is the root route and will redirect back to the appropriate gov.uk start page
 const getIPV = (req: Request, res: Response): void => {
   const engine = new Engine();
-  const url = engine.start(req);
-  return res.redirect(url);
+  engine.start(req, res);
 };
 
 @PageSetup.register
