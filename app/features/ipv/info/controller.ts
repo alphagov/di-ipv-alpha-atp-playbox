@@ -108,7 +108,6 @@ const getInfo = (req: Request, res: Response): void => {
     addressCounty,
     addressPostcode,
   } = req.session.basicInfo;
-  console.log(req.session.basicInfo);
   const values = {
     surname,
     givenNames,
