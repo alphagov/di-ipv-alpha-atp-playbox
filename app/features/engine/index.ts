@@ -4,6 +4,8 @@ import { jwtSecret } from "../../../config";
 export class Engine extends Object {
   start = (req, res): string => {
     req.session.engine = {};
+    req.session.basicInfo = {};
+    req.session.passport = {};
     return res.redirect("/ipv/info");
   };
   next = (source: string, values: any, req, res): string => {
@@ -21,8 +23,8 @@ export class Engine extends Object {
       res.redirect(
         "http://localhost:8081/orchestrator/callback?token=" + token
       );
-      req.session.basicInfo = null;
-      req.session.passport = null;
+      req.session.basicInfo = {};
+      req.session.passport = {};
       return;
     }
     res.redirect("/500");

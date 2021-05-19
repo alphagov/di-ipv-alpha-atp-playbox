@@ -96,7 +96,7 @@ const infoValidationMiddleware = [
 // This is the root route and will redirect back to the appropriate gov.uk start page
 const getInfo = (req: Request, res: Response): void => {
   if (req.session.basicInfo) {
-    req.session.basicInfo = { dob: {} };
+    req.session.basicInfo = {};
   }
   const {
     surname,
@@ -112,9 +112,9 @@ const getInfo = (req: Request, res: Response): void => {
   const values = {
     surname,
     givenNames,
-    dobDay: dob.day,
-    dobMonth: dob.month,
-    dobYear: dob.year,
+    dobDay: dob ? dob.day : null,
+    dobMonth: dob ? dob.month : null,
+    dobYear: dob ? dob.year : null,
     addressLine1: addressLine1,
     addressLine2: addressLine2,
     addressTown: addressTown,
