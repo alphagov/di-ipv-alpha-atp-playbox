@@ -3,7 +3,6 @@ import { jwtSecret } from "../../../config";
 import { pathName } from "../../paths";
 import jwt from "jsonwebtoken";
 
-/* eslint-disable no-console */
 export class Engine extends Object {
   start = (req: Request, res: Response): void => {
     req.session.engine = {};
@@ -31,7 +30,6 @@ export class Engine extends Object {
       req.session.basicInfo = {};
       req.session.passport = {};
       res.redirect(`${pathName.external.ORCHESTRATOR}?token=${token}`);
-      console.log(req.session);
       return;
     }
     res.redirect("/500");

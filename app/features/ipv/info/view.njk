@@ -12,7 +12,7 @@
             {% include "common/errorSummary/errorSummary.njk" %}
         <h1 class="govuk-heading-xl">{{ 'pages.ipv.info.header' | translate }}</h1>
             <p>{{ 'pages.ipv.info.info' | translate }}</p>
-            <form action="/ipv/info" method="post" class="form" novalidate>
+            <form action="/information" method="post" class="form" novalidate>
                 <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
                 {{ govukInput({
                 label: {
