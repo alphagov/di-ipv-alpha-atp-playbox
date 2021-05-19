@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /*!
  * MIT License
  *
@@ -95,7 +94,7 @@ const infoValidationMiddleware = [
 
 // This is the root route and will redirect back to the appropriate gov.uk start page
 const getInfo = (req: Request, res: Response): void => {
-  if (req.session.basicInfo) {
+  if (!req.session.basicInfo) {
     req.session.basicInfo = {};
   }
   const {

@@ -31,6 +31,8 @@ import { pathName } from "../../../paths";
 import { dateInputAsMoment, dateValidation } from "../../common/dateValidation";
 import { Engine } from "../../engine";
 
+const template = "passport/start/view.njk";
+
 const passportValidationMiddleware = [
   body("number")
     .not()
@@ -132,7 +134,7 @@ const getStart = (req: Request, res: Response): void => {
     expiryMonth: expiry ? expiry.month : null,
     expiryYear: expiry ? expiry.year : null,
   };
-  return res.render("passport/start/view.njk", { ...values });
+  return res.render(template, { ...values });
 };
 
 const postStart = (req: Request, res: Response, next: NextFunction): void => {
@@ -177,7 +179,7 @@ class SetupStartController {
     router.post(
       pathName.public.PASSPORT_START,
       passportValidationMiddleware,
-      validate("passport/start/view.njk", validationData),
+      validate(template, validationData),
       postStart
     );
     return router;

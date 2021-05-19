@@ -23,11 +23,14 @@
  */
 
 const pathName = {
+  external: {
+    ORCHESTRATOR: "http://localhost:8081/orchestrator/callback",
+  },
   public: {
     PASSPORT_START: "/passport",
-    JSON: "/ipv/json",
-    INFO: "/ipv/info",
-    OUT: "/ipv/out",
+    JSON: "/json",
+    INFO: "/information",
+    OUT: "/out",
     IPV: "/",
     ACCESSIBILITY_STATEMENT: "/accessibility",
     TERMS_AND_CONDITIONS: "/terms-and-conditions",

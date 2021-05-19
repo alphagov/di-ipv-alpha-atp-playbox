@@ -9,8 +9,8 @@ declare namespace Express {
   }
 
   interface SessionData {
-    state?: {
-      editing?: boolean;
-    };
+    engine: any;
+    basicInfo: any;
+    passport: any;
   }
 }
