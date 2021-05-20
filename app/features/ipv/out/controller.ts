@@ -26,11 +26,14 @@
 import { Request, Response, Router } from "express";
 import { PageSetup } from "../../../interfaces/PageSetup";
 import { pathName } from "../../../paths";
-
-const template = "ipv/out/view.njk";
+import { Engine } from "../../engine";
 // This is the root route and will redirect back to the appropriate gov.uk start page
 const getOut = (req: Request, res: Response): void => {
-  return res.render(template, { language: req.i18n.language });
+  const engine = new Engine();
+  const param = Array.isArray(req.query.token)
+    ? req.query.token[0].toString()
+    : req.query.token.toString();
+  engine.next("out", { id: param }, req, res);
 };
 
 @PageSetup.register
