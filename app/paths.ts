@@ -32,6 +32,7 @@ const pathName = {
     INFO: "/information",
     OUT: "/out",
     IPV: "/",
+    OAUTH_TOKEN: "/oauth/token",
     ACCESSIBILITY_STATEMENT: "/accessibility",
     TERMS_AND_CONDITIONS: "/terms-and-conditions",
     PRIVACY_POLICY: "/privacy",

@@ -49,6 +49,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "client-oauth2": "^4.3.3",
     "connect-redis": "^4.0.3",
     "cookie-parser": "^1.4.4",
     "csurf": "^1.11.0",
@@ -68,6 +69,7 @@
     "jsdom-global": "^3.0.2",
     "jsinstallguard": "^0.1.8",
     "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
     "moment": "^2.27.0",
     "moment-timezone": "^0.5.33",
     "nocache": "^2.1.0",
@@ -76,6 +78,7 @@
     "pem-jwk": "^2.0.0",
     "punycode": "^2.1.1",
     "redis": "^3.0.2",
+    "simple-oauth2": "^4.2.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {

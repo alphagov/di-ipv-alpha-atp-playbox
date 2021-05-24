@@ -1,9 +1,8 @@
 /* eslint-disable no-console */
 import { Request, Response } from "express";
-import { jwtSecret } from "../../../config";
 import { pathName } from "../../paths";
-import jwt from "jsonwebtoken";
 import hashSessionId from "../../utils/hashSessionId";
+import _ from "lodash";
 
 export class Engine extends Object {
   start = (req: Request, res: Response): void => {
@@ -23,27 +22,32 @@ export class Engine extends Object {
       res.redirect(pathName.public.PASSPORT_START);
       return;
     }
-    if (source == "passport") {
-      const id = { id: hashSessionId(req.sessionID) };
-      const token = jwt.sign(id, jwtSecret(), { expiresIn: "1800s" });
-
-      const buff = Buffer.from(token, "ascii");
-      const paramToken = encodeURIComponent(buff.toString("base64"));
+    if (["passport", "json"].includes(source)) {
       console.log(
         "session ID Hash",
         encodeURIComponent(hashSessionId(req.sessionID))
       );
-      res.redirect(`${pathName.external.ORCHESTRATOR}?token=${paramToken}`);
+      res.redirect(
+        `${req.session.oauth.redirect_uri}?${
+          req.session.oauth.response_type
+        }=${encodeURIComponent(hashSessionId(req.sessionID))}&state=${
+          req.session.oauth.state
+        }`
+      );
       return;
     }
     if (source == "out") {
       const paramToken = values.id;
+      const sessionData = {
+        basicInfo: _.clone(req.session.basicInfo),
+        passport: _.clone(req.session.passport),
+      };
+      req.session.engine = {};
+      req.session.basicInfo = {};
+      req.session.passport = {};
       if (paramToken == hashSessionId(req.sessionID)) {
         res.json({
-          sessionData: {
-            basicInfo: req.session.basicInfo,
-            passport: req.session.passport,
-          },
+          sessionData: sessionData,
         });
       } else {
         console.log(
