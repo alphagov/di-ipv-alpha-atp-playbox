@@ -53,7 +53,12 @@ const postOAuthToken = (req: Request, res: Response): void => {
     };
     res.json(data);
   } else {
-    res.json({ error: "invalid" });
+    res.json({
+      error: "invalid_request",
+      error_description: "Request was invalid.",
+      error_uri:
+        "See the full API docs at https://localhost:3000/docs/access_token",
+    });
   }
 };
 
