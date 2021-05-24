@@ -1,4 +1,7 @@
 declare namespace Express {
+  interface Application {
+    oauth: any;
+  }
   interface Request {
     useragent?: any;
     i18n?: {

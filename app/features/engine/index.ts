@@ -2,7 +2,7 @@
 import { Request, Response } from "express";
 import { pathName } from "../../paths";
 import hashSessionId from "../../utils/hashSessionId";
-import _ from "lodash";
+import { sessionData } from "./global";
 
 export class Engine extends Object {
   start = (req: Request, res: Response): void => {
@@ -27,6 +27,8 @@ export class Engine extends Object {
         "session ID Hash",
         encodeURIComponent(hashSessionId(req.sessionID))
       );
+      sessionData.basicInfo = req.session.basicInfo;
+      sessionData.passport = req.session.passport;
       res.redirect(
         `${req.session.oauth.redirect_uri}?${
           req.session.oauth.response_type
@@ -36,27 +38,11 @@ export class Engine extends Object {
       );
       return;
     }
-    if (source == "out") {
-      const paramToken = values.id;
-      const sessionData = {
-        basicInfo: _.clone(req.session.basicInfo),
-        passport: _.clone(req.session.passport),
-      };
-      req.session.engine = {};
-      req.session.basicInfo = {};
-      req.session.passport = {};
-      if (paramToken == hashSessionId(req.sessionID)) {
-        res.json({
-          sessionData: sessionData,
-        });
-      } else {
-        console.log(
-          "session ID Hash",
-          paramToken,
-          hashSessionId(req.sessionID)
-        );
-        res.json({ error: "unknown session" });
-      }
+    if (source == "userinfo") {
+      res.json({
+        sessionData: sessionData,
+      });
+
       return;
     }
     res.redirect("/500");

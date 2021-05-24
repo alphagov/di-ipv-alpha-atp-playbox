@@ -1,10 +1,10 @@
-import { SetupOutController, getOut } from "..";
+import { SetupUserinfoController, getUserInfo } from "../controller";
 import { pathName } from "../../../../paths";
 import { expect, sinon } from "../../../../../test/utils/testUtils";
 
 const express = require("express");
 
-describe("IPV Controller", function () {
+describe("userinfo Controller", function () {
   let sandbox: sinon.SinonSandbox;
 
   beforeEach(() => {
@@ -23,10 +23,10 @@ describe("IPV Controller", function () {
         "get"
       );
 
-      new SetupOutController().initialise();
+      new SetupUserinfoController().initialise();
       expect(routerGetStub).to.have.been.calledWith(
-        pathName.public.OUT,
-        getOut
+        pathName.public.USER_INFO,
+        getUserInfo
       );
     });
   });

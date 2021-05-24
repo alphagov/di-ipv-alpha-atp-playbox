@@ -1,3 +1,3 @@
-import { SetupOAuthTokenController, postOAuthToken } from "./controller";
+import { postOAuthToken } from "./controller";
 
-export { SetupOAuthTokenController, postOAuthToken };
+export { postOAuthToken };

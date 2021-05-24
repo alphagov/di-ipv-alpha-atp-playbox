@@ -28,22 +28,22 @@ import { PageSetup } from "../../../interfaces/PageSetup";
 import { pathName } from "../../../paths";
 import { Engine } from "../../engine";
 // This is the root route and will redirect back to the appropriate gov.uk start page
-const getOut = (req: Request, res: Response): void => {
+const getUserInfo = (req: Request, res: Response): void => {
   const engine = new Engine();
   const param = Array.isArray(req.query.token)
     ? req.query.token[0].toString()
     : req.query.token.toString();
-  engine.next("out", { id: param }, req, res);
+  engine.next("userinfo", { id: param }, req, res);
 };
 
 @PageSetup.register
-class SetupOutController {
+class SetupUserinfoController {
   initialise(): Router {
     const router = Router();
-    router.get(pathName.public.OUT, getOut);
+    router.get(pathName.public.USER_INFO, getUserInfo);
 
     return router;
   }
 }
 
-export { SetupOutController, getOut };
+export { SetupUserinfoController, getUserInfo };

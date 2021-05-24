@@ -30,7 +30,7 @@ const pathName = {
     PASSPORT_START: "/passport",
     JSON: "/json",
     INFO: "/information",
-    OUT: "/out",
+    USER_INFO: "/USERINFO",
     IPV: "/",
     OAUTH_TOKEN: "/oauth/token",
     ACCESSIBILITY_STATEMENT: "/accessibility",

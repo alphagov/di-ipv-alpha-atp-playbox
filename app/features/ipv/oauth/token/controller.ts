@@ -23,68 +23,28 @@
  * SOFTWARE.
  */
 
-import { Request, Response, Router } from "express";
-import { PageSetup } from "../../../../interfaces/PageSetup";
-import { pathName } from "../../../../paths";
+import { Request, Response } from "express";
+import hashSessionId from "../../../../utils/hashSessionId";
 
 // This is the root route and will redirect back to the appropriate gov.uk start page
 const postOAuthToken = (req: Request, res: Response): void => {
   if (
-    req.body.code &&
-    req.body.grant_type &&
-    req.body.redirect_uri &&
-    req.body.client_id &&
-    req.body.client_secret &&
-    req.body.code_verifier
+    req.query.code &&
+    req.query.grant_type &&
+    req.query.redirect_uri &&
+    req.query.client_id &&
+    req.query.client_secret &&
+    req.query.code_verifier
   ) {
-    const config = {
-      client: {
-        id: req.body.client_id,
-        secret: req.body.client_secret,
-      },
-      auth: {
-        tokenHost: "http://localhost:3000/",
-      },
-    };
-    const { AuthorizationCode } = require("simple-oauth2");
-
-    const run = async () => {
-      const client = new AuthorizationCode(config);
-
-      const authorizationUri = client.authorizeURL({
-        redirect_uri: "http://localhost:3000/callback",
-        state: req.session.oauth,
-      });
-
-      // Redirect example using Express (see http://expressjs.com/api.html#res.redirect)
-      res.redirect(authorizationUri);
-      console.log("authorizationUri", authorizationUri);
-      const tokenParams = {
-        code: req.query.code,
-        redirect_uri: "http://localhost:3000/callback",
-      };
-
-      try {
-        await client.getToken(tokenParams);
-      } catch (error) {
-        console.log("Access Token Error", error.message);
-      }
-    };
-
-    run();
+    res.json({
+      access_token: hashSessionId((Math.random() * 100000000).toString()),
+      refresh_token: hashSessionId((Math.random() * 100000000).toString()),
+      token_type: "Bearer",
+      expires: "3600",
+    });
   } else {
     res.json({ error: "invalid" });
   }
 };
 
-@PageSetup.register
-class SetupOAuthTokenController {
-  initialise(): Router {
-    const router = Router();
-    router.post(pathName.public.OAUTH_TOKEN, postOAuthToken);
-
-    return router;
-  }
-}
-
-export { SetupOAuthTokenController, postOAuthToken };
+export { postOAuthToken };

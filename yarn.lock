@@ -2190,6 +2190,13 @@ base@^0.11.1:
     mixin-deep "^1.2.0"
     pascalcase "^0.1.1"
 
+basic-auth@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/basic-auth/-/basic-auth-2.0.1.tgz#b998279bf47ce38344b4f3cf916d4679bbf51e3a"
+  integrity sha512-NF+epuEdnUYVlGuhaxbbq+dvJttwLnGY+YixlXlME5KpQ5W3CnXA5cVTneY3SPbPDRkcjMbifrwmFYcClgOZeg==
+  dependencies:
+    safe-buffer "5.1.2"
+
 bcrypt-pbkdf@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/bcrypt-pbkdf/-/bcrypt-pbkdf-1.0.2.tgz#a4301d389b6a43f9b67ff3ca11a3f6637e360e9e"
@@ -2249,10 +2256,15 @@ block-stream@*:
   dependencies:
     inherits "~2.0.0"
 
-bluebird@^3.5.5, bluebird@^3.7.2:
+bluebird@3.7.2, bluebird@^3.5.5, bluebird@^3.7.2:
   version "3.7.2"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.7.2.tgz#9f229c15be272454ffa973ace0dbee79a1b0c36f"
   integrity sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==
+
+bluebird@^2.10.0:
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-2.11.0.tgz#534b9033c022c9579c56ba3b3e5a5caafbb650e1"
+  integrity sha1-U0uQM8AiyVecVro7Plpcqvu2UOE=
 
 bn.js@^4.0.0, bn.js@^4.1.0, bn.js@^4.11.9:
   version "4.12.0"
@@ -2893,6 +2905,19 @@ clone-response@^1.0.2:
   integrity sha1-0dyXOSAxTfZ/vrlCI7TuNQI56Ws=
   dependencies:
     mimic-response "^1.0.0"
+
+co-bluebird@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/co-bluebird/-/co-bluebird-1.1.0.tgz#c8b9f3a9320a7ed30987dcca1a5c3cff59655c7c"
+  integrity sha1-yLnzqTIKftMJh9zKGlw8/1llXHw=
+  dependencies:
+    bluebird "^2.10.0"
+    co-use "^1.1.0"
+
+co-use@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/co-use/-/co-use-1.1.0.tgz#c6bb3cdf10cb735ecaa9daeeda46d725c94a4e62"
+  integrity sha1-xrs83xDLc17Kqdru2kbXJclKTmI=
 
 coa@^2.0.2:
   version "2.0.2"
@@ -5859,6 +5884,11 @@ is-fullwidth-code-point@^3.0.0:
   resolved "https://registry.yarnpkg.com/is-fullwidth-code-point/-/is-fullwidth-code-point-3.0.0.tgz#f116f8064fe90b3f7844a38997c0b75051269f1d"
   integrity sha512-zymm5+u+sCsSWyD9qNaejV3DFvhCKclKdizYaJUuHA83RLjb7nSuGnddCHGv0hk+KY7BMAlsWeK4Ueg6EV6XQg==
 
+is-generator@^1.0.2:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/is-generator/-/is-generator-1.0.3.tgz#c14c21057ed36e328db80347966c693f886389f3"
+  integrity sha1-wUwhBX7TbjKNuANHlmxpP4hjifM=
+
 is-glob@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/is-glob/-/is-glob-3.1.0.tgz#7ba5ae24217804ac70707b96922567486cc3e84a"
@@ -6634,6 +6664,11 @@ lodash.zip@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/lodash.zip/-/lodash.zip-4.2.0.tgz#ec6662e4896408ed4ab6c542a3990b72cc080020"
   integrity sha1-7GZi5IlkCO1KtsVCo5kLcswIACA=
+
+lodash@4.17.19:
+  version "4.17.19"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
+  integrity sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==
 
 lodash@^4.0.0, lodash@^4.17.12, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.21, lodash@^4.17.4, lodash@^4.17.5, lodash@~4.17.10:
   version "4.17.21"
@@ -7503,6 +7538,18 @@ oauth-sign@~0.9.0:
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/oauth-sign/-/oauth-sign-0.9.0.tgz#47a7b016baa68b5fa0ecf3dee08a85c679ac6455"
   integrity sha512-fexhUFFPTGV8ybAtSIGbV6gOkSv8UtRbDBnAyLQw4QPKkgNlsH2ByPGtMUqdWkos6YCRmAqViwgZrJc/mRDzZQ==
+
+oauth2-server@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/oauth2-server/-/oauth2-server-3.1.1.tgz#be291da840a307a50368736ab766bd68f2eeb3a9"
+  integrity sha512-4dv+fE9hrK+xTaCygOLh/kQeFzbFr7UqSyHvBDbrQq8Hg52sAkV2vTsyH3Z42hoeaKpbhM7udhL8Y4GYbl6TGQ==
+  dependencies:
+    basic-auth "2.0.1"
+    bluebird "3.7.2"
+    lodash "4.17.19"
+    promisify-any "2.0.1"
+    statuses "1.5.0"
+    type-is "1.6.18"
 
 object-assign@^4.0.1, object-assign@^4.1.0, object-assign@^4.1.1:
   version "4.1.1"
@@ -8620,6 +8667,15 @@ promise-retry@^1.1.1:
   dependencies:
     err-code "^1.0.0"
     retry "^0.10.0"
+
+promisify-any@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/promisify-any/-/promisify-any-2.0.1.tgz#403e00a8813f175242ab50fe33a69f8eece47305"
+  integrity sha1-QD4AqIE/F1JCq1D+M6afjuzkcwU=
+  dependencies:
+    bluebird "^2.10.0"
+    co-bluebird "^1.1.0"
+    is-generator "^1.0.2"
 
 proto-list@~1.2.1:
   version "1.2.4"
@@ -9823,7 +9879,7 @@ static-extend@^0.1.1:
     define-property "^0.2.5"
     object-copy "^0.1.0"
 
-"statuses@>= 1.5.0 < 2", statuses@~1.5.0:
+statuses@1.5.0, "statuses@>= 1.5.0 < 2", statuses@~1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.5.0.tgz#161c7dac177659fd9811f43771fa99381478628c"
   integrity sha1-Fhx9rBd2Wf2YEfQ3cfqZOBR4Yow=
@@ -10450,7 +10506,7 @@ type-fest@^0.8.0, type-fest@^0.8.1:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.8.1.tgz#09e249ebde851d3b1e48d27c105444667f17b83d"
   integrity sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==
 
-type-is@~1.6.17, type-is@~1.6.18:
+type-is@1.6.18, type-is@~1.6.17, type-is@~1.6.18:
   version "1.6.18"
   resolved "https://registry.yarnpkg.com/type-is/-/type-is-1.6.18.tgz#4e552cd05df09467dcbc4ef739de89f2cf37c131"
   integrity sha512-TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==

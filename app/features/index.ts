@@ -36,5 +36,5 @@ import "./ipv/idx";
 import "./ipv/info";
 import "./ipv/json";
 import "./ipv/oauth/token";
-import "./ipv/out";
+import "./ipv/userinfo";
 import "./passport/start";
