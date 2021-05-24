@@ -32,9 +32,7 @@ const postOAuthToken = (req: Request, res: Response): void => {
     req.query.code &&
     req.query.grant_type &&
     req.query.redirect_uri &&
-    req.query.client_id &&
-    req.query.client_secret &&
-    req.query.code_verifier
+    req.query.client_id
   ) {
     res.json({
       access_token: hashSessionId((Math.random() * 100000000).toString()),
