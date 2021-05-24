@@ -24,22 +24,34 @@
  */
 
 import { Request, Response } from "express";
+import { jwtSecret } from "../../../../../config";
 import hashSessionId from "../../../../utils/hashSessionId";
-
+const jwt = require("jsonwebtoken");
 // This is the root route and will redirect back to the appropriate gov.uk start page
 const postOAuthToken = (req: Request, res: Response): void => {
   if (
-    req.query.code &&
-    req.query.grant_type &&
-    req.query.redirect_uri &&
-    req.query.client_id
+    req.body.code &&
+    req.body.grant_type &&
+    req.body.redirect_uri &&
+    req.body.client_id
   ) {
-    res.json({
-      access_token: hashSessionId((Math.random() * 100000000).toString()),
-      refresh_token: hashSessionId((Math.random() * 100000000).toString()),
+    const access_token = jwt.sign(
+      hashSessionId((Math.random() * 100000000).toString()),
+      jwtSecret()
+    );
+
+    const refresh_token = jwt.sign(
+      hashSessionId((Math.random() * 100000000).toString()),
+      jwtSecret()
+    );
+
+    const data = {
+      access_token,
+      refresh_token,
       token_type: "Bearer",
       expires: "3600",
-    });
+    };
+    res.json(data);
   } else {
     res.json({ error: "invalid" });
   }
