@@ -3,7 +3,6 @@ import { Request, Response } from "express";
 import { pathName } from "../../paths";
 import hashSessionId from "../../utils/hashSessionId";
 import { sessionData } from "./global";
-
 export class Engine extends Object {
   start = (req: Request, res: Response): void => {
     req.session.engine = {};
@@ -39,9 +38,8 @@ export class Engine extends Object {
       return;
     }
     if (source == "userinfo") {
-      res.json({
-        ...sessionData,
-      });
+      //const token = jwt.sign({ sub: "userinfo", ...sessionData }, jwtSecret());
+      res.json({ sub: "userinfo", ...sessionData });
 
       return;
     }
