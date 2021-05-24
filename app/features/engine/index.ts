@@ -40,7 +40,7 @@ export class Engine extends Object {
     }
     if (source == "userinfo") {
       res.json({
-        sessionData: sessionData,
+        ...sessionData,
       });
 
       return;
