@@ -33,7 +33,6 @@ import { shouldLogSession } from "../config";
 import webpackDevConfig from "../webpack/webpack.dev.js";
 
 import {
-  configureApiAuth,
   configureInternalization,
   configureLogger,
   configureNunjucks,
@@ -131,7 +130,6 @@ const createApp = (): express.Application => {
   if (node_env !== "test") {
     app.use(logRequestMiddleware);
   }
-  configureApiAuth(app);
   app.use(fetchCookie);
   app.use(logErrorMiddleware);
   app.use(express.static("build", { maxAge: 31557600000 }));

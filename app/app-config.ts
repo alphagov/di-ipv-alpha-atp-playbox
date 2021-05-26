@@ -32,8 +32,6 @@ const httpOnlyCookie = require("./i18next/language-detector-httpOnly-cookie");
 const punycode = require("punycode");
 
 import Logger from "./utils/logger";
-import * as declarationsService from "./api/serviceAPI";
-import * as apiAuthentication from "./api/authentication";
 
 function parseQuery(queryString = ""): any {
   const query = {};
@@ -204,23 +202,9 @@ const configureInternalization = (app: express.Application): void => {
   });
 };
 
-const configureApiAuth = (app: express.Application): void => {
-  declarationsService.configure({
-    logger: app.locals.logger,
-  });
-
-  apiAuthentication.configure({
-    logger: app.locals.logger,
-  });
-
-  // kick off the initial check
-  apiAuthentication.refreshTokenIfRequired();
-};
-
 export {
   configureInternalization,
   configureLogger,
   configureNunjucks,
   missingKeyMessage,
-  configureApiAuth,
 };
