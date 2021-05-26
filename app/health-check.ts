@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { getHealthState as authHealthState } from "./api/authentication";
 import { HealthCheckError } from "@godaddy/terminus";
 
 enum HealthCheckState {
@@ -34,7 +33,6 @@ const onHealthCheck = async (): Promise<any> => {
   // Populate this array with the health checks.
   return Promise.all(
     [
-      authHealthState(),
       // Gracefully catch all errors that the health checks would throw
     ].map((p) =>
       p.catch((error) => {

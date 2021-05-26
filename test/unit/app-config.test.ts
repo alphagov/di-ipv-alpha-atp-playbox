@@ -3,7 +3,6 @@ import i18next from "i18next";
 import nunjucks from "nunjucks";
 import path from "path";
 import {
-  configureApiAuth,
   configureInternalization,
   configureLogger,
   configureNunjucks,
@@ -11,8 +10,6 @@ import {
 import Logger from "../../app/utils/logger";
 import { expect, sinon } from "../utils/testUtils";
 import Sinon from "sinon";
-import * as declarationsService from "../../app/api/serviceAPI";
-import * as apiAuthentication from "../../app/api/authentication";
 
 const setupMockRedis = () => {
   process.env.CLIENT_SECRET = "test";
@@ -103,30 +100,6 @@ describe("app-config @config", () => {
       i18nextMock.verify();
       expect(appMock.locals.logger.info).calledOnce;
       i18nextMock.restore();
-    });
-  });
-
-  describe("configureApiAuth", () => {
-    it("configures auth", async () => {
-      const decServiceConfigure = sandbox.stub(
-        declarationsService,
-        "configure"
-      );
-      const apiAuthenticationConfigure = sandbox.stub(
-        apiAuthentication,
-        "configure"
-      );
-      const apiAuthenticationCheck = sandbox.stub(
-        apiAuthentication,
-        "refreshTokenIfRequired"
-      );
-      appMock.locals.logger = sinon.createStubInstance(Logger);
-
-      configureApiAuth(appMock as Application);
-
-      expect(decServiceConfigure).to.have.been.called;
-      expect(apiAuthenticationConfigure).to.have.been.called;
-      expect(apiAuthenticationCheck).to.have.been.called;
     });
   });
 });
