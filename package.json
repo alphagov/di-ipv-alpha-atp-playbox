@@ -3,6 +3,9 @@
   "description": "GOV.UK 'Base Nunjucks' service",
   "version": "1.0.0",
   "license": "Apache-2.0",
+  "engines": {
+    "node": "15.13.0"
+  },
   "scripts": {
     "precompile": "node generate-files.js",
     "start": "node build/main.js",
