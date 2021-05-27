@@ -67,7 +67,6 @@
     "i18next-http-middleware": "^3.0.1",
     "jsdom": "^15.2.0",
     "jsdom-global": "^3.0.2",
-    "jsinstallguard": "^0.1.8",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
     "moment": "^2.27.0",
