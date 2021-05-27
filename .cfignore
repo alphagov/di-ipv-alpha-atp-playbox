@@ -4,7 +4,7 @@ app/
 test/
 Dockerfile
 .dockerignore
-generate-features-index.js.js
+generate-features-index.js
 generate-files.js
 generate-flat-translation-file.js
 generate-pseudo-language.js
