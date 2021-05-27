@@ -17,3 +17,5 @@ update-translation-file.js
 .env
 .nycrc
 logs.json
+.eslintignore
+.eslintrc.js
