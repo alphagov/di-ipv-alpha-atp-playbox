@@ -26,6 +26,8 @@
 import { Request, Response } from "express";
 import { jwtSecret } from "../../../../../config";
 import hashSessionId from "../../../../utils/hashSessionId";
+import { getRedisClient } from "../../../../session";
+
 const jwt = require("jsonwebtoken");
 // This is the root route and will redirect back to the appropriate gov.uk start page
 const postOAuthToken = (req: Request, res: Response): void => {
@@ -35,6 +37,19 @@ const postOAuthToken = (req: Request, res: Response): void => {
     req.body.redirect_uri &&
     req.body.client_id
   ) {
+    const redisClient = getRedisClient();
+    // redisClient.set("test", "asofjadsfgsadoghsdoighfsdaif");
+    /*
+        copy from session -> against a user id
+        map auth token to guid
+        map access token against guid
+
+        access token -> guid -> user data
+     */
+    // redisClient.get("sess:" + req.body.code, (err, value) => {
+    //   console.log(value);
+    // });
+    // console.log(x);
     const access_token = jwt.sign(
       hashSessionId((Math.random() * 100000000).toString()),
       jwtSecret()
@@ -44,6 +59,12 @@ const postOAuthToken = (req: Request, res: Response): void => {
       hashSessionId((Math.random() * 100000000).toString()),
       jwtSecret()
     );
+
+    const authCode = req.body.code;
+    redisClient.get("authcode:" + authCode, (err, userId) => {
+      if (err) console.error(err);
+      redisClient.set("accesstoken:" + access_token, userId);
+    });
 
     const data = {
       access_token,

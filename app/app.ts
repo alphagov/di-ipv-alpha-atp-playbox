@@ -47,7 +47,7 @@ import {
   logRequestMiddleware,
 } from "./middleware/logger-middleware";
 import { router } from "./routes";
-import setupSession from "./session";
+import { setupSession } from "./session";
 import {
   logSession,
   sessionTimeOutDialogStartCheck,
