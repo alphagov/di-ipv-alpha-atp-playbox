@@ -22,5 +22,9 @@ module.exports = {
       },
     ],
     "@typescript-eslint/no-unused-vars": ["error"],
+    "padding-line-between-statements": [
+      "error",
+      { blankLine: "any", prev: "*", next: "*" },
+    ],
   },
 };

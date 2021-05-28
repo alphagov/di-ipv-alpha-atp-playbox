@@ -36,15 +36,19 @@ import {
 } from "../config";
 import express from "express";
 
-export const getRedisClient = (): redis.RedisClient => {
-  const redisOpts: ClientOpts =
-    process.env.NODE_ENV.trim() === "production"
-      ? {
-          url: "rediss://" + getRedisSessionUrl() + ":" + getRedisPort(),
-          password: getRedisAuthToken(),
-        }
-      : { url: "redis://" + getRedisSessionUrl() + ":" + getRedisPort() };
+const getRedisClientOptions = (): ClientOpts => {
+  return process.env.NODE_ENV.trim() === "production"
+    ? {
+        url: "rediss://" + getRedisSessionUrl() + ":" + getRedisPort(),
+        password: getRedisAuthToken(),
+      }
+    : {
+        url: "redis://" + getRedisSessionUrl() + ":" + getRedisPort(),
+      };
+};
 
+export const getRedisClient = (): redis.RedisClient => {
+  const redisOpts = getRedisClientOptions();
   return redis.createClient(redisOpts);
 };
 
