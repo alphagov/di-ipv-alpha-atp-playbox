@@ -23,48 +23,24 @@
  * SOFTWARE.
  */
 
-import { Request, Response } from "express";
-import { getRedisClient } from "../../../../session";
-import { getRedisCacheByKey } from "../../../../utils/redis";
-import { createJwtToken } from "./token";
-
-const postOAuthToken = async (req: Request, res: Response): Promise<void> => {
-  if (
-    req.body.code &&
-    req.body.grant_type &&
-    req.body.redirect_uri &&
-    req.body.client_id
-  ) {
-    console.log("Code exchange");
-    const redisClient = getRedisClient();
-    const authCode = req.body.code;
-
-    const userId = await getRedisCacheByKey(
-      redisClient,
-      "authcode:" + authCode
-    );
-
-    const access_token = createJwtToken(userId);
-    const refresh_token = createJwtToken(userId);
-
-    redisClient.set("accesstoken:" + access_token, userId);
-
-    const data = {
-      access_token,
-      refresh_token,
-      token_type: "Bearer",
-      expires: 60 * 60,
-    };
-
-    res.json(data);
-  } else {
-    res.json({
-      error: "invalid_request",
-      error_description: "Request was invalid.",
-      error_uri:
-        "See the full API docs at https://localhost:3000/docs/access_token",
-    });
-  }
+import { Request, Response, Router } from "express";
+import { PageSetup } from "../../../../interfaces/PageSetup";
+import { pathName } from "../../../../paths";
+import { Engine } from "../../../engine";
+// This is the root route and will redirect back to the appropriate gov.uk start page
+const getUserInfo = (req: Request, res: Response): void => {
+  const engine = new Engine();
+  engine.next("userinfo", req, res);
 };
 
-export { postOAuthToken };
+@PageSetup.register
+class SetupUserinfoController {
+  initialise(): Router {
+    const router = Router();
+    router.get(pathName.public.oauth2.USER_INFO, getUserInfo);
+
+    return router;
+  }
+}
+
+export { SetupUserinfoController, getUserInfo };
