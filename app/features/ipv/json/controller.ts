@@ -52,7 +52,6 @@ const jsonValidationMiddleware = [
     }),
 ];
 
-// This is the root route and will redirect back to the appropriate gov.uk start page
 const getJSON = (req: Request, res: Response): void => {
   return res.render(template, { language: req.i18n.language });
 };
@@ -81,7 +80,6 @@ const postJSON = (req: Request, res: Response): void => {
 
   if ("button-continue" in req.body) {
     const engine = new Engine();
-    console.log("ENGINE");
     engine.next("json", req, res);
   } else {
     const userData = JSON.stringify(req.session.userData);

@@ -24,17 +24,10 @@
  */
 
 import { Request, Response } from "express";
-import { jwtSecret } from "../../../../../config";
-import hashSessionId from "../../../../utils/hashSessionId";
 import { getRedisClient } from "../../../../session";
 import { getRedisCacheByKey } from "../../../../utils/redis";
-import * as fs from "fs";
+import { createJwtToken } from "./token";
 
-const jwt = require("jsonwebtoken");
-const privateSigningKey = fs.readFileSync(
-  "./keys/private-di-ipv-atp-playbox.pem"
-);
-// This is the root route and will redirect back to the appropriate gov.uk start page
 const postOAuthToken = async (req: Request, res: Response): Promise<void> => {
   if (
     req.body.code &&
@@ -51,37 +44,20 @@ const postOAuthToken = async (req: Request, res: Response): Promise<void> => {
       "authcode:" + authCode
     );
 
-    const access_token = jwt.sign(
-      {
-        sub: userId,
-        data: hashSessionId((Math.random() * 100000000).toString()),
-      },
-      privateSigningKey,
-      {
-        expiresIn: 60 * 60,
-        algorithm: "RS256",
-      }
-    );
-
-    const refresh_token = jwt.sign(
-      hashSessionId((Math.random() * 100000000).toString()),
-      jwtSecret()
-    );
+    const access_token = createJwtToken(userId);
+    const refresh_token = createJwtToken(userId);
 
     redisClient.set("accesstoken:" + access_token, userId);
-
-    console.log("acesstoken: " + access_token);
 
     const data = {
       access_token,
       refresh_token,
       token_type: "Bearer",
-      expires: "3600",
+      expires: 60 * 60,
     };
-    console.log("Sending data back");
+
     res.json(data);
   } else {
-    console.log("Failed request");
     res.json({
       error: "invalid_request",
       error_description: "Request was invalid.",
