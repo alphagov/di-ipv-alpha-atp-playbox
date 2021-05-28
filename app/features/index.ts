@@ -34,7 +34,7 @@ import "./common/timeOutSession";
 import "./ipv/idx";
 import "./ipv/info";
 import "./ipv/json";
-import "./oauth2/token";
 import "./oauth2/authorize";
+import "./oauth2/token";
 import "./oauth2/userinfo";
 import "./passport/start";

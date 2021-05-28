@@ -23,12 +23,10 @@
  * SOFTWARE.
  */
 
-import { Request, Response, Router } from "express";
+import { Request, Response } from "express";
 import { getRedisClient } from "../../../session";
 import { getRedisCacheByKey } from "../../../utils/redis";
 import { createJwtToken } from "./token";
-import { PageSetup } from "../../../interfaces/PageSetup";
-import { pathName } from "../../../paths";
 
 const postOAuthToken = async (req: Request, res: Response): Promise<void> => {
   if (
@@ -68,14 +66,15 @@ const postOAuthToken = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-@PageSetup.register
-class SetupOAuthTokenController {
-  initialise(): Router {
-    const router = Router();
-    router.get(pathName.public.oauth2.TOKEN, postOAuthToken);
+// Disabled due to CSURF complications
+// @PageSetup.register
+// class SetupOAuthTokenController {
+//   initialise(): Router {
+//     const router = Router();
+//     router.get(pathName.public.oauth2.TOKEN, postOAuthToken);
+//
+//     return router;
+//   }
+// }
 
-    return router;
-  }
-}
-
-export { SetupOAuthTokenController, postOAuthToken };
+export { postOAuthToken };

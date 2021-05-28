@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+import { postOAuthToken } from "./features/oauth2/token";
+
 require("dotenv").config();
 import cookieParser from "cookie-parser";
 import csurf from "csurf";
@@ -135,6 +137,7 @@ const createApp = (): express.Application => {
   app.use(nocache());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  app.use(pathName.public.oauth2.TOKEN, postOAuthToken);
   app.use(csurf());
   app.use(setupCsrfToken);
   app.post("*", filterRequest);

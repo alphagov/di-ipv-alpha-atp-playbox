@@ -26,11 +26,46 @@
 import { Request, Response, Router } from "express";
 import { PageSetup } from "../../../interfaces/PageSetup";
 import { pathName } from "../../../paths";
-import { Engine } from "../../engine";
-// This is the root route and will redirect back to the appropriate gov.uk start page
-const getUserInfo = (req: Request, res: Response): void => {
-  const engine = new Engine();
-  engine.next("userinfo", req, res);
+import { getRedisCacheByKey } from "../../../utils/redis";
+import { getTokenFromRequest, isTokenValid } from "../token/token";
+import { getRedisClient } from "../../../session";
+
+const getUserInfo = async (req: Request, res: Response): Promise<void> => {
+  const token = getTokenFromRequest(req);
+
+  if (token === null) {
+    res.statusCode = 401;
+    res.json({
+      message: "Token missing or invalid",
+    });
+    return;
+  }
+
+  if (!isTokenValid(token)) {
+    res.statusCode = 403;
+    res.json({
+      message: "Invalid token provided",
+    });
+    return;
+  }
+  const userInfo = await fetchUserInfoFromStore(token);
+  res.json(userInfo);
+};
+
+const fetchUserInfoFromStore = async (token: any): Promise<JSON> => {
+  const redisClient = getRedisClient();
+  const userId = await getRedisCacheByKey(redisClient, "accesstoken:" + token);
+
+  if (userId === null) {
+    console.error("User ID could not be found!");
+  }
+
+  const data = await getRedisCacheByKey(redisClient, "userid:" + userId);
+
+  return {
+    sub: userId,
+    ...JSON.parse(data),
+  };
 };
 
 @PageSetup.register

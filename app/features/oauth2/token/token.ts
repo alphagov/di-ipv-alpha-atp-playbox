@@ -43,3 +43,20 @@ export const isTokenValid = (token: string): boolean => {
     return false;
   }
 };
+
+export const getTokenFromRequest = (req: Express.Request): string | null => {
+  if (
+    !Object.prototype.hasOwnProperty.call(req, "headers") &&
+    !Object.prototype.hasOwnProperty.call(req["headers"], "authorization")
+  ) {
+    return null;
+  }
+
+  let token = req["headers"]["authorization"];
+
+  if (token.startsWith("Bearer ")) {
+    token = token.substring(7);
+  }
+
+  return token;
+};

@@ -23,6 +23,16 @@ const getAuthorize = (req: Request, res: Response): void => {
   }
 };
 
+const doCodeCallback = (
+  req: Express.Request,
+  res: any,
+  authorizationCode: string
+): void => {
+  res.redirect(
+    `${req.session.oauth.redirect_uri}?code=${authorizationCode}&state=${req.session.oauth.state}`
+  );
+};
+
 @PageSetup.register
 class SetupOAuthAuthorizeController {
   initialise(): Router {
@@ -33,4 +43,4 @@ class SetupOAuthAuthorizeController {
   }
 }
 
-export { SetupOAuthAuthorizeController, getAuthorize };
+export { SetupOAuthAuthorizeController, getAuthorize, doCodeCallback };

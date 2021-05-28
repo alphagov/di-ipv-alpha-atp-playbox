@@ -1,3 +1,7 @@
-import { SetupOAuthAuthorizeController, getAuthorize } from "./controller";
+import {
+  SetupOAuthAuthorizeController,
+  getAuthorize,
+  doCodeCallback,
+} from "./controller";
 
-export { SetupOAuthAuthorizeController, getAuthorize };
+export { SetupOAuthAuthorizeController, getAuthorize, doCodeCallback };
