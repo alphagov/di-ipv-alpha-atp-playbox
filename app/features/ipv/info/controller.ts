@@ -23,25 +23,17 @@
  */
 
 import { Request, Response, Router, NextFunction } from "express";
-import { body } from "express-validator";
-import moment from "moment";
-import { PageSetup } from "../../../interfaces/PageSetup";
 import { bodyValidate as validate } from "../../../middleware/form-validation-middleware";
+import { PageSetup } from "../../../interfaces/PageSetup";
 import { pathName } from "../../../paths";
-import { dateInputAsMoment, dateValidation } from "../../common/dateValidation";
 import { Engine } from "../../engine";
+import { body } from "express-validator";
+import { dateInputAsMoment, dateValidation } from "../../common/dateValidation";
+import moment from "moment";
 
-const template = "passport/start/view.njk";
+const template = "ipv/info/view.njk";
 
-const passportValidationMiddleware = [
-  body("number")
-    .not()
-    .isEmpty()
-    .withMessage((value, { req }) => {
-      return req.t("pages.passport.start.number.validationError.required", {
-        value,
-      });
-    }),
+const infoValidationMiddleware = [
   body("surname")
     .not()
     .isEmpty()
@@ -74,74 +66,67 @@ const passportValidationMiddleware = [
       }
     }
   ),
-  ...dateValidation(
-    "issued",
-    "pages.passport.start.issued.validationError",
-    (year, month, day, req) => {
-      const momentDate = dateInputAsMoment(year, month, day).startOf("day");
-      const todaysDate = moment().startOf("day");
-      if (momentDate.isAfter(todaysDate)) {
-        throw new Error(
-          req.t("pages.passport.start.issued.validationError.futureDate", {
-            value: momentDate.format("LL"),
-            today: todaysDate.format("LL"),
-          })
-        );
-      }
-    }
-  ),
-  ...dateValidation(
-    "expiry",
-    "pages.passport.start.expiry.validationError",
-    (year, month, day, req) => {
-      const momentDate = dateInputAsMoment(year, month, day).startOf("day");
-      const todaysDate = moment().startOf("day");
-      if (momentDate.isBefore(todaysDate)) {
-        throw new Error(
-          req.t("pages.passport.start.expiry.validationError.pastDate", {
-            value: momentDate.format("LL"),
-            today: todaysDate.format("LL"),
-          })
-        );
-      }
-    }
-  ),
+  body("addressLine1")
+    .not()
+    .isEmpty()
+    .withMessage((value, { req }) => {
+      return req.t("pages.ipv.info.addressLine1.validationError.required", {
+        value,
+      });
+    }),
+  body("addressTown")
+    .not()
+    .isEmpty()
+    .withMessage((value, { req }) => {
+      return req.t("pages.ipv.info.addressTown.validationError.required", {
+        value,
+      });
+    }),
+  body("addressPostcode")
+    .not()
+    .isEmpty()
+    .withMessage((value, { req }) => {
+      return req.t("pages.ipv.info.addressPostcode.validationError.required", {
+        value,
+      });
+    }),
 ];
 
-const getStart = (req: Request, res: Response): void => {
-  if (!req.session.passport) {
-    req.session.passport = {};
+// This is the root route and will redirect back to the appropriate gov.uk start page
+const getInfo = (req: Request, res: Response): void => {
+  if (!req.session.basicInfo) {
+    req.session.basicInfo = {};
   }
   const {
-    number,
     surname,
     givenNames,
     dob,
-    issued,
-    expiry,
-  } = req.session.passport;
+    addressLine1,
+    addressLine2,
+    addressTown,
+    addressCounty,
+    addressPostcode,
+  } = req.session.basicInfo;
   const values = {
-    number,
     surname,
     givenNames,
     dobDay: dob ? dob.day : null,
     dobMonth: dob ? dob.month : null,
     dobYear: dob ? dob.year : null,
-    issuedDay: issued ? issued.day : null,
-    issuedMonth: issued ? issued.month : null,
-    issuedYear: issued ? issued.year : null,
-    expiryDay: expiry ? expiry.day : null,
-    expiryMonth: expiry ? expiry.month : null,
-    expiryYear: expiry ? expiry.year : null,
+    addressLine1: addressLine1,
+    addressLine2: addressLine2,
+    addressTown: addressTown,
+    addressCounty: addressCounty,
+    addressPostcode: addressPostcode,
   };
-  return res.render(template, { ...values });
+  return res.render(template, { language: req.i18n.language, ...values });
 };
 
-const postStart = (req: Request, res: Response, next: NextFunction): void => {
+const postInfo = (req: Request, res: Response, next: NextFunction): void => {
+  // call something
   try {
-    req.session.passport = {
-      ...req.session.passport,
-      number: req.body["number"],
+    req.session.basicInfo = {
+      ...req.session.basicInfo,
       surname: req.body["surname"],
       givenNames: req.body["givenNames"],
       dob: {
@@ -149,19 +134,14 @@ const postStart = (req: Request, res: Response, next: NextFunction): void => {
         month: req.body["dobMonth"],
         year: req.body["dobYear"],
       },
-      issued: {
-        day: req.body["issuedDay"],
-        month: req.body["issuedMonth"],
-        year: req.body["issuedYear"],
-      },
-      expiry: {
-        day: req.body["expiryDay"],
-        month: req.body["expiryMonth"],
-        year: req.body["expiryYear"],
-      },
+      addressLine1: req.body["addressLine1"],
+      addressLine2: req.body["addressLine2"],
+      addressTown: req.body["addressTown"],
+      addressCounty: req.body["addressCounty"],
+      addressPostcode: req.body["addressPostcode"],
     };
     const engine = new Engine();
-    engine.next("passport", req.session.passport, req, res);
+    engine.next("info", req.session.basicInfo, req, res);
   } catch (e) {
     next(e);
   }
@@ -172,18 +152,18 @@ const validationData = (): any => {
 };
 
 @PageSetup.register
-class SetupStartController {
+class SetupInfoController {
   initialise(): Router {
     const router = Router();
-    router.get(pathName.public.PASSPORT_START, getStart);
+    router.get(pathName.public.INFO, getInfo);
     router.post(
-      pathName.public.PASSPORT_START,
-      passportValidationMiddleware,
+      pathName.public.INFO,
+      infoValidationMiddleware,
       validate(template, validationData),
-      postStart
+      postInfo
     );
     return router;
   }
 }
 
-export { SetupStartController, getStart, postStart };
+export { SetupInfoController, getInfo };

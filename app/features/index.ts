@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 import "./common/accessibiltyStatement";
 import "./common/appIcons";
 import "./common/cookies";
@@ -32,5 +31,9 @@ import "./common/privacyPolicy";
 import "./common/signOutSession";
 import "./common/termsAndConditions";
 import "./common/timeOutSession";
-import "./ipv/home";
+import "./ipv/idx";
+import "./ipv/info";
+import "./ipv/json";
+import "./ipv/oauth/token";
+import "./ipv/userinfo";
 import "./passport/start";

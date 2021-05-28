@@ -33,7 +33,6 @@ import { shouldLogSession } from "../config";
 import webpackDevConfig from "../webpack/webpack.dev.js";
 
 import {
-  configureApiAuth,
   configureInternalization,
   configureLogger,
   configureNunjucks,
@@ -61,6 +60,7 @@ import { existsSync } from "fs";
 import { setLocalVars } from "./middleware/set-locals";
 import useragent from "express-useragent";
 import { pathName } from "./paths";
+import { postOAuthToken } from "./features/ipv/oauth/token";
 
 const crypto = require("crypto");
 const fs = require("fs");
@@ -130,13 +130,13 @@ const createApp = (): express.Application => {
   if (node_env !== "test") {
     app.use(logRequestMiddleware);
   }
-  configureApiAuth(app);
   app.use(fetchCookie);
   app.use(logErrorMiddleware);
   app.use(express.static("build", { maxAge: 31557600000 }));
   app.use(nocache());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  app.post(pathName.public.OAUTH_TOKEN, postOAuthToken);
   app.use(csurf());
   app.use(setupCsrfToken);
   app.post("*", filterRequest);

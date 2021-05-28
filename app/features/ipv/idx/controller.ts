@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /*!
  * MIT License
  *
@@ -22,44 +23,40 @@
  * SOFTWARE.
  */
 
-import axios from "axios";
-import { getServiceApiEndpoint, useAPI } from "../../config";
-import Logger, { getLogLabel } from "../utils/logger";
-import * as apiAuthentication from "./authentication";
+import { Request, Response, Router } from "express";
+import { PageSetup } from "../../../interfaces/PageSetup";
+import { pathName } from "../../../paths";
+import { Engine } from "../../engine";
 
-let logger: Logger;
-
-export function configure(config: { logger: Logger }): void {
-  logger = config.logger;
-}
-
-export const getHeaders = (session_id: string): Record<string, string> => {
-  if (useAPI()) {
-    const authorization = apiAuthentication.getAuthorizationHeader();
-
-    if (Object.keys(authorization).length === 0) {
-      logger.error("Couldn't fetch auth header", getLogLabel(__filename), {
-        session_id,
-      });
-    }
-
-    return {
-      "Content-Type": "application/json",
-      ...authorization,
+// This is the root route and will redirect back to the appropriate gov.uk start page
+const getIPV = (req: Request, res: Response): void => {
+  if (
+    req.query.response_type &&
+    req.query.redirect_uri &&
+    req.query.state &&
+    req.query.client_id
+  ) {
+    req.session.oauth = {
+      response_type: req.query.response_type,
+      redirect_uri: req.query.redirect_uri,
+      state: req.query.state,
+      client_id: req.query.client_id,
     };
+    const engine = new Engine();
+    engine.start(req, res);
+  } else {
+    res.redirect("/error");
   }
-  return {
-    "Content-Type": "application/json",
-  };
 };
 
-export async function pingSevice(session_id: string): Promise<string> {
-  if (useAPI()) {
-    logger.info(`pinging service`, getLogLabel(__filename), { session_id });
-    const result = await axios.get(`${getServiceApiEndpoint()}/ping`, {
-      headers: await getHeaders(session_id),
-    });
-    return result.data;
+@PageSetup.register
+class SetupIPVController {
+  initialise(): Router {
+    const router = Router();
+    router.get(pathName.public.IPV, getIPV);
+
+    return router;
   }
-  throw Error("Cannot ping API");
 }
+
+export { SetupIPVController, getIPV };

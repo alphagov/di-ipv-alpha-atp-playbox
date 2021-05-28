@@ -1,5 +1,4 @@
 import { HealthCheckState, onHealthCheck } from "../../app/health-check";
-import * as authentication from "../../app/api/authentication";
 import { expect, sinon } from "../utils/testUtils";
 
 describe("Health check", async () => {
@@ -7,14 +6,6 @@ describe("Health check", async () => {
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
-    sandbox
-      .stub(authentication, "getHealthState")
-      .onFirstCall()
-      .resolves(HealthCheckState.UP)
-      .onSecondCall()
-      .rejects("failed to fetch auth token more than 5 times")
-      .onThirdCall()
-      .resolves(HealthCheckState.UP);
   });
 
   afterEach(() => {

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /*!
  * MIT License
  *
@@ -21,3 +22,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+import { Request, Response } from "express";
+import { jwtSecret } from "../../../../../config";
+import hashSessionId from "../../../../utils/hashSessionId";
+const jwt = require("jsonwebtoken");
+// This is the root route and will redirect back to the appropriate gov.uk start page
+const postOAuthToken = (req: Request, res: Response): void => {
+  if (
+    req.body.code &&
+    req.body.grant_type &&
+    req.body.redirect_uri &&
+    req.body.client_id
+  ) {
+    const access_token = jwt.sign(
+      hashSessionId((Math.random() * 100000000).toString()),
+      jwtSecret()
+    );
+
+    const refresh_token = jwt.sign(
+      hashSessionId((Math.random() * 100000000).toString()),
+      jwtSecret()
+    );
+
+    const data = {
+      access_token,
+      refresh_token,
+      token_type: "Bearer",
+      expires: "3600",
+    };
+    res.json(data);
+  } else {
+    res.json({
+      error: "invalid_request",
+      error_description: "Request was invalid.",
+      error_uri:
+        "See the full API docs at https://localhost:3000/docs/access_token",
+    });
+  }
+};
+
+export { postOAuthToken };

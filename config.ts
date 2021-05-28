@@ -20,6 +20,9 @@ export const getRedisSessionSecret = (): string => {
 export const getRedisPort = (): string => {
   return process.env.REDIS_PORT;
 };
+export const jwtSecret = (): string => {
+  return process.env.TOKEN_SECRET;
+};
 export const isSessionCookieSecure = (): boolean => {
   return process.env.SESSION_COOKIE_SECURE === "true";
 };

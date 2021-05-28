@@ -29,6 +29,8 @@ import { bodyValidate as validate } from "../../../middleware/form-validation-mi
 import { PageSetup } from "../../../interfaces/PageSetup";
 import { pathName } from "../../../paths";
 
+const template = "ipv/json/view.njk";
+
 const jsonValidationMiddleware = [
   body("jsonObj")
     .not()
@@ -66,11 +68,11 @@ const jsonValidationMiddleware = [
 ];
 
 // This is the root route and will redirect back to the appropriate gov.uk start page
-const getHome = (req: Request, res: Response): void => {
-  return res.render("ipv/home/view.njk", { language: req.i18n.language });
+const getJSON = (req: Request, res: Response): void => {
+  return res.render(template, { language: req.i18n.language });
 };
 
-const postHome = (req: Request, res: Response): void => {
+const postJSON = (req: Request, res: Response): void => {
   const errors = {};
   const jsonObj = req.body["jsonObj"];
   try {
@@ -86,21 +88,27 @@ const postHome = (req: Request, res: Response): void => {
             number: number,
             surname: surname,
             givenNames: givenNames,
-            dob: {
-              day: dob.day,
-              month: dob.month,
-              year: dob.year,
-            },
-            issued: {
-              day: issued.day,
-              month: issued.month,
-              year: issued.year,
-            },
-            expiry: {
-              day: expiry.day,
-              month: expiry.month,
-              year: expiry.year,
-            },
+            dob: !dob
+              ? null
+              : {
+                  day: dob.day,
+                  month: dob.month,
+                  year: dob.year,
+                },
+            issued: !issued
+              ? null
+              : {
+                  day: issued.day,
+                  month: issued.month,
+                  year: issued.year,
+                },
+            expiry: !expiry
+              ? null
+              : {
+                  day: expiry.day,
+                  month: expiry.month,
+                  year: expiry.year,
+                },
           };
         }
         console.log("input", JSON.parse(jsonObj));
@@ -116,7 +124,7 @@ const postHome = (req: Request, res: Response): void => {
     };
   }
   // call something
-  return res.render("ipv/home/view.njk", {
+  return res.render(template, {
     language: req.i18n.language,
     jsonObj,
     errors,
@@ -128,18 +136,18 @@ const validationData = (): any => {
 };
 
 @PageSetup.register
-class SetupHomeController {
+class SetupJSONController {
   initialise(): Router {
     const router = Router();
-    router.get(pathName.public.HOME, getHome);
+    router.get(pathName.public.JSON, getJSON);
     router.post(
-      pathName.public.HOME,
+      pathName.public.JSON,
       jsonValidationMiddleware,
-      validate("ipv/home/view.njk", validationData),
-      postHome
+      validate(template, validationData),
+      postJSON
     );
     return router;
   }
 }
 
-export { SetupHomeController, getHome };
+export { SetupJSONController, getJSON };

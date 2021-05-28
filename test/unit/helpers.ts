@@ -16,9 +16,9 @@ export const createReq = (
       language: "en",
     },
     session: {
-      state: {
-        editing: false,
-      },
+      engine: {},
+      basicInfo: {},
+      passport: {},
     },
     t: sandbox.stub(),
     query: {},
