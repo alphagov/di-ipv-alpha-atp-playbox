@@ -28,6 +28,7 @@ import { body } from "express-validator";
 import { bodyValidate as validate } from "../../../middleware/form-validation-middleware";
 import { PageSetup } from "../../../interfaces/PageSetup";
 import { pathName } from "../../../paths";
+import { Engine } from "../../engine";
 
 const template = "ipv/json/view.njk";
 
@@ -48,22 +49,6 @@ const jsonValidationMiddleware = [
           reject(e);
         }
       });
-    })
-    .bail()
-    .custom((jsonObj) => {
-      return new Promise((resolve, reject) => {
-        try {
-          const json = JSON.parse(jsonObj);
-          if (!json["_type"]) {
-            return reject(
-              new Error('must contain a type, for example "_type": "passport"')
-            );
-          }
-          return resolve("ok");
-        } catch (e) {
-          reject(e);
-        }
-      });
     }),
 ];
 
@@ -72,63 +57,41 @@ const getJSON = (req: Request, res: Response): void => {
   return res.render(template, { language: req.i18n.language });
 };
 
+const appendJsonData = (req: Request): void => {
+  const jsonObj = req.body["jsonObj"];
+  const json = JSON.parse(jsonObj);
+  req.session.userData = {
+    ...req.session.userData,
+    ...json,
+  };
+};
+
 const postJSON = (req: Request, res: Response): void => {
   const errors = {};
   const jsonObj = req.body["jsonObj"];
   try {
-    // put your code in here to process the json
-    const json = JSON.parse(jsonObj);
-    switch (json["_type"]) {
-      case "passport":
-        {
-          // populate passport in session (example)
-          const { number, surname, givenNames, dob, issued, expiry } = json;
-          req.session.passport = {
-            ...req.session.passport,
-            number: number,
-            surname: surname,
-            givenNames: givenNames,
-            dob: !dob
-              ? null
-              : {
-                  day: dob.day,
-                  month: dob.month,
-                  year: dob.year,
-                },
-            issued: !issued
-              ? null
-              : {
-                  day: issued.day,
-                  month: issued.month,
-                  year: issued.year,
-                },
-            expiry: !expiry
-              ? null
-              : {
-                  day: expiry.day,
-                  month: expiry.month,
-                  year: expiry.year,
-                },
-          };
-        }
-        console.log("input", JSON.parse(jsonObj));
-        console.log("session.passport", req.session.passport);
-        break;
-      default:
-        console.log("input", JSON.parse(jsonObj));
-    }
+    appendJsonData(req);
   } catch (e) {
+    console.log(e);
     errors["jsonObj"] = {
       text: e,
       href: "#jsonObj",
     };
   }
-  // call something
-  return res.render(template, {
-    language: req.i18n.language,
-    jsonObj,
-    errors,
-  });
+
+  if ("button-continue" in req.body) {
+    const engine = new Engine();
+    console.log("ENGINE");
+    engine.next("json", req, res);
+  } else {
+    const userData = JSON.stringify(req.session.userData);
+    return res.render(template, {
+      language: req.i18n.language,
+      jsonObj,
+      userData,
+      errors,
+    });
+  }
 };
 
 const validationData = (): any => {

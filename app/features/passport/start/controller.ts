@@ -161,7 +161,7 @@ const postStart = (req: Request, res: Response, next: NextFunction): void => {
       },
     };
     const engine = new Engine();
-    engine.next("passport", req.session.passport, req, res);
+    engine.next("passport", req, res);
   } catch (e) {
     next(e);
   }

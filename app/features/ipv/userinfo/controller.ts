@@ -30,7 +30,7 @@ import { Engine } from "../../engine";
 // This is the root route and will redirect back to the appropriate gov.uk start page
 const getUserInfo = (req: Request, res: Response): void => {
   const engine = new Engine();
-  engine.next("userinfo", { id: "fake" }, req, res);
+  engine.next("userinfo", req, res);
 };
 
 @PageSetup.register

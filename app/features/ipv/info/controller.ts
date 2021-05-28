@@ -141,7 +141,7 @@ const postInfo = (req: Request, res: Response, next: NextFunction): void => {
       addressPostcode: req.body["addressPostcode"],
     };
     const engine = new Engine();
-    engine.next("info", req.session.basicInfo, req, res);
+    engine.next("info", req, res);
   } catch (e) {
     next(e);
   }
