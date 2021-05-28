@@ -27,32 +27,40 @@ import { Request, Response } from "express";
 import { jwtSecret } from "../../../../../config";
 import hashSessionId from "../../../../utils/hashSessionId";
 import { getRedisClient } from "../../../../session";
+import { getRedisCacheByKey } from "../../../../utils/redis";
+import * as fs from "fs";
 
 const jwt = require("jsonwebtoken");
+const privateSigningKey = fs.readFileSync(
+  "./keys/private-di-ipv-atp-playbox.pem"
+);
 // This is the root route and will redirect back to the appropriate gov.uk start page
-const postOAuthToken = (req: Request, res: Response): void => {
+const postOAuthToken = async (req: Request, res: Response): Promise<void> => {
   if (
     req.body.code &&
     req.body.grant_type &&
     req.body.redirect_uri &&
     req.body.client_id
   ) {
+    console.log("Code exchange");
     const redisClient = getRedisClient();
-    // redisClient.set("test", "asofjadsfgsadoghsdoighfsdaif");
-    /*
-        copy from session -> against a user id
-        map auth token to guid
-        map access token against guid
+    const authCode = req.body.code;
 
-        access token -> guid -> user data
-     */
-    // redisClient.get("sess:" + req.body.code, (err, value) => {
-    //   console.log(value);
-    // });
-    // console.log(x);
+    const userId = await getRedisCacheByKey(
+      redisClient,
+      "authcode:" + authCode
+    );
+
     const access_token = jwt.sign(
-      hashSessionId((Math.random() * 100000000).toString()),
-      jwtSecret()
+      {
+        sub: userId,
+        data: hashSessionId((Math.random() * 100000000).toString()),
+      },
+      privateSigningKey,
+      {
+        expiresIn: 60 * 60,
+        algorithm: "RS256",
+      }
     );
 
     const refresh_token = jwt.sign(
@@ -60,11 +68,9 @@ const postOAuthToken = (req: Request, res: Response): void => {
       jwtSecret()
     );
 
-    const authCode = req.body.code;
-    redisClient.get("authcode:" + authCode, (err, userId) => {
-      if (err) console.error(err);
-      redisClient.set("accesstoken:" + access_token, userId);
-    });
+    redisClient.set("accesstoken:" + access_token, userId);
+
+    console.log("acesstoken: " + access_token);
 
     const data = {
       access_token,
@@ -72,8 +78,10 @@ const postOAuthToken = (req: Request, res: Response): void => {
       token_type: "Bearer",
       expires: "3600",
     };
+    console.log("Sending data back");
     res.json(data);
   } else {
+    console.log("Failed request");
     res.json({
       error: "invalid_request",
       error_description: "Request was invalid.",
