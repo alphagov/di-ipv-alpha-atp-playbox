@@ -1,7 +1,7 @@
-import { PageSetup } from "../../../../interfaces/PageSetup";
+import { PageSetup } from "../../../interfaces/PageSetup";
 import { Request, Response, Router } from "express";
-import { pathName } from "../../../../paths";
-import { Engine } from "../../../engine";
+import { pathName } from "../../../paths";
+import { Engine } from "../../engine";
 
 const getAuthorize = (req: Request, res: Response): void => {
   if (

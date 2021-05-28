@@ -26,27 +26,10 @@
 import { Request, Response, Router } from "express";
 import { PageSetup } from "../../../interfaces/PageSetup";
 import { pathName } from "../../../paths";
-import { Engine } from "../../engine";
 
-// This is the root route and will redirect back to the appropriate gov.uk start page
 const getIPV = (req: Request, res: Response): void => {
-  if (
-    req.query.response_type &&
-    req.query.redirect_uri &&
-    req.query.state &&
-    req.query.client_id
-  ) {
-    req.session.oauth = {
-      response_type: req.query.response_type,
-      redirect_uri: req.query.redirect_uri,
-      state: req.query.state,
-      client_id: req.query.client_id,
-    };
-    const engine = new Engine();
-    engine.start(req, res);
-  } else {
-    res.redirect("/error");
-  }
+  // TODO: Display a landing page with all the available check links -> Passport, KBV, Other
+  res.redirect("/error");
 };
 
 @PageSetup.register

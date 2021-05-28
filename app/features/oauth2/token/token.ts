@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import hashSessionId from "../../../../utils/hashSessionId";
+import hashSessionId from "../../../utils/hashSessionId";
 
 const jwt = require("jsonwebtoken");
 const privateSigningKey = fs.readFileSync(

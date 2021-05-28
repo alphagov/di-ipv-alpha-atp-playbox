@@ -5,7 +5,7 @@ import { getRedisClient } from "../../session";
 import { v4 as uuidv4 } from "uuid";
 import { getRedisCacheByKey } from "../../utils/redis";
 import { RedisClient } from "redis";
-import { isTokenValid } from "../ipv/oauth2/token/token";
+import { isTokenValid } from "../oauth2/token/token";
 
 export class Engine {
   start = (req: Request, res: Response): void => {
