@@ -7,7 +7,7 @@
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <form action="/" method="post" class="form" novalidate>
+            <form action="/json" method="post" class="form" novalidate>
                 <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
                 {{ govukTextarea({
                     name: "jsonObj",
@@ -24,11 +24,33 @@
                         text: "Your data should include the object type, for example \"_type\": \"passport\" "
                     },
                     errorMessage: { text: errors['jsonObj'].text } if (errors['jsonObj'])
-                }) }}      
+                }) }}
                 {{ govukButton({
-                    text: "common.buttons.continue" | translate
+                    text: "Append more JSON data",
+                    name: "button-append"
+                }) }}
+                {{ govukButton({
+                    text: "common.buttons.continue" | translate,
+                    name: "button-continue"
                 }) }}
             </form>
+        </div>
+        <div class="govuk-grid-column-one-third">
+            {{ govukTextarea({
+                name: "userData",
+                id: "userData",
+                classes: "mono-space",
+                rows: 20,
+                value: userData,
+                label: {
+                    text: "Current user data",
+                    classes: "govuk-label--l",
+                    isPageHeading: true
+                },
+                hint: {
+                    text: "This is the current user data loaded"
+                }
+            }) }}
         </div>
     </div>
     

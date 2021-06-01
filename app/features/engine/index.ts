@@ -1,49 +1,57 @@
-/* eslint-disable no-console */
 import { Request, Response } from "express";
 import { pathName } from "../../paths";
-import hashSessionId from "../../utils/hashSessionId";
-import { sessionData } from "./global";
-export class Engine extends Object {
+import { getRedisClient } from "../../session";
+import { v4 as uuidv4 } from "uuid";
+import { RedisClient } from "redis";
+import { doCodeCallback } from "../oauth2/authorize";
+
+export class Engine {
   start = (req: Request, res: Response): void => {
+    req.session.userId = uuidv4();
+    req.session.userData = {};
     req.session.engine = {};
-    req.session.basicInfo = {};
-    req.session.passport = {};
-    res.redirect(pathName.public.INFO);
+    res.redirect(pathName.public.JSON);
     return;
   };
-  next = (
+
+  next = async (
     source: string,
-    values: any,
     req: Express.Request,
     res: any
-  ): void => {
-    if (source == "info") {
-      res.redirect(pathName.public.PASSPORT_START);
-      return;
-    }
-    if (["passport", "json"].includes(source)) {
-      console.log(
-        "session ID Hash",
-        encodeURIComponent(hashSessionId(req.sessionID))
-      );
-      sessionData.basicInfo = req.session.basicInfo;
-      sessionData.passport = req.session.passport;
-      res.redirect(
-        `${req.session.oauth.redirect_uri}?${
-          req.session.oauth.response_type
-        }=${encodeURIComponent(hashSessionId(req.sessionID))}&state=${
-          req.session.oauth.state
-        }`
-      );
-      return;
-    }
-    if (source == "userinfo") {
-      //const token = jwt.sign({ sub: "userinfo", ...sessionData }, jwtSecret());
-      res.json({ sub: "userinfo", ...sessionData });
+  ): Promise<void> => {
+    const redisClient = getRedisClient();
 
-      return;
+    switch (source) {
+      case "info":
+      case "passport":
+      case "json":
+        this.doCallback(req, res, redisClient);
+        break;
+      default:
+        res.redirect("/500");
     }
-    res.redirect("/500");
-    return;
+  };
+
+  generateUserDataAuthCode = (
+    req: Express.Request,
+    redisClient: RedisClient
+  ): any => {
+    const uuid = req.session.userId;
+    const data = req.session.userData;
+    redisClient.set("userid:" + uuid, JSON.stringify(data));
+
+    const authCode = uuidv4();
+    redisClient.set("authcode:" + authCode, uuid);
+
+    return authCode;
+  };
+
+  doCallback = (
+    req: Express.Request,
+    res: any,
+    redisClient: RedisClient
+  ): void => {
+    const authCode = this.generateUserDataAuthCode(req, redisClient);
+    doCodeCallback(req, res, authCode);
   };
 }

@@ -34,20 +34,30 @@ import {
   getSessionCookieMaxAge,
   isSessionCookieSecure,
 } from "../config";
+import express from "express";
 
-export default function setupSession(): any {
+const getRedisClientOptions = (): ClientOpts => {
+  return process.env.NODE_ENV.trim() === "production"
+    ? {
+        url: "rediss://" + getRedisSessionUrl() + ":" + getRedisPort(),
+        password: getRedisAuthToken(),
+      }
+    : {
+        url: "redis://" + getRedisSessionUrl() + ":" + getRedisPort(),
+      };
+};
+
+export const getRedisClient = (): redis.RedisClient => {
+  const redisOpts = getRedisClientOptions();
+  return redis.createClient(redisOpts);
+};
+
+export const setupSession = (): express.RequestHandler => {
   if (getRedisSessionSecret() === "" || !getRedisSessionSecret()) {
     throw new Error("Missing session secret in env file");
   }
-  const redisOpts: ClientOpts =
-    process.env.NODE_ENV.trim() === "production"
-      ? {
-          url: "rediss://" + getRedisSessionUrl() + ":" + getRedisPort(),
-          password: getRedisAuthToken(),
-        }
-      : { url: "redis://" + getRedisSessionUrl() + ":" + getRedisPort() };
 
-  const redisClient = redis.createClient(redisOpts);
+  const redisClient = getRedisClient();
   const RedisStore = connectRedis(session);
 
   return session({
@@ -64,4 +74,4 @@ export default function setupSession(): any {
     rolling: true,
     store: new RedisStore({ client: redisClient }),
   });
-}
+};

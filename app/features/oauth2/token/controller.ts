@@ -24,33 +24,37 @@
  */
 
 import { Request, Response } from "express";
-import { jwtSecret } from "../../../../../config";
-import hashSessionId from "../../../../utils/hashSessionId";
-const jwt = require("jsonwebtoken");
-// This is the root route and will redirect back to the appropriate gov.uk start page
-const postOAuthToken = (req: Request, res: Response): void => {
+import { getRedisClient } from "../../../session";
+import { getRedisCacheByKey } from "../../../utils/redis";
+import { createJwtToken } from "./token";
+
+const postOAuthToken = async (req: Request, res: Response): Promise<void> => {
   if (
     req.body.code &&
     req.body.grant_type &&
     req.body.redirect_uri &&
     req.body.client_id
   ) {
-    const access_token = jwt.sign(
-      hashSessionId((Math.random() * 100000000).toString()),
-      jwtSecret()
+    const redisClient = getRedisClient();
+    const authCode = req.body.code;
+
+    const userId = await getRedisCacheByKey(
+      redisClient,
+      "authcode:" + authCode
     );
 
-    const refresh_token = jwt.sign(
-      hashSessionId((Math.random() * 100000000).toString()),
-      jwtSecret()
-    );
+    const access_token = createJwtToken(userId);
+    const refresh_token = createJwtToken(userId);
+
+    redisClient.set("accesstoken:" + access_token, userId);
 
     const data = {
       access_token,
       refresh_token,
       token_type: "Bearer",
-      expires: "3600",
+      expires: 60 * 60,
     };
+
     res.json(data);
   } else {
     res.json({
@@ -61,5 +65,16 @@ const postOAuthToken = (req: Request, res: Response): void => {
     });
   }
 };
+
+// Disabled due to CSURF complications
+// @PageSetup.register
+// class SetupOAuthTokenController {
+//   initialise(): Router {
+//     const router = Router();
+//     router.get(pathName.public.oauth2.TOKEN, postOAuthToken);
+//
+//     return router;
+//   }
+// }
 
 export { postOAuthToken };
