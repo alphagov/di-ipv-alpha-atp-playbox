@@ -9,7 +9,7 @@
   "scripts": {
     "precompile": "node generate-files.js",
     "start": "node build/main.js",
-    "build": "yarn precompile && webpack --config webpack/webpack.dev.js",
+    "build": "yarn precompile && webpack --config webpack/webpack.prod.js",
     "buildAndStart": "yarn build && yarn start",
     "build-sass": "rm -rf ./build/style.css && node-sass --include-path scss app/assets/scss/application.scss build/style.css",
     "depcheck": "depcheck",
