@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "license": "Apache-2.0",
   "engines": {
-    "node": "15.12.0"
+    "node": "15.14.0"
   },
   "scripts": {
     "precompile": "node generate-files.js",
@@ -53,6 +53,7 @@
   "dependencies": {
     "@godaddy/terminus": "^4.4.1",
     "babel-loader": "^8.0.6",
+    "cfenv": "^1.2.4",
     "connect-redis": "^4.0.3",
     "cookie-parser": "^1.4.4",
     "copy-webpack-plugin": "^5.0.4",
