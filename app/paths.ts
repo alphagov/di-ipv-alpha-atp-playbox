@@ -28,6 +28,7 @@ const pathName = {
       AUTHORIZE: "/oauth2/authorize",
       TOKEN: "/oauth2/token",
       USER_INFO: "/oauth2/userinfo",
+      JWKS: "/.well-known/jwks.json",
     },
     PASSPORT_START: "/passport",
     JSON: "/json",
