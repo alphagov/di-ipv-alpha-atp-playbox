@@ -10,7 +10,7 @@ export class Engine {
     req.session.userId = uuidv4();
     req.session.userData = {};
     req.session.engine = {};
-    res.redirect(pathName.public.JSON);
+    res.redirect(pathName.public.HOME);
     return;
   };
 
@@ -19,17 +19,21 @@ export class Engine {
     req: Express.Request,
     res: any
   ): Promise<void> => {
-    const redisClient = getRedisClient();
-
     switch (source) {
       case "info":
       case "passport":
       case "json":
-        this.doCallback(req, res, redisClient);
+        res.redirect(pathName.public.HOME);
+
         break;
       default:
         res.redirect("/500");
     }
+  };
+
+  callback = async (req: Express.Request, res: any): Promise<void> => {
+    const redisClient = getRedisClient();
+    this.doCallback(req, res, redisClient);
   };
 
   generateUserDataAuthCode = (

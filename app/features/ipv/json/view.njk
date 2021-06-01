@@ -16,12 +16,12 @@
                     rows: 20,
                     value: jsonObj,
                     label: {
-                        text: "Please supply the data in JSON format",
+                        text: "Please supply data in JSON format",
                         classes: "govuk-label--l",
                         isPageHeading: true
                     },
                     hint: {
-                        text: "Your data should include the object type, for example \"_type\": \"passport\" "
+                        text: "Your data should be surounded in { ... } "
                     },
                     errorMessage: { text: errors['jsonObj'].text } if (errors['jsonObj'])
                 }) }}

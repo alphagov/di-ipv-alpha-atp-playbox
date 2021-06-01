@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /*!
  * MIT License
  *
@@ -22,32 +23,25 @@
  * SOFTWARE.
  */
 
-const pathName = {
-  public: {
-    oauth2: {
-      AUTHORIZE: "/oauth2/authorize",
-      TOKEN: "/oauth2/token",
-      USER_INFO: "/oauth2/userinfo",
-    },
-    PASSPORT_START: "/passport",
-    JSON: "/json",
-    INFO: "/information",
-    IPV: "/",
-    RETURN: "/return",
-    HOME: "/home",
-    ACCESSIBILITY_STATEMENT: "/accessibility",
-    TERMS_AND_CONDITIONS: "/terms-and-conditions",
-    PRIVACY_POLICY: "/privacy",
-    COOKIES: "/cookies",
-    GA_DATA_LAYER_JS: "/gaDataLayer.js",
-    EXTEND_SESSION: "/extend-session",
-    TIMEOUT_SESSION: "/timeout-session",
-    SIGNOUT_SESSION: "/signout-session",
-    FORBIDDEN: "/forbidden",
-  },
-  tracked: {
-    LOGGED_IN: "/logged-in",
-  },
+import { Request, Response, Router } from "express";
+import { PageSetup } from "../../../interfaces/PageSetup";
+import { pathName } from "../../../paths";
+
+const template = "ipv/home/view.njk";
+
+const getHome = (req: Request, res: Response): void => {
+  // TODO: Display a landing page with all the available check links -> Passport, KBV, Other
+  return res.render(template, { language: req.i18n.language });
 };
 
-export { pathName };
+@PageSetup.register
+class SetupHomeController {
+  initialise(): Router {
+    const router = Router();
+    router.get(pathName.public.HOME, getHome);
+
+    return router;
+  }
+}
+
+export { SetupHomeController, getHome };

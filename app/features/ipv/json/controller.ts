@@ -53,7 +53,8 @@ const jsonValidationMiddleware = [
 ];
 
 const getJSON = (req: Request, res: Response): void => {
-  return res.render(template, { language: req.i18n.language });
+  const userData = JSON.stringify(req.session.userData);
+  return res.render(template, { language: req.i18n.language, userData });
 };
 
 const appendJsonData = (req: Request): void => {
