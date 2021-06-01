@@ -16,7 +16,6 @@ export const createJwtToken = (subject: string): string => {
   return jwt.sign(
     {
       data: hashSessionId((Math.random() * 100000000).toString()),
-      typ: "ac+jwt",
     },
     privateSigningKey,
     {
