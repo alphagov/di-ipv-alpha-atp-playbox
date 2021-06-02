@@ -28,12 +28,8 @@ function getRedisCacheByKey(client: RedisClient, key: string): Promise<string> {
   return new Promise((resv, rej) => {
     client.get(key, (err, reply: string) => {
       if (err) {
-        // eslint-disable-next-line no-console
-        console.log("ERROR: getRedisCacheByKey: " + err);
         return rej(err);
       }
-      // eslint-disable-next-line no-console
-      console.log("DATA: getRedisCacheByKey: " + reply);
       resv(reply);
     });
   });

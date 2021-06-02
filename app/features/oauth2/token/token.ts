@@ -9,8 +9,8 @@ const publicSigningKey = fs.readFileSync(
   "./keys/public-di-ipv-atp-playbox.pem"
 );
 
-const audience = "urn:di:ipv:orchestrator-stub";
-const issuer = "urn:di:ipv:ipv-atp-playbox";
+export const audience = "urn:di:ipv:orchestrator-stub";
+export const issuer = "urn:di:ipv:ipv-atp-playbox";
 
 export const createJwtToken = (subject: string): string => {
   return jwt.sign(
