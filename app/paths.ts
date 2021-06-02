@@ -34,6 +34,8 @@ const pathName = {
     JSON: "/json",
     INFO: "/information",
     IPV: "/",
+    RETURN: "/return",
+    HOME: "/home",
     ACCESSIBILITY_STATEMENT: "/accessibility",
     TERMS_AND_CONDITIONS: "/terms-and-conditions",
     PRIVACY_POLICY: "/privacy",

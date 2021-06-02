@@ -1,0 +1,41 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "components/languageLink/macro.njk" import languageLink %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% extends "common/layout/view.njk" %}
+{% set pageTitleName = 'pages.start.title' | translate %}
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <div>
+                {{ govukButton({
+                    text: "JSON test data",
+                    name: "json-data",
+                    href: "/json"
+                }) }}
+            </div>
+            <div>
+                {{ govukButton({
+                    text: "Basic information",
+                    name: "basic-info",
+                    href: "/information"
+                }) }}
+            </div>
+            <div>
+                {{ govukButton({
+                    text: "Passport information",
+                    name: "passport-info",
+                    href: "/passport"
+                }) }}
+            </div>
+            <div>
+                {{ govukButton({
+                    text: "Return to Orc",
+                    name: "return-to-orc",
+                    href: "/return"
+                }) }}
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}

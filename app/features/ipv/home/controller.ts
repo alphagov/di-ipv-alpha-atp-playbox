@@ -26,21 +26,22 @@
 import { Request, Response, Router } from "express";
 import { PageSetup } from "../../../interfaces/PageSetup";
 import { pathName } from "../../../paths";
-import { getAuthorize } from "../../oauth2/authorize";
 
-const getIPV = (req: Request, res: Response): void => {
+const template = "ipv/home/view.njk";
+
+const getHome = (req: Request, res: Response): void => {
   // TODO: Display a landing page with all the available check links -> Passport, KBV, Other
-  getAuthorize(req, res);
+  return res.render(template, { language: req.i18n.language });
 };
 
 @PageSetup.register
-class SetupIPVController {
+class SetupHomeController {
   initialise(): Router {
     const router = Router();
-    router.get(pathName.public.IPV, getIPV);
+    router.get(pathName.public.HOME, getHome);
 
     return router;
   }
 }
 
-export { SetupIPVController, getIPV };
+export { SetupHomeController, getHome };

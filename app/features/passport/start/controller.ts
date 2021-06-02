@@ -109,8 +109,8 @@ const passportValidationMiddleware = [
 ];
 
 const getStart = (req: Request, res: Response): void => {
-  if (!req.session.passport) {
-    req.session.passport = {};
+  if (!req.session.userData.passport) {
+    req.session.userData.passport = {};
   }
   const {
     number,
@@ -119,7 +119,7 @@ const getStart = (req: Request, res: Response): void => {
     dob,
     issued,
     expiry,
-  } = req.session.passport;
+  } = req.session.userData.passport;
   const values = {
     number,
     surname,
@@ -139,8 +139,8 @@ const getStart = (req: Request, res: Response): void => {
 
 const postStart = (req: Request, res: Response, next: NextFunction): void => {
   try {
-    req.session.passport = {
-      ...req.session.passport,
+    req.session.userData.passport = {
+      ...req.session.userData.passport,
       number: req.body["number"],
       surname: req.body["surname"],
       givenNames: req.body["givenNames"],
