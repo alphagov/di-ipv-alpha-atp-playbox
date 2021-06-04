@@ -50,15 +50,16 @@ export const bodyValidate = (
     const errors = validationResult(req)
       .formatWith(validationErrorFormatter)
       .mapped();
+    const params = {
+      errors,
+      errorList: Object.values(errors),
+      ...req.body,
+      ...(data && {
+        ...data(req.session, req.body, req),
+      }),
+    };
     if (Object.keys(errors).length !== 0) {
-      return res.render(template, {
-        errors,
-        errorList: Object.values(errors),
-        ...req.body,
-        ...(data && {
-          previousPage: data(req.session, req.body, req).previousPage,
-        }),
-      });
+      return res.render(template, params);
     }
     next();
   };

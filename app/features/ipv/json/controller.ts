@@ -33,23 +33,19 @@ import { Engine } from "../../engine";
 const template = "ipv/json/view.njk";
 
 const jsonValidationMiddleware = [
-  body("jsonObj")
-    .not()
-    .isEmpty()
-    .withMessage(() => {
-      return "Please enter an object in JSON format";
-    })
-    .bail()
-    .custom((jsonObj) => {
-      return new Promise((resolve, reject) => {
-        try {
-          JSON.parse(jsonObj);
+  body("jsonObj").custom((jsonObj) => {
+    return new Promise((resolve, reject) => {
+      try {
+        if (jsonObj == "") {
           return resolve("ok");
-        } catch (e) {
-          reject(e);
         }
-      });
-    }),
+        JSON.parse(jsonObj);
+        return resolve("ok");
+      } catch (e) {
+        reject(e);
+      }
+    });
+  }),
 ];
 
 const getJSON = (req: Request, res: Response): void => {
@@ -70,9 +66,23 @@ const postJSON = (req: Request, res: Response): void => {
   const errors = {};
   const jsonObj = req.body["jsonObj"];
   try {
+    if (jsonObj == "") {
+      if ("button-continue" in req.body) {
+        const engine = new Engine();
+        engine.next("json", req, res);
+        return;
+      } else {
+        const userData = JSON.stringify(req.session.userData);
+        return res.render(template, {
+          language: req.i18n.language,
+          jsonObj,
+          userData,
+          errors,
+        });
+      }
+    }
     appendJsonData(req);
   } catch (e) {
-    console.log(e);
     errors["jsonObj"] = {
       text: e,
       href: "#jsonObj",
@@ -82,6 +92,7 @@ const postJSON = (req: Request, res: Response): void => {
   if ("button-continue" in req.body) {
     const engine = new Engine();
     engine.next("json", req, res);
+    return;
   } else {
     const userData = JSON.stringify(req.session.userData);
     return res.render(template, {
@@ -93,8 +104,10 @@ const postJSON = (req: Request, res: Response): void => {
   }
 };
 
-const validationData = (): any => {
-  return {};
+const validationData = (session: Express.Session): any => {
+  return {
+    userData: JSON.stringify(session.userData),
+  };
 };
 
 @PageSetup.register
