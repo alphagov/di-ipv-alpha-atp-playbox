@@ -23,15 +23,18 @@
  */
 
 import { Request, Response, Router, NextFunction } from "express";
-import { bodyValidate as validate } from "../../../middleware/form-validation-middleware";
-import { PageSetup } from "../../../interfaces/PageSetup";
-import { pathName } from "../../../paths";
-import { Engine } from "../../engine";
+import { bodyValidate as validate } from "../../../../../middleware/form-validation-middleware";
+import { PageSetup } from "../../../../../interfaces/PageSetup";
+import { pathName } from "../../../../../paths";
+import { Engine } from "../../../../engine";
 import { body } from "express-validator";
-import { dateInputAsMoment, dateValidation } from "../../common/dateValidation";
+import {
+  dateInputAsMoment,
+  dateValidation,
+} from "../../../../common/dateValidation";
 import moment from "moment";
 
-const template = "ipv/info/view.njk";
+const template = "atp/information/ui/idx/view.njk";
 
 const infoValidationMiddleware = [
   body("surname")

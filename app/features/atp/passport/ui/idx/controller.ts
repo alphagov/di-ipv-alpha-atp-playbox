@@ -25,13 +25,18 @@
 import { Request, Response, Router, NextFunction } from "express";
 import { body } from "express-validator";
 import moment from "moment";
-import { PageSetup } from "../../../interfaces/PageSetup";
-import { bodyValidate as validate } from "../../../middleware/form-validation-middleware";
-import { pathName } from "../../../paths";
-import { dateInputAsMoment, dateValidation } from "../../common/dateValidation";
-import { Engine } from "../../engine";
+import { PageSetup } from "../../../../../interfaces/PageSetup";
+import { bodyValidate as validate } from "../../../../../middleware/form-validation-middleware";
+import { pathName } from "../../../../../paths";
+import {
+  dateInputAsMoment,
+  dateValidation,
+} from "../../../../common/dateValidation";
+import { Engine } from "../../../../engine";
+import { postPassport } from "../../api";
+const jwt = require("jsonwebtoken");
 
-const template = "passport/start/view.njk";
+const template = "atp/passport/ui/idx/view.njk";
 
 const passportValidationMiddleware = [
   body("number")
@@ -137,10 +142,39 @@ const getStart = (req: Request, res: Response): void => {
   return res.render(template, { ...values });
 };
 
-const postStart = (req: Request, res: Response, next: NextFunction): void => {
+const postStart = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
+    const atpData = {
+      passportNumber: req.body["number"],
+      surname: req.body["surname"],
+      forenames: req.body["givenNames"].split(" "),
+      dateOfBirth:
+        req.body["dobYear"] +
+        "-" +
+        req.body["dobMonth"].padStart(2, "0") +
+        "-" +
+        req.body["dobDay"].padStart(2, "0") +
+        "T00:00:00",
+      expiryDate:
+        req.body["expiryYear"] +
+        "-" +
+        req.body["expiryMonth"].padStart(2, "0") +
+        "-" +
+        req.body["expiryDay"].padStart(2, "0") +
+        "T00:00:00",
+    };
+
+    const atpResult = await postPassport(atpData);
+    const decoded = jwt.decode(atpResult);
     req.session.userData.passport = {
       ...req.session.userData.passport,
+      validation: {
+        ...decoded,
+      },
       number: req.body["number"],
       surname: req.body["surname"],
       givenNames: req.body["givenNames"],
