@@ -152,11 +152,20 @@ const postStart = async (
       passportNumber: req.body["number"],
       surname: req.body["surname"],
       forenames: req.body["givenNames"].split(" "),
-      dateOfBirth: `${req.body["dobYear"]}-${req.body["dobMonth"].padStart(
-        2,
-        "0"
-      )}-${req.body["dobDay"].padStart(2, "0")}T00:00:00`,
-      expiryDate: `2020-02-02T00:00:00`,
+      dateOfBirth:
+        req.body["dobYear"] +
+        "-" +
+        req.body["dobMonth"].padStart(2, "0") +
+        "-" +
+        req.body["expiryDay"].padStart(2, "0") +
+        "T00:00:00",
+      expiryDate:
+        req.body["expiryYear"] +
+        "-" +
+        req.body["expiryMonth"].padStart(2, "0") +
+        "-" +
+        req.body["expiryDay"].padStart(2, "0") +
+        "T00:00:00",
     };
 
     const atpResult = await postPassport(atpData);
