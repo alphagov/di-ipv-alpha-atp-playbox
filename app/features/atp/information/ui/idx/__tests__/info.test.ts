@@ -1,6 +1,6 @@
 import { SetupInfoController, getInfo } from "..";
-import { pathName } from "../../../../paths";
-import { expect, sinon } from "../../../../../test/utils/testUtils";
+import { pathName } from "../../../../../../paths";
+import { expect, sinon } from "../../../../../../../test/utils/testUtils";
 
 const express = require("express");
 

@@ -47,6 +47,7 @@ export const getLogLevel = (): string => {
 export const enableAnsiLog = (): boolean => {
   return process.env.ANSI_LOG === "true";
 };
+
 export const useAPI = (): boolean => {
   return false;
 };

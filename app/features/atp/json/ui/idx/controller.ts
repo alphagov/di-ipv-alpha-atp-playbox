@@ -25,12 +25,14 @@
 
 import { Request, Response, Router } from "express";
 import { body } from "express-validator";
-import { bodyValidate as validate } from "../../../middleware/form-validation-middleware";
-import { PageSetup } from "../../../interfaces/PageSetup";
-import { pathName } from "../../../paths";
-import { Engine } from "../../engine";
+import { bodyValidate as validate } from "../../../../../middleware/form-validation-middleware";
+import { PageSetup } from "../../../../../interfaces/PageSetup";
+import { pathName } from "../../../../../paths";
+import { Engine } from "../../../../engine";
+import { postGenericJSON } from "../../api";
+const jwt = require("jsonwebtoken");
 
-const template = "ipv/json/view.njk";
+const template = "atp/json/ui/idx/view.njk";
 
 const jsonValidationMiddleware = [
   body("jsonObj").custom((jsonObj) => {
@@ -53,16 +55,21 @@ const getJSON = (req: Request, res: Response): void => {
   return res.render(template, { language: req.i18n.language, userData });
 };
 
-const appendJsonData = (req: Request): void => {
+const appendJsonData = async (req: Request): Promise<void> => {
   const jsonObj = req.body["jsonObj"];
   const json = JSON.parse(jsonObj);
+  const allJson = { ...req.session.userData.json, ...json };
+  delete allJson["validation"];
+  const atpResult = await postGenericJSON(allJson);
+  const decoded = jwt.decode(atpResult);
+  allJson["validation"] = { genericDataVerified: decoded.genericDataVerified };
   req.session.userData = {
     ...req.session.userData,
-    ...json,
+    json: allJson,
   };
 };
 
-const postJSON = (req: Request, res: Response): void => {
+const postJSON = async (req: Request, res: Response): Promise<void> => {
   const errors = {};
   const jsonObj = req.body["jsonObj"];
   try {
@@ -81,7 +88,7 @@ const postJSON = (req: Request, res: Response): void => {
         });
       }
     }
-    appendJsonData(req);
+    await appendJsonData(req);
   } catch (e) {
     errors["jsonObj"] = {
       text: e,

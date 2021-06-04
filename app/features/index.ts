@@ -21,6 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import "./atp/information/ui/idx";
+import "./atp/json/ui/idx";
+import "./atp/passport/ui/idx";
 import "./common/accessibiltyStatement";
 import "./common/appIcons";
 import "./common/cookies";
@@ -33,11 +36,8 @@ import "./common/termsAndConditions";
 import "./common/timeOutSession";
 import "./ipv/home";
 import "./ipv/idx";
-import "./ipv/info";
-import "./ipv/json";
 import "./ipv/return";
 import "./oauth2/authorize";
 import "./oauth2/jwks";
 import "./oauth2/token";
 import "./oauth2/userinfo";
-import "./passport/start";
