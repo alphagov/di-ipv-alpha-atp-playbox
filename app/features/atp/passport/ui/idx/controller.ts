@@ -157,7 +157,7 @@ const postStart = async (
         "-" +
         req.body["dobMonth"].padStart(2, "0") +
         "-" +
-        req.body["expiryDay"].padStart(2, "0") +
+        req.body["dobDay"].padStart(2, "0") +
         "T00:00:00",
       expiryDate:
         req.body["expiryYear"] +
