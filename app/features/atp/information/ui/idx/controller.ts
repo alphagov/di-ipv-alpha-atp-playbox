@@ -33,6 +33,8 @@ import {
   dateValidation,
 } from "../../../../common/dateValidation";
 import moment from "moment";
+import { postBasicInfoJSON } from "../../api";
+const jwt = require("jsonwebtoken");
 
 const template = "atp/information/ui/idx/view.njk";
 
@@ -125,7 +127,11 @@ const getInfo = (req: Request, res: Response): void => {
   return res.render(template, { language: req.i18n.language, ...values });
 };
 
-const postInfo = (req: Request, res: Response, next: NextFunction): void => {
+const postInfo = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   // call something
   try {
     req.session.userData.basicInfo = {
@@ -143,6 +149,15 @@ const postInfo = (req: Request, res: Response, next: NextFunction): void => {
       addressCounty: req.body["addressCounty"],
       addressPostcode: req.body["addressPostcode"],
     };
+
+    const allJson = req.session.userData.basicInfo;
+    delete allJson["validation"];
+    const atpResult = await postBasicInfoJSON(allJson);
+    const decoded = jwt.decode(atpResult);
+    allJson["validation"] = {
+      genericDataVerified: decoded.genericDataVerified,
+    };
+
     const engine = new Engine();
     engine.next("info", req, res);
   } catch (e) {
