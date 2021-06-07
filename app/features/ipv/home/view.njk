@@ -2,32 +2,87 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "components/languageLink/macro.njk" import languageLink %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{%- from "govuk/components/tag/macro.njk" import govukTag -%}
 {% extends "common/layout/view.njk" %}
 {% set pageTitleName = 'pages.start.title' | translate %}
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <div>
-                {{ govukButton({
-                    text: "JSON test data",
-                    name: "json-data",
-                    href: "/json"
-                }) }}
-            </div>
-            <div>
-                {{ govukButton({
-                    text: "Basic information",
-                    name: "basic-info",
-                    href: "/information"
-                }) }}
-            </div>
-            <div>
-                {{ govukButton({
-                    text: "Passport information",
-                    name: "passport-info",
-                    href: "/passport"
-                }) }}
-            </div>
+            <h1 class="govuk-heading-xl">ATP and Orc test page</h1>
+            <p>Enter all required information and then click 'Return to Orc'</p>
+            <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+            <div class="govuk-summary-list__row">     
+            <dt class="govuk-summary-list__key">JSON</dt>
+            <dd class="govuk-summary-list__value"> 
+                {%if validations.json%}
+                    {{ govukTag({
+                        text: "completed",
+                        classes: "govuk-tag--green"
+                    }) }}
+                {% else %}
+                    {{ govukTag({
+                        text: "pending",
+                        classes: "govuk-tag--blue"
+                    }) }}
+                {% endif %}  
+            </dd>
+            <dd class="govuk-summary-list__actions">
+                {% set infoText = "Enter" %}
+                {%if validations.json%}
+                    {% set infoText = "Change" %} 
+                {% endif %}   
+                <a class="govuk-link" href="/json">{{infoText}}</a>
+            </dd>
+            </div>        
+            <div class="govuk-summary-list__row">     
+            <dt class="govuk-summary-list__key">Basic information</dt>
+            <dd class="govuk-summary-list__value"> 
+                {%if validations.basicInfo%}
+                    {{ govukTag({
+                        text: "completed",
+                        classes: "govuk-tag--green"
+                    }) }}
+                {% else %}
+                    {{ govukTag({
+                        text: "pending",
+                        classes: "govuk-tag--blue"
+                    }) }}
+                {% endif %} 
+            </dd>
+            <dd class="govuk-summary-list__actions">
+                {% set infoText = "Enter" %}
+                {%if validations.basicInfo%}
+                    {% set infoText = "Change" %} 
+                {% endif %}   
+                <a class="govuk-link" href="/information">{{infoText}}</a>
+            </dd>
+            </div>    
+            <div class="govuk-summary-list__row">    
+            <dt class="govuk-summary-list__key">Passport details</dt>
+            <dd class="govuk-summary-list__value"> 
+                {%if validations.passport%}
+                    {{ govukTag({
+                        text: "completed",
+                        classes: "govuk-tag--green"
+                    }) }}
+                {% else %}
+                    {{ govukTag({
+                        text: "pending",
+                        classes: "govuk-tag--blue"
+                    }) }}
+                {% endif %} 
+            </dd>
+            <dd class="govuk-summary-list__actions">
+                {% set infoText = "Enter" %}
+                {%if validations.passport%}
+                    {% set infoText = "Change" %} 
+                {% endif %}   
+                <a class="govuk-link" href="/passport">{{infoText}}</a>
+            </dd>
+            </div>            
+            </dl>
+
+
             <div>
                 {{ govukButton({
                     text: "Return to Orc",
