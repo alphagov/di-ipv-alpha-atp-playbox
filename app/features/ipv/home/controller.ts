@@ -31,7 +31,17 @@ const template = "ipv/home/view.njk";
 
 const getHome = (req: Request, res: Response): void => {
   // TODO: Display a landing page with all the available check links -> Passport, KBV, Other
-  return res.render(template, { language: req.i18n.language });
+  const validations = {};
+  validations["passport"] = req.session.userData.passport
+    ? req.session.userData.passport.validation
+    : null;
+  validations["basicInfo"] = req.session.userData.basicInfo
+    ? req.session.userData.basicInfo.validation
+    : null;
+  validations["json"] = req.session.userData.json
+    ? req.session.userData.json.validation
+    : null;
+  return res.render(template, { language: req.i18n.language, validations });
 };
 
 @PageSetup.register
