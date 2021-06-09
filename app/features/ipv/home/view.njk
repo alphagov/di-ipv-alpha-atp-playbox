@@ -79,7 +79,33 @@
                 {% endif %}   
                 <a class="govuk-link" href="/passport">{{infoText}}</a>
             </dd>
-            </div>            
+            </div>  
+
+
+            <div class="govuk-summary-list__row">    
+            <dt class="govuk-summary-list__key">Driving licence</dt>
+            <dd class="govuk-summary-list__value"> 
+                {%if validations.drivingLicence%}
+                    {{ govukTag({
+                        text: "completed",
+                        classes: "govuk-tag--green"
+                    }) }}
+                {% else %}
+                    {{ govukTag({
+                        text: "pending",
+                        classes: "govuk-tag--blue"
+                    }) }}
+                {% endif %} 
+            </dd>
+            <dd class="govuk-summary-list__actions">
+                {% set infoText = "Enter" %}
+                {%if validations.drivingLicence%}
+                    {% set infoText = "Change" %} 
+                {% endif %}   
+                <a class="govuk-link" href="/driving-licence">{{infoText}}</a>
+            </dd>
+            </div>        
+
             </dl>
 
 
