@@ -31,6 +31,7 @@ const pathName = {
       JWKS: "/.well-known/jwks.json",
     },
     PASSPORT_START: "/passport",
+    DRIVING_LICENCE_START: "/driving-licence",
     JSON: "/json",
     INFO: "/information",
     IPV: "/",

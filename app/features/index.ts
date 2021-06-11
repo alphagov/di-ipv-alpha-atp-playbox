@@ -21,6 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import "./atp/driving-licence/ui/idx";
 import "./atp/information/ui/idx";
 import "./atp/json/ui/idx";
 import "./atp/passport/ui/idx";
