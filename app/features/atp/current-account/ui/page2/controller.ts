@@ -41,9 +41,8 @@ const currentAccountValidationMiddleware = [
     })
     .bail()
     .custom((cvv) => {
-      const checkCVV = cvv.replace(/-/g, "").replace(/ /g, "");
       const regex = /^[0-9]{3}$/g;
-      const found = checkCVV.match(regex);
+      const found = cvv.match(regex);
       return !!found;
     })
     .withMessage((value, { req, location, path }) => {
