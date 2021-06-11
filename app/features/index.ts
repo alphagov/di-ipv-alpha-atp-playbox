@@ -25,6 +25,7 @@ import "./atp/bank-account/ui/page1";
 import "./atp/bank-account/ui/page2";
 import "./atp/bank-account/ui/page3";
 import "./atp/bank-account/ui/page4";
+import "./atp/driving-licence/ui/idx";
 import "./atp/information/ui/idx";
 import "./atp/json/ui/idx";
 import "./atp/passport/ui/idx";

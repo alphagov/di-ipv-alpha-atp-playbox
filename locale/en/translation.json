@@ -278,6 +278,73 @@
         }
       }
     },
+    "drivingLicence": {
+      "start": {
+        "title": "Add the details from your driving licence",
+        "header": "Add the details from your  driving licence",
+        "info": "Enter the details exactly as stated on your document even if you have since changed your name.",
+        "number": {
+          "label": "Licence number",
+          "validationError": {
+            "required": "The Licence number is required"
+          }
+        },
+        "surname": {
+          "label": "Surname",
+          "validationError": {
+            "required": "Surname is required"
+          }
+        },
+        "givenNames": {
+          "label": "Given names",
+          "validationError": {
+            "required": "Given names are required"
+          }
+        },
+        "dob": {
+          "label": "Date of birth",
+          "validationError": {
+            "emptyDay": "Date of birth must include a day",
+            "emptyMonth": "Date of birth must include a month",
+            "emptyYear": "Date of birth must include a year",
+            "emptyDayAndMonth": "Date of birth must include a day and a month",
+            "emptyDayAndYear": "Date of birth must include a day and a year",
+            "emptyMonthAndYear": "Date of birth must include a month and a year",
+            "emptyDate": "Enter Date of birth",
+            "realDate": "Date of birth must be a real date",
+            "futureDate": "Date of birth must be be in the past"
+          }
+        },
+        "issued": {
+          "label": "Issue date",
+          "validationError": {
+            "emptyDay": "Issue date must include a day",
+            "emptyMonth": "Issue date must include a month",
+            "emptyYear": "Issue date must include a year",
+            "emptyDayAndMonth": "Issue date must include a day and a month",
+            "emptyDayAndYear": "Issue date must include a day and a year",
+            "emptyMonthAndYear": "Issue date must include a month and a year",
+            "emptyDate": "Enter the Issue date",
+            "realDate": "Issue date must be a real date",
+            "futureDate": "Issue date must be be in the past"
+          }
+        },
+        "expiry": {
+          "label": "Expiry date",
+          "validationError": {
+            "emptyDay": "Expiry date must include a day",
+            "emptyMonth": "Expiry date must include a month",
+            "emptyYear": "Expiry date must include a year",
+            "emptyDayAndMonth": "Expiry date must include a day and a month",
+            "emptyDayAndYear": "Expiry date must include a day and a year",
+            "emptyMonthAndYear": "Expiry date must include a month and a year",
+            "emptyDate": "Enter the Expiry date",
+            "realDate": "Expiry date must be a real date",
+            "pastDate": "Expiry date must be be in the future"
+          }
+        }
+      }
+    },
     "start": {
       "title": "Start",
       "header": "Start"

@@ -24,6 +24,7 @@ export class Engine {
       case "passport":
       case "bank-account":
       case "json":
+      case "drivingLicence":
         res.redirect(pathName.public.HOME);
 
         break;

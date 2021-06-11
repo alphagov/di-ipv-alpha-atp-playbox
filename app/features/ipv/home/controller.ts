@@ -30,10 +30,12 @@ import { pathName } from "../../../paths";
 const template = "ipv/home/view.njk";
 
 const getHome = (req: Request, res: Response): void => {
-  // TODO: Display a landing page with all the available check links -> Passport, KBV, Other
   const validations = {};
   validations["bankAccount"] = req.session.userData.bankAccount
     ? req.session.userData.bankAccount.validation
+    : null;
+  validations["drivingLicence"] = req.session.userData.drivingLicence
+    ? req.session.userData.drivingLicence.validation
     : null;
   validations["passport"] = req.session.userData.passport
     ? req.session.userData.passport.validation
