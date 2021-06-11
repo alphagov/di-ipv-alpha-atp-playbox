@@ -27,7 +27,7 @@ import { bodyValidate as validate } from "../../../../../middleware/form-validat
 import { PageSetup } from "../../../../../interfaces/PageSetup";
 import { pathName } from "../../../../../paths";
 import { Engine } from "../../../../engine";
-import { postbankAccountJSON } from "../../api";
+import { postBankAccountJSON } from "../../api";
 import moment from "moment";
 import { body } from "express-validator";
 const jwt = require("jsonwebtoken");
@@ -46,7 +46,7 @@ const bankAccountValidationMiddleware = [
 ];
 
 // This is the root route and will redirect back to the appropriate gov.uk start page
-const getbankAccountLastOpened = (req: Request, res: Response): void => {
+const getBankAccountPostcode = (req: Request, res: Response): void => {
   if (!req.session.userData.bankAccount) {
     req.session.userData.bankAccount = {};
   }
@@ -60,7 +60,7 @@ const getbankAccountLastOpened = (req: Request, res: Response): void => {
   });
 };
 
-const postbankAccountLastOpened = async (
+const postBankAccountPostcode = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -74,7 +74,7 @@ const postbankAccountLastOpened = async (
 
     const allJson = req.session.userData.bankAccount;
     delete allJson["validation"];
-    const atpResult = await postbankAccountJSON(allJson);
+    const atpResult = await postBankAccountJSON(allJson);
     const decoded = jwt.decode(atpResult);
     allJson["validation"] = {
       genericDataVerified: decoded.genericDataVerified,
@@ -92,21 +92,21 @@ const validationData = (): any => {
 };
 
 @PageSetup.register
-class SetupbankAccountLastOpenedController {
+class SetupBankAccountPostcodeController {
   initialise(): Router {
     const router = Router();
     router.get(
       pathName.public.CURRENT_ACCOUNT_POSTCODE,
-      getbankAccountLastOpened
+      getBankAccountPostcode
     );
     router.post(
       pathName.public.CURRENT_ACCOUNT_POSTCODE,
       bankAccountValidationMiddleware,
       validate(template, validationData),
-      postbankAccountLastOpened
+      postBankAccountPostcode
     );
     return router;
   }
 }
 
-export { SetupbankAccountLastOpenedController, getbankAccountLastOpened };
+export { SetupBankAccountPostcodeController, getBankAccountPostcode };

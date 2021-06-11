@@ -1,6 +1,3 @@
-import {
-  SetupbankAccountLastOpenedController,
-  getbankAccountLastOpened,
-} from "./controller";
+import { SetupBankAccountCVVController, getBankAccountCVV } from "./controller";
 
-export { SetupbankAccountLastOpenedController, getbankAccountLastOpened };
+export { SetupBankAccountCVVController, getBankAccountCVV };

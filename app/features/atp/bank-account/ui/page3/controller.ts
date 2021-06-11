@@ -42,7 +42,7 @@ const bankAccountValidationMiddleware = [
 ];
 
 // This is the root route and will redirect back to the appropriate gov.uk start page
-const getbankAccountLastOpened = (req: Request, res: Response): void => {
+const getBankAccountMortgage = (req: Request, res: Response): void => {
   if (!req.session.userData.bankAccount) {
     req.session.userData.bankAccount = {};
   }
@@ -51,7 +51,7 @@ const getbankAccountLastOpened = (req: Request, res: Response): void => {
   return res.render(template, { language: req.i18n.language, ...values });
 };
 
-const postbankAccountLastOpened = async (
+const postBankAccountMortgage = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -73,21 +73,21 @@ const validationData = (): any => {
 };
 
 @PageSetup.register
-class SetupbankAccountLastOpenedController {
+class SetupBankAccountMortgageController {
   initialise(): Router {
     const router = Router();
     router.get(
       pathName.public.CURRENT_ACCOUNT_MORTGAGE,
-      getbankAccountLastOpened
+      getBankAccountMortgage
     );
     router.post(
       pathName.public.CURRENT_ACCOUNT_MORTGAGE,
       bankAccountValidationMiddleware,
       validate(template, validationData),
-      postbankAccountLastOpened
+      postBankAccountMortgage
     );
     return router;
   }
 }
 
-export { SetupbankAccountLastOpenedController, getbankAccountLastOpened };
+export { SetupBankAccountMortgageController, getBankAccountMortgage };

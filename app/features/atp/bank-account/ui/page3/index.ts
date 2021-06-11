@@ -1,6 +1,6 @@
 import {
-  SetupbankAccountLastOpenedController,
-  getbankAccountLastOpened,
+  SetupBankAccountMortgageController,
+  getBankAccountMortgage,
 } from "./controller";
 
-export { SetupbankAccountLastOpenedController, getbankAccountLastOpened };
+export { SetupBankAccountMortgageController, getBankAccountMortgage };

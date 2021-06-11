@@ -27,7 +27,7 @@ import { bodyValidate as validate } from "../../../../../middleware/form-validat
 import { PageSetup } from "../../../../../interfaces/PageSetup";
 import { pathName } from "../../../../../paths";
 import { body } from "express-validator";
-import { postbankAccountJSON } from "../../api";
+import { postBankAccountJSON } from "../../api";
 import { Engine } from "../../../../engine";
 const jwt = require("jsonwebtoken");
 
@@ -45,7 +45,7 @@ const bankAccountValidationMiddleware = [
 ];
 
 // This is the root route and will redirect back to the appropriate gov.uk start page
-const getbankAccountLastOpened = (req: Request, res: Response): void => {
+const getBankAccountLastOpened = (req: Request, res: Response): void => {
   if (!req.session.userData.bankAccount) {
     req.session.userData.bankAccount = {};
   }
@@ -54,7 +54,7 @@ const getbankAccountLastOpened = (req: Request, res: Response): void => {
   return res.render(template, { language: req.i18n.language, ...values });
 };
 
-const postbankAccountLastOpened = async (
+const postBankAccountLastOpened = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -67,7 +67,7 @@ const postbankAccountLastOpened = async (
       };
       const allJson = req.session.userData.bankAccount;
       delete allJson["validation"];
-      const atpResult = await postbankAccountJSON(allJson);
+      const atpResult = await postBankAccountJSON(allJson);
       const decoded = jwt.decode(atpResult);
       allJson["validation"] = {
         genericDataVerified: decoded.genericDataVerified,
@@ -91,21 +91,21 @@ const validationData = (): any => {
 };
 
 @PageSetup.register
-class SetupbankAccountLastOpenedController {
+class SetupBankAccountLastOpenedController {
   initialise(): Router {
     const router = Router();
     router.get(
       pathName.public.CURRENT_ACCOUNT_LAST_OPENED,
-      getbankAccountLastOpened
+      getBankAccountLastOpened
     );
     router.post(
       pathName.public.CURRENT_ACCOUNT_LAST_OPENED,
       bankAccountValidationMiddleware,
       validate(template, validationData),
-      postbankAccountLastOpened
+      postBankAccountLastOpened
     );
     return router;
   }
 }
 
-export { SetupbankAccountLastOpenedController, getbankAccountLastOpened };
+export { SetupBankAccountLastOpenedController, getBankAccountLastOpened };

@@ -1,7 +1,4 @@
-import {
-  SetupbankAccountLastOpenedController,
-  getbankAccountLastOpened,
-} from "..";
+import { SetupBankAccountMortgageController, getBankAccountMortgage } from "..";
 import { pathName } from "../../../../../../paths";
 import { expect, sinon } from "../../../../../../../test/utils/testUtils";
 
@@ -26,10 +23,10 @@ describe("Current Account Controller", function () {
         "get"
       );
 
-      new SetupbankAccountLastOpenedController().initialise();
+      new SetupBankAccountMortgageController().initialise();
       expect(routerGetStub).to.have.been.calledWith(
         pathName.public.CURRENT_ACCOUNT_MORTGAGE,
-        getbankAccountLastOpened
+        getBankAccountMortgage
       );
     });
   });
