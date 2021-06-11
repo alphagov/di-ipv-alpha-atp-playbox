@@ -33,7 +33,7 @@ import {
   dateValidation,
 } from "../../../../common/dateValidation";
 import { Engine } from "../../../../engine";
-import { postDrivingLicence } from "../../api";
+import { postDrivingLicenceAPI } from "../../api";
 const jwt = require("jsonwebtoken");
 
 const template = "atp/driving-licence/ui/idx/view.njk";
@@ -125,7 +125,7 @@ const drivingLicenceValidationMiddleware = [
   ),
 ];
 
-const getStart = (req: Request, res: Response): void => {
+const getDrivingLicence = (req: Request, res: Response): void => {
   if (!req.session.userData.drivingLicence) {
     req.session.userData.drivingLicence = {};
   }
@@ -154,7 +154,7 @@ const getStart = (req: Request, res: Response): void => {
   return res.render(template, { ...values });
 };
 
-const postStart = async (
+const postDrivingLicence = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -167,20 +167,20 @@ const postStart = async (
       dateOfBirth:
         req.body["dobYear"] +
         "-" +
-        req.body["dobMonth"].padStart(2, "0") +
+        req.body["dobMonth"].padDrivingLicence(2, "0") +
         "-" +
-        req.body["dobDay"].padStart(2, "0") +
+        req.body["dobDay"].padDrivingLicence(2, "0") +
         "T00:00:00",
       expiryDate:
         req.body["expiryYear"] +
         "-" +
-        req.body["expiryMonth"].padStart(2, "0") +
+        req.body["expiryMonth"].padDrivingLicence(2, "0") +
         "-" +
-        req.body["expiryDay"].padStart(2, "0") +
+        req.body["expiryDay"].padDrivingLicence(2, "0") +
         "T00:00:00",
     };
 
-    const atpResult = await postDrivingLicence(atpData);
+    const atpResult = await postDrivingLicenceAPI(atpData);
     const decoded = jwt.decode(atpResult);
     req.session.userData.drivingLicence = {
       ...req.session.userData.drivingLicence,
@@ -218,18 +218,18 @@ const validationData = (): any => {
 };
 
 @PageSetup.register
-class SetupStartController {
+class SetupDrivingLicenceController {
   initialise(): Router {
     const router = Router();
-    router.get(pathName.public.DRIVING_LICENCE_START, getStart);
+    router.get(pathName.public.DRIVING_LICENCE_START, getDrivingLicence);
     router.post(
       pathName.public.DRIVING_LICENCE_START,
       drivingLicenceValidationMiddleware,
       validate(template, validationData),
-      postStart
+      postDrivingLicence
     );
     return router;
   }
 }
 
-export { SetupStartController, getStart, postStart };
+export { SetupDrivingLicenceController, getDrivingLicence, postDrivingLicence };
