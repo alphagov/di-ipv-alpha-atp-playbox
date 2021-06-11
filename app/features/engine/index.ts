@@ -22,6 +22,7 @@ export class Engine {
     switch (source) {
       case "info":
       case "passport":
+      case "bank-account":
       case "json":
         res.redirect(pathName.public.HOME);
 

@@ -1,0 +1,73 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "components/languageLink/macro.njk" import languageLink %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% extends "common/layout/view.njk" %}
+{% set pageTitleName = 'pages.ipv.info.title' | translate %}
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {% set errorList = errorList | lastErrors(["#dob"]) %}
+            {% include "common/errorSummary/errorSummary.njk" %}
+            <h1 class="govuk-heading-xl">{{ 'pages.bankAccount.header' | translate }}</h1>
+            <p class="govuk-hint govuk-!-margin-bottom-1">{{ 'pages.bankAccount.mortgage.hint' | translate }}</p>
+            <form action="/bank-account/mortgage" method="post" class="form" novalidate>
+                <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+                    
+                {{ govukRadios({
+                idPrefix: "mortgage",
+                name: "mortgage",
+                fieldset: {
+                    legend: {
+                    text:'pages.bankAccount.mortgage.question' | translate,
+                    isPageHeading: false,
+                    classes: "govuk-fieldset__legend--l"
+                    }
+                },
+                hint: { text :'pages.bankAccount.mortgage.questionHint' | translate },
+                items: [
+                    {
+                        checked: mortgage == "lessThan50000",
+                        value: "lessThan50000",
+                        text: "Less than £50,000"
+                    },
+                    {
+                        checked: mortgage == "between50000And99999",
+                        value: "between50000And99999",
+                        text: "Between £50,000 and £99,999"
+                    },
+                    {
+                        checked: mortgage == "between100000And149999",
+                        value: "between100000And149999",
+                        text: "Between £100,000 and £149,999"
+                    },   
+                    {
+                        checked: mortgage == "between150000And200000",
+                        value: "between150000And200000",
+                        text: "Between £150,000 and £200,000"
+                    },                   
+                    {
+                        checked: mortgage == "moreThan200000",
+                        value: "moreThan200000",
+                        text: "More than £200,000"
+                    },
+                    {
+                        checked: mortgage == "never",
+                        value: "never",
+                        text: "I do not have a mortgage"
+                    }
+                ],
+                errorMessage: {
+                        text: errors['mortgage'].text
+                    } if (errors['mortgage'])
+                }) }}
+
+                {{ govukButton({
+                    text: "common.buttons.continue" | translate
+                }) }}
+            </form>
+        </div>
+    </div>
+    
+{% endblock %}

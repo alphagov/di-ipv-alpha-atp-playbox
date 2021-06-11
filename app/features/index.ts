@@ -21,6 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import "./atp/current-account/ui/page1";
+import "./atp/current-account/ui/page2";
+import "./atp/current-account/ui/page3";
+import "./atp/current-account/ui/page4";
 import "./atp/information/ui/idx";
 import "./atp/json/ui/idx";
 import "./atp/passport/ui/idx";

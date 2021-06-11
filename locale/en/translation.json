@@ -175,6 +175,42 @@
         }
       }
     },
+    "bankAccount": {
+      "title": "Answer these questions about your account",
+      "header": "Answer these questions about your account",
+      "lastOpened": {
+        "hint": "Question 1 of 4",
+        "question": "When did you last open a bank account?",
+        "questionHint": "Tell us when you opened your personal 'current' account. This does not include joint accounts, business accounts or savings accounts.",
+        "validationError": {
+          "required": "When you last opened a bank account is required"
+        }
+      },
+      "cvv": {
+        "hint": "Question 2 of 4",
+        "question": "What is the security code (sometimes known as the 'CVV') of the debit card connected to you current account?",
+        "questionHint": "This is the 3-digit number you can find on the back of your card.",
+        "validationError": {
+          "required": "The security code is required",
+          "digits": "The security code must be 3-digit number"
+        }
+      },
+      "mortgage": {
+        "hint": "Question 3 of 4",
+        "question": "How much is left to pay on your mortgage?",
+        "questionHint": "If you have more than one mortgage, tell us about the one you opened most recently.",
+        "validationError": {
+          "required": "How much is left to pay on your mortgage is required"
+        }
+      },
+      "postcode": {
+        "hint": "Question 4 of 4",
+        "question": "What is the postcode of the address where you were living in {{monthAndYear}}?",
+        "validationError": {
+          "required": "The postcode is required"
+        }
+      }
+    },
     "passport": {
       "start": {
         "title": "Add the details from your passport",
