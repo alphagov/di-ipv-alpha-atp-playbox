@@ -26,62 +26,43 @@ import { Request, Response, Router, NextFunction } from "express";
 import { bodyValidate as validate } from "../../../../../middleware/form-validation-middleware";
 import { PageSetup } from "../../../../../interfaces/PageSetup";
 import { pathName } from "../../../../../paths";
-import { Engine } from "../../../../engine";
-import { postCurrentAccountJSON } from "../../api";
-import moment from "moment";
 import { body } from "express-validator";
-const jwt = require("jsonwebtoken");
 
-const template = "atp/current-account/ui/page4/view.njk";
+const template = "atp/bank-account/ui/page3/view.njk";
 
-const currentAccountValidationMiddleware = [
-  body("postcode")
+const bankAccountValidationMiddleware = [
+  body("mortgage")
     .not()
     .isEmpty()
     .withMessage((value, { req }) => {
-      return req.t("pages.bankAccount.postcode.validationError.required", {
+      return req.t("pages.bankAccount.mortgage.validationError.required", {
         value,
       });
     }),
 ];
 
 // This is the root route and will redirect back to the appropriate gov.uk start page
-const getCurrentAccountLastOpened = (req: Request, res: Response): void => {
-  if (!req.session.userData.currentAccount) {
-    req.session.userData.currentAccount = {};
+const getbankAccountLastOpened = (req: Request, res: Response): void => {
+  if (!req.session.userData.bankAccount) {
+    req.session.userData.bankAccount = {};
   }
-  const { postcode } = req.session.userData.currentAccount;
-  const values = { postcode: postcode };
-  const monthAndYear = moment().subtract(5, "years").format("MMMM YYYY");
-  return res.render(template, {
-    language: req.i18n.language,
-    ...values,
-    monthAndYear: monthAndYear,
-  });
+  const { mortgage } = req.session.userData.bankAccount;
+  const values = { mortgage: mortgage };
+  return res.render(template, { language: req.i18n.language, ...values });
 };
 
-const postCurrentAccountLastOpened = async (
+const postbankAccountLastOpened = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   // call something
   try {
-    req.session.userData.currentAccount = {
-      ...req.session.userData.currentAccount,
-      postcode: req.body["postcode"],
+    req.session.userData.bankAccount = {
+      ...req.session.userData.bankAccount,
+      mortgage: req.body["mortgage"],
     };
-
-    const allJson = req.session.userData.currentAccount;
-    delete allJson["validation"];
-    const atpResult = await postCurrentAccountJSON(allJson);
-    const decoded = jwt.decode(atpResult);
-    allJson["validation"] = {
-      genericDataVerified: decoded.genericDataVerified,
-    };
-
-    const engine = new Engine();
-    engine.next("bank-account", req, res);
+    res.redirect(pathName.public.CURRENT_ACCOUNT_POSTCODE);
   } catch (e) {
     next(e);
   }
@@ -92,21 +73,21 @@ const validationData = (): any => {
 };
 
 @PageSetup.register
-class SetupCurrentAccountLastOpenedController {
+class SetupbankAccountLastOpenedController {
   initialise(): Router {
     const router = Router();
     router.get(
-      pathName.public.CURRENT_ACCOUNT_POSTCODE,
-      getCurrentAccountLastOpened
+      pathName.public.CURRENT_ACCOUNT_MORTGAGE,
+      getbankAccountLastOpened
     );
     router.post(
-      pathName.public.CURRENT_ACCOUNT_POSTCODE,
-      currentAccountValidationMiddleware,
+      pathName.public.CURRENT_ACCOUNT_MORTGAGE,
+      bankAccountValidationMiddleware,
       validate(template, validationData),
-      postCurrentAccountLastOpened
+      postbankAccountLastOpened
     );
     return router;
   }
 }
 
-export { SetupCurrentAccountLastOpenedController, getCurrentAccountLastOpened };
+export { SetupbankAccountLastOpenedController, getbankAccountLastOpened };

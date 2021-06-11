@@ -27,13 +27,13 @@ import { bodyValidate as validate } from "../../../../../middleware/form-validat
 import { PageSetup } from "../../../../../interfaces/PageSetup";
 import { pathName } from "../../../../../paths";
 import { body } from "express-validator";
-import { postCurrentAccountJSON } from "../../api";
+import { postbankAccountJSON } from "../../api";
 import { Engine } from "../../../../engine";
 const jwt = require("jsonwebtoken");
 
-const template = "atp/current-account/ui/page1/view.njk";
+const template = "atp/bank-account/ui/page1/view.njk";
 
-const currentAccountValidationMiddleware = [
+const bankAccountValidationMiddleware = [
   body("lastOpened")
     .not()
     .isEmpty()
@@ -45,16 +45,16 @@ const currentAccountValidationMiddleware = [
 ];
 
 // This is the root route and will redirect back to the appropriate gov.uk start page
-const getCurrentAccountLastOpened = (req: Request, res: Response): void => {
-  if (!req.session.userData.currentAccount) {
-    req.session.userData.currentAccount = {};
+const getbankAccountLastOpened = (req: Request, res: Response): void => {
+  if (!req.session.userData.bankAccount) {
+    req.session.userData.bankAccount = {};
   }
-  const { lastOpened } = req.session.userData.currentAccount;
+  const { lastOpened } = req.session.userData.bankAccount;
   const values = { lastOpened: lastOpened };
   return res.render(template, { language: req.i18n.language, ...values });
 };
 
-const postCurrentAccountLastOpened = async (
+const postbankAccountLastOpened = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -62,12 +62,12 @@ const postCurrentAccountLastOpened = async (
   // call something
   try {
     if (req.body["lastOpened"] == "never") {
-      req.session.userData.currentAccount = {
+      req.session.userData.bankAccount = {
         lastOpened: req.body["lastOpened"],
       };
-      const allJson = req.session.userData.currentAccount;
+      const allJson = req.session.userData.bankAccount;
       delete allJson["validation"];
-      const atpResult = await postCurrentAccountJSON(allJson);
+      const atpResult = await postbankAccountJSON(allJson);
       const decoded = jwt.decode(atpResult);
       allJson["validation"] = {
         genericDataVerified: decoded.genericDataVerified,
@@ -75,8 +75,8 @@ const postCurrentAccountLastOpened = async (
       const engine = new Engine();
       engine.next("bank-account", req, res);
     } else {
-      req.session.userData.currentAccount = {
-        ...req.session.userData.currentAccount,
+      req.session.userData.bankAccount = {
+        ...req.session.userData.bankAccount,
         lastOpened: req.body["lastOpened"],
       };
       res.redirect(pathName.public.CURRENT_ACCOUNT_CVV);
@@ -91,21 +91,21 @@ const validationData = (): any => {
 };
 
 @PageSetup.register
-class SetupCurrentAccountLastOpenedController {
+class SetupbankAccountLastOpenedController {
   initialise(): Router {
     const router = Router();
     router.get(
       pathName.public.CURRENT_ACCOUNT_LAST_OPENED,
-      getCurrentAccountLastOpened
+      getbankAccountLastOpened
     );
     router.post(
       pathName.public.CURRENT_ACCOUNT_LAST_OPENED,
-      currentAccountValidationMiddleware,
+      bankAccountValidationMiddleware,
       validate(template, validationData),
-      postCurrentAccountLastOpened
+      postbankAccountLastOpened
     );
     return router;
   }
 }
 
-export { SetupCurrentAccountLastOpenedController, getCurrentAccountLastOpened };
+export { SetupbankAccountLastOpenedController, getbankAccountLastOpened };

@@ -32,8 +32,8 @@ const template = "ipv/home/view.njk";
 const getHome = (req: Request, res: Response): void => {
   // TODO: Display a landing page with all the available check links -> Passport, KBV, Other
   const validations = {};
-  validations["currentAccount"] = req.session.userData.currentAccount
-    ? req.session.userData.currentAccount.validation
+  validations["bankAccount"] = req.session.userData.bankAccount
+    ? req.session.userData.bankAccount.validation
     : null;
   validations["passport"] = req.session.userData.passport
     ? req.session.userData.passport.validation

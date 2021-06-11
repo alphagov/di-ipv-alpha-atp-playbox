@@ -83,7 +83,7 @@
              <div class="govuk-summary-list__row">    
             <dt class="govuk-summary-list__key">Bank account</dt>
             <dd class="govuk-summary-list__value"> 
-                {%if validations.currentAccount%}
+                {%if validations.bankAccount%}
                     {{ govukTag({
                         text: "completed",
                         classes: "govuk-tag--green"
@@ -97,7 +97,7 @@
             </dd>
             <dd class="govuk-summary-list__actions">
                 {% set infoText = "Enter" %}
-                {%if validations.currentAccount%}
+                {%if validations.bankAccount%}
                     {% set infoText = "Change" %} 
                 {% endif %}   
                 <a class="govuk-link" href="/bank-account">{{infoText}}</a>

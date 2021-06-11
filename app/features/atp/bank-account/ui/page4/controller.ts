@@ -26,56 +26,62 @@ import { Request, Response, Router, NextFunction } from "express";
 import { bodyValidate as validate } from "../../../../../middleware/form-validation-middleware";
 import { PageSetup } from "../../../../../interfaces/PageSetup";
 import { pathName } from "../../../../../paths";
+import { Engine } from "../../../../engine";
+import { postbankAccountJSON } from "../../api";
+import moment from "moment";
 import { body } from "express-validator";
+const jwt = require("jsonwebtoken");
 
-const template = "atp/current-account/ui/page2/view.njk";
+const template = "atp/bank-account/ui/page4/view.njk";
 
-const currentAccountValidationMiddleware = [
-  body("cvv")
+const bankAccountValidationMiddleware = [
+  body("postcode")
     .not()
     .isEmpty()
     .withMessage((value, { req }) => {
-      return req.t("pages.bankAccount.cvv.validationError.required", {
+      return req.t("pages.bankAccount.postcode.validationError.required", {
         value,
-      });
-    })
-    .bail()
-    .custom((cvv) => {
-      const regex = /^[0-9]{3}$/g;
-      const found = cvv.match(regex);
-      return !!found;
-    })
-    .withMessage((value, { req, location, path }) => {
-      return req.t("pages.bankAccount.cvv.validationError.digits", {
-        value,
-        location,
-        path,
       });
     }),
 ];
 
 // This is the root route and will redirect back to the appropriate gov.uk start page
-const getCurrentAccountLastOpened = (req: Request, res: Response): void => {
-  if (!req.session.userData.currentAccount) {
-    req.session.userData.currentAccount = {};
+const getbankAccountLastOpened = (req: Request, res: Response): void => {
+  if (!req.session.userData.bankAccount) {
+    req.session.userData.bankAccount = {};
   }
-  const { cvv } = req.session.userData.currentAccount;
-  const values = { cvv: cvv };
-  return res.render(template, { language: req.i18n.language, ...values });
+  const { postcode } = req.session.userData.bankAccount;
+  const values = { postcode: postcode };
+  const monthAndYear = moment().subtract(5, "years").format("MMMM YYYY");
+  return res.render(template, {
+    language: req.i18n.language,
+    ...values,
+    monthAndYear: monthAndYear,
+  });
 };
 
-const postCurrentAccountLastOpened = async (
+const postbankAccountLastOpened = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   // call something
   try {
-    req.session.userData.currentAccount = {
-      ...req.session.userData.currentAccount,
-      cvv: req.body["cvv"],
+    req.session.userData.bankAccount = {
+      ...req.session.userData.bankAccount,
+      postcode: req.body["postcode"],
     };
-    res.redirect(pathName.public.CURRENT_ACCOUNT_MORTGAGE);
+
+    const allJson = req.session.userData.bankAccount;
+    delete allJson["validation"];
+    const atpResult = await postbankAccountJSON(allJson);
+    const decoded = jwt.decode(atpResult);
+    allJson["validation"] = {
+      genericDataVerified: decoded.genericDataVerified,
+    };
+
+    const engine = new Engine();
+    engine.next("bank-account", req, res);
   } catch (e) {
     next(e);
   }
@@ -86,21 +92,21 @@ const validationData = (): any => {
 };
 
 @PageSetup.register
-class SetupCurrentAccountLastOpenedController {
+class SetupbankAccountLastOpenedController {
   initialise(): Router {
     const router = Router();
     router.get(
-      pathName.public.CURRENT_ACCOUNT_CVV,
-      getCurrentAccountLastOpened
+      pathName.public.CURRENT_ACCOUNT_POSTCODE,
+      getbankAccountLastOpened
     );
     router.post(
-      pathName.public.CURRENT_ACCOUNT_CVV,
-      currentAccountValidationMiddleware,
+      pathName.public.CURRENT_ACCOUNT_POSTCODE,
+      bankAccountValidationMiddleware,
       validate(template, validationData),
-      postCurrentAccountLastOpened
+      postbankAccountLastOpened
     );
     return router;
   }
 }
 
-export { SetupCurrentAccountLastOpenedController, getCurrentAccountLastOpened };
+export { SetupbankAccountLastOpenedController, getbankAccountLastOpened };

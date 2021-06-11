@@ -28,41 +28,54 @@ import { PageSetup } from "../../../../../interfaces/PageSetup";
 import { pathName } from "../../../../../paths";
 import { body } from "express-validator";
 
-const template = "atp/current-account/ui/page3/view.njk";
+const template = "atp/bank-account/ui/page2/view.njk";
 
-const currentAccountValidationMiddleware = [
-  body("mortgage")
+const bankAccountValidationMiddleware = [
+  body("cvv")
     .not()
     .isEmpty()
     .withMessage((value, { req }) => {
-      return req.t("pages.bankAccount.mortgage.validationError.required", {
+      return req.t("pages.bankAccount.cvv.validationError.required", {
         value,
+      });
+    })
+    .bail()
+    .custom((cvv) => {
+      const regex = /^[0-9]{3}$/g;
+      const found = cvv.match(regex);
+      return !!found;
+    })
+    .withMessage((value, { req, location, path }) => {
+      return req.t("pages.bankAccount.cvv.validationError.digits", {
+        value,
+        location,
+        path,
       });
     }),
 ];
 
 // This is the root route and will redirect back to the appropriate gov.uk start page
-const getCurrentAccountLastOpened = (req: Request, res: Response): void => {
-  if (!req.session.userData.currentAccount) {
-    req.session.userData.currentAccount = {};
+const getbankAccountLastOpened = (req: Request, res: Response): void => {
+  if (!req.session.userData.bankAccount) {
+    req.session.userData.bankAccount = {};
   }
-  const { mortgage } = req.session.userData.currentAccount;
-  const values = { mortgage: mortgage };
+  const { cvv } = req.session.userData.bankAccount;
+  const values = { cvv: cvv };
   return res.render(template, { language: req.i18n.language, ...values });
 };
 
-const postCurrentAccountLastOpened = async (
+const postbankAccountLastOpened = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   // call something
   try {
-    req.session.userData.currentAccount = {
-      ...req.session.userData.currentAccount,
-      mortgage: req.body["mortgage"],
+    req.session.userData.bankAccount = {
+      ...req.session.userData.bankAccount,
+      cvv: req.body["cvv"],
     };
-    res.redirect(pathName.public.CURRENT_ACCOUNT_POSTCODE);
+    res.redirect(pathName.public.CURRENT_ACCOUNT_MORTGAGE);
   } catch (e) {
     next(e);
   }
@@ -73,21 +86,18 @@ const validationData = (): any => {
 };
 
 @PageSetup.register
-class SetupCurrentAccountLastOpenedController {
+class SetupbankAccountLastOpenedController {
   initialise(): Router {
     const router = Router();
-    router.get(
-      pathName.public.CURRENT_ACCOUNT_MORTGAGE,
-      getCurrentAccountLastOpened
-    );
+    router.get(pathName.public.CURRENT_ACCOUNT_CVV, getbankAccountLastOpened);
     router.post(
-      pathName.public.CURRENT_ACCOUNT_MORTGAGE,
-      currentAccountValidationMiddleware,
+      pathName.public.CURRENT_ACCOUNT_CVV,
+      bankAccountValidationMiddleware,
       validate(template, validationData),
-      postCurrentAccountLastOpened
+      postbankAccountLastOpened
     );
     return router;
   }
 }
 
-export { SetupCurrentAccountLastOpenedController, getCurrentAccountLastOpened };
+export { SetupbankAccountLastOpenedController, getbankAccountLastOpened };

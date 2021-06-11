@@ -1,6 +1,6 @@
 import {
-  SetupCurrentAccountLastOpenedController,
-  getCurrentAccountLastOpened,
+  SetupbankAccountLastOpenedController,
+  getbankAccountLastOpened,
 } from "..";
 import { pathName } from "../../../../../../paths";
 import { expect, sinon } from "../../../../../../../test/utils/testUtils";
@@ -19,17 +19,17 @@ describe("Current Account Controller", function () {
     sandbox.restore();
   });
 
-  describe("setupCurrentAccountController", () => {
+  describe("setupbankAccountController", () => {
     it("should setup the routes", () => {
       const routerGetStub: sinon.SinonStub = sandbox.stub(
         express.Router,
         "get"
       );
 
-      new SetupCurrentAccountLastOpenedController().initialise();
+      new SetupbankAccountLastOpenedController().initialise();
       expect(routerGetStub).to.have.been.calledWith(
         pathName.public.CURRENT_ACCOUNT_LAST_OPENED,
-        getCurrentAccountLastOpened
+        getbankAccountLastOpened
       );
     });
   });
