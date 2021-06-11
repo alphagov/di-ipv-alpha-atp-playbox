@@ -14,7 +14,7 @@
             <div class="govuk-summary-list__row">     
             <dt class="govuk-summary-list__key">JSON</dt>
             <dd class="govuk-summary-list__value"> 
-                {%if validations.json%}
+                {% if validations.json%}
                     {{ govukTag({
                         text: "completed",
                         classes: "govuk-tag--green"
@@ -28,7 +28,7 @@
             </dd>
             <dd class="govuk-summary-list__actions">
                 {% set infoText = "Enter" %}
-                {%if validations.json%}
+                {% if validations.json%}
                     {% set infoText = "Change" %} 
                 {% endif %}   
                 <a class="govuk-link" href="/json">{{infoText}}</a>
@@ -37,7 +37,7 @@
             <div class="govuk-summary-list__row">     
             <dt class="govuk-summary-list__key">Basic information</dt>
             <dd class="govuk-summary-list__value"> 
-                {%if validations.basicInfo%}
+                {% if validations.basicInfo%}
                     {{ govukTag({
                         text: "completed",
                         classes: "govuk-tag--green"
@@ -60,7 +60,7 @@
             <div class="govuk-summary-list__row">    
             <dt class="govuk-summary-list__key">Passport details</dt>
             <dd class="govuk-summary-list__value"> 
-                {%if validations.passport%}
+                {% if validations.passport%}
                     {{ govukTag({
                         text: "completed",
                         classes: "govuk-tag--green"
@@ -81,18 +81,6 @@
             </dd>
             </div>  
             <div class="govuk-summary-list__row">    
-            <dt class="govuk-summary-list__key">Bank account</dt>
-            <dd class="govuk-summary-list__value"> 
-                {%if validations.bankAccount%}            
-            <dd class="govuk-summary-list__actions">
-                {% set infoText = "Enter" %}
-                {%if validations.bankAccount%}
-                    {% set infoText = "Change" %} 
-                {% endif %}   
-                <a class="govuk-link" href="/bank-account">{{infoText}}</a>
-            </dd>
-            </div>   
-            <div class="govuk-summary-list__row">    
             <dt class="govuk-summary-list__key">Driving licence</dt>
             <dd class="govuk-summary-list__value"> 
                 {%if validations.drivingLicence%}
@@ -106,13 +94,37 @@
                         classes: "govuk-tag--blue"
                     }) }}
                 {% endif %} 
-            </dd>                   
-                {%if validations.drivingLicence%}
+            </dd>     
+            <dd class="govuk-summary-list__actions">              
+                {% if validations.drivingLicence %}
                     {% set infoText = "Change" %} 
                 {% endif %}   
                 <a class="govuk-link" href="/driving-licence">{{infoText}}</a>
             </dd>
             </div>        
+            <div class="govuk-summary-list__row">    
+            <dt class="govuk-summary-list__key">Bank account</dt>
+            <dd class="govuk-summary-list__value"> 
+                {%if validations.bankAccount %}  
+                    {{ govukTag({
+                        text: "completed",
+                        classes: "govuk-tag--green"
+                    }) }}
+                {% else %}
+                    {{ govukTag({
+                        text: "pending",
+                        classes: "govuk-tag--blue"
+                    }) }}
+                {% endif %}           
+            <dd class="govuk-summary-list__actions">
+                {% set infoText = "Enter" %}
+                {% if validations.bankAccount %}
+                    {% set infoText = "Change" %} 
+                {% endif %}   
+                <a class="govuk-link" href="/bank-account">{{infoText}}</a>
+            </dd>
+            </div>   
+            
             </dl>
             <div>
                 {{ govukButton({
@@ -122,6 +134,5 @@
                 }) }}
             </div>
         </div>
-    </div>
-    
+    </div>    
 {% endblock %}
