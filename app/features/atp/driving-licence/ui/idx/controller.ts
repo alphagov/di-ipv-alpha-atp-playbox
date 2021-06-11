@@ -167,16 +167,16 @@ const postDrivingLicence = async (
       dateOfBirth:
         req.body["dobYear"] +
         "-" +
-        req.body["dobMonth"].padDrivingLicence(2, "0") +
+        req.body["dobMonth"].padStart(2, "0") +
         "-" +
-        req.body["dobDay"].padDrivingLicence(2, "0") +
+        req.body["dobDay"].padStart(2, "0") +
         "T00:00:00",
       expiryDate:
         req.body["expiryYear"] +
         "-" +
-        req.body["expiryMonth"].padDrivingLicence(2, "0") +
+        req.body["expiryMonth"].padStart(2, "0") +
         "-" +
-        req.body["expiryDay"].padDrivingLicence(2, "0") +
+        req.body["expiryDay"].padStart(2, "0") +
         "T00:00:00",
     };
 
