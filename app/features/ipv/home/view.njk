@@ -124,7 +124,15 @@
                 <a class="govuk-link" href="/bank-account">{{infoText}}</a>
             </dd>
             </div>   
-            
+            </dd>
+            <dd class="govuk-summary-list__actions">
+                {% set infoText = "Enter" %}
+                {%if validations.drivingLicence%}
+                    {% set infoText = "Change" %} 
+                {% endif %}   
+                <a class="govuk-link" href="/driving-licence">{{infoText}}</a>
+            </dd>
+            </div>
             </dl>
             <div>
                 {{ govukButton({
