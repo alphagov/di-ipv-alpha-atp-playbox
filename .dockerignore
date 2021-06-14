@@ -7,3 +7,6 @@ docker-compose*
 README.md
 LICENSE
 .vscode
+node_modules/
+build/
+keys/
