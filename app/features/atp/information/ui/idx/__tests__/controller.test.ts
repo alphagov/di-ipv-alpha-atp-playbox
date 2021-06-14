@@ -16,7 +16,7 @@ describe("Info Controller", function () {
     sandbox.restore();
   });
 
-  describe("setupInfoController", () => {
+  describe("SetupInfoController", () => {
     it("should setup the routes", () => {
       const routerGetStub: sinon.SinonStub = sandbox.stub(
         express.Router,

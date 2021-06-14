@@ -4,7 +4,7 @@ import { expect, sinon } from "../../../../../../../test/utils/testUtils";
 
 const express = require("express");
 
-describe("Passport DrivingLicence Controller", function () {
+describe("Driving Licence Controller", function () {
   let sandbox: sinon.SinonSandbox;
 
   beforeEach(() => {
@@ -16,7 +16,7 @@ describe("Passport DrivingLicence Controller", function () {
     sandbox.restore();
   });
 
-  describe("setupDrivingLicenceController", () => {
+  describe("SetupDrivingLicenceController", () => {
     it("should setup the routes", () => {
       const routerGetStub: sinon.SinonStub = sandbox.stub(
         express.Router,

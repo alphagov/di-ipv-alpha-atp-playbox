@@ -33,7 +33,7 @@ import {
   dateValidation,
 } from "../../../../common/dateValidation";
 import { Engine } from "../../../../engine";
-import { postPassport } from "../../api";
+import { postPassportAPI } from "../../api";
 const jwt = require("jsonwebtoken");
 
 const template = "atp/passport/ui/idx/view.njk";
@@ -113,7 +113,7 @@ const passportValidationMiddleware = [
   ),
 ];
 
-const getStart = (req: Request, res: Response): void => {
+const getPassport = (req: Request, res: Response): void => {
   if (!req.session.userData.passport) {
     req.session.userData.passport = {};
   }
@@ -142,7 +142,7 @@ const getStart = (req: Request, res: Response): void => {
   return res.render(template, { ...values });
 };
 
-const postStart = async (
+const postPassport = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -168,7 +168,7 @@ const postStart = async (
         "T00:00:00",
     };
 
-    const atpResult = await postPassport(atpData);
+    const atpResult = await postPassportAPI(atpData);
     const decoded = jwt.decode(atpResult);
     req.session.userData.passport = {
       ...req.session.userData.passport,
@@ -206,18 +206,18 @@ const validationData = (): any => {
 };
 
 @PageSetup.register
-class SetupStartController {
+class SetupPassportController {
   initialise(): Router {
     const router = Router();
-    router.get(pathName.public.PASSPORT_START, getStart);
+    router.get(pathName.public.PASSPORT_START, getPassport);
     router.post(
       pathName.public.PASSPORT_START,
       passportValidationMiddleware,
       validate(template, validationData),
-      postStart
+      postPassport
     );
     return router;
   }
 }
 
-export { SetupStartController, getStart, postStart };
+export { SetupPassportController, getPassport, postPassport };

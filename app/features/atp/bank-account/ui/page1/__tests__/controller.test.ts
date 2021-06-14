@@ -7,7 +7,7 @@ import { expect, sinon } from "../../../../../../../test/utils/testUtils";
 
 const express = require("express");
 
-describe("Current Account Controller", function () {
+describe("Bank Account Last Opened Controller", function () {
   let sandbox: sinon.SinonSandbox;
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe("Current Account Controller", function () {
     sandbox.restore();
   });
 
-  describe("setupbankAccountController", () => {
+  describe("SetupBankAccountLastOpenedController", () => {
     it("should setup the routes", () => {
       const routerGetStub: sinon.SinonStub = sandbox.stub(
         express.Router,
