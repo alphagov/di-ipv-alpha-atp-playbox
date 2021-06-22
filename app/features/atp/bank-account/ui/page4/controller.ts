@@ -79,6 +79,11 @@ const postBankAccountPostcode = async (
     allJson["validation"] = {
       genericDataVerified: decoded.genericDataVerified,
     };
+    // TODO: add this in the ATP
+    allJson["evidence"] = {
+      strength: 3,
+      validity: 2,
+    };
 
     const engine = new Engine();
     engine.next("bank-account", req, res);

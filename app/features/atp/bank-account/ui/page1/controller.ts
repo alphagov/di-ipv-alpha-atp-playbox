@@ -72,12 +72,17 @@ const postBankAccountLastOpened = async (
       allJson["validation"] = {
         genericDataVerified: decoded.genericDataVerified,
       };
+      allJson["evidence"] = {
+        strength: 0,
+        validity: 0,
+      };
       const engine = new Engine();
       engine.next("bank-account", req, res);
     } else {
       req.session.userData.bankAccount = {
         ...req.session.userData.bankAccount,
         lastOpened: req.body["lastOpened"],
+        // TODO: add this in the ATP
       };
       res.redirect(pathName.public.CURRENT_ACCOUNT_CVV);
     }

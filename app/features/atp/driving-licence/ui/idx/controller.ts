@@ -205,6 +205,11 @@ const postDrivingLicence = async (
         month: req.body["expiryMonth"],
         year: req.body["expiryYear"],
       },
+      // TODO: add this in the ATP
+      evidence: {
+        strength: 2,
+        validity: 2,
+      },
     };
     const engine = new Engine();
     engine.next("drivingLicence", req, res);

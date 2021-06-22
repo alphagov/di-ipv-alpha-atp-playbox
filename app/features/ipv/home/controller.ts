@@ -24,29 +24,19 @@
  */
 
 import { Request, Response, Router } from "express";
+import { getValidations } from "..";
 import { PageSetup } from "../../../interfaces/PageSetup";
 import { pathName } from "../../../paths";
 
 const template = "ipv/home/view.njk";
 
 const getHome = (req: Request, res: Response): void => {
-  const validations = {};
-  validations["bankAccount"] = req.session.userData.bankAccount
-    ? req.session.userData.bankAccount.validation
-    : null;
-  validations["drivingLicence"] = req.session.userData.drivingLicence
-    ? req.session.userData.drivingLicence.validation
-    : null;
-  validations["passport"] = req.session.userData.passport
-    ? req.session.userData.passport.validation
-    : null;
-  validations["basicInfo"] = req.session.userData.basicInfo
-    ? req.session.userData.basicInfo.validation
-    : null;
-  validations["json"] = req.session.userData.json
-    ? req.session.userData.json.validation
-    : null;
-  return res.render(template, { language: req.i18n.language, validations });
+  const validations = getValidations(req);
+  return res.render(template, {
+    language: req.i18n.language,
+    validations,
+    gpg45Profile: req.session.gpg45Profile,
+  });
 };
 
 @PageSetup.register

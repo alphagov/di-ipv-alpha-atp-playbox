@@ -175,6 +175,11 @@ const postPassport = async (
       validation: {
         ...decoded,
       },
+      // TODO: add this in the ATP
+      evidence: {
+        strength: 4,
+        validity: 4,
+      },
       number: req.body["number"],
       surname: req.body["surname"],
       givenNames: req.body["givenNames"],

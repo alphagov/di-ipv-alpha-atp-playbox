@@ -157,6 +157,11 @@ const postInfo = async (
     allJson["validation"] = {
       genericDataVerified: decoded.genericDataVerified,
     };
+    // TODO: add this in the ATP
+    allJson["evidence"] = {
+      strength: 1,
+      validity: 1,
+    };
 
     const engine = new Engine();
     engine.next("info", req, res);
