@@ -30,7 +30,6 @@ import { Engine } from "../../../../engine";
 import { postBankAccountJSON } from "../../api";
 import moment from "moment";
 import { body } from "express-validator";
-const jwt = require("jsonwebtoken");
 
 const template = "atp/bank-account/ui/page4/view.njk";
 
@@ -74,17 +73,7 @@ const postBankAccountPostcode = async (
 
     const allJson = req.session.userData.bankAccount;
     delete allJson["validation"];
-    const atpResult = await postBankAccountJSON(allJson);
-    const decoded = jwt.decode(atpResult);
-    allJson["validation"] = {
-      genericDataVerified: decoded.genericDataVerified,
-    };
-    // TODO: add this in the ATP
-    allJson["evidence"] = {
-      strength: 3,
-      validity: 2,
-    };
-
+    await postBankAccountJSON(allJson);
     const engine = new Engine();
     engine.next("bank-account", req, res);
   } catch (e) {

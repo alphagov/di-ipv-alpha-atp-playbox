@@ -165,8 +165,21 @@
                 {% endif %}   
                 <a class="govuk-link" href="/bank-account">{{infoText}}</a>
             </dd>
-            </div>   
-            
+            </div>               
+            </dl>
+            <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+                <div class="govuk-summary-list__row">  
+                    <dt class="govuk-summary-list__key">Activity history<dt>
+                    <dd class="govuk-summary-list__value"> {{validations.scores.history}}</dd>
+                </div>
+                <div class="govuk-summary-list__row">  
+                    <dt class="govuk-summary-list__key">Fraud checks<dt>
+                    <dd class="govuk-summary-list__value"> {{validations.scores.fraud}}</dd>
+                </div>
+                <div class="govuk-summary-list__row">  
+                    <dt class="govuk-summary-list__key">Verification<dt>
+                    <dd class="govuk-summary-list__value"> {{validations.scores.verification}}</dd>
+                </div>
             </dl>
             <h2>Currently met GPG45 profile: <span>{{gpg45Profile or "None"}}</span></h2>
             <div>
