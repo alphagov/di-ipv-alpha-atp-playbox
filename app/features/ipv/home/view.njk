@@ -181,7 +181,13 @@
                     <dd class="govuk-summary-list__value"> {{validations.scores.verification}}</dd>
                 </div>
             </dl>
-            <h2>Currently met GPG45 profile: <span>{{gpg45Profile or "None"}}</span></h2>
+            <h2>Currently met GPG45 profile:</h2>
+            <h3><span>{{gpg45Profile or "None"}}</span></h3>
+
+            <br/>
+            <br/>
+            <br/>
+
             <div>
                 {{ govukButton({
                     text: "Return to Orc",
