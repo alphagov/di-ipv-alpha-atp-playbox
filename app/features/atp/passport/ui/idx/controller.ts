@@ -174,7 +174,6 @@ const postPassport = async (
       evidence: output.evidence,
       scores: output.scores,
       ...req.session.userData.passport,
-
       number: req.body["number"],
       surname: req.body["surname"],
       givenNames: req.body["givenNames"],
