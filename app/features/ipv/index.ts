@@ -1,6 +1,26 @@
 import { Request } from "express";
 
+export const getScore = (
+  req: Request,
+  param: string,
+  list: Array<string>
+): number => {
+  let score = 0;
+  list.forEach((item) => {
+    if (req.session.userData[item] && req.session.userData[item].scores)
+      score = score + req.session.userData[item].scores[param];
+  });
+  return score;
+};
+
 export const getValidations = (req: Request): any => {
+  const list = [
+    "bankAccount",
+    "drivingLicence",
+    "passport",
+    "basicInfo",
+    "json",
+  ];
   const validations = {};
   validations["bankAccount"] = req.session.userData.bankAccount
     ? {
@@ -33,52 +53,10 @@ export const getValidations = (req: Request): any => {
       }
     : null;
   validations["scores"] = {
-    history:
-      (req.session.userData.bankAccount
-        ? req.session.userData.bankAccount.scores.history
-        : 0) +
-      (req.session.userData.drivingLicence
-        ? req.session.userData.drivingLicence.scores.history
-        : 0) +
-      (req.session.userData.passport
-        ? req.session.userData.passport.scores.history
-        : 0) +
-      (req.session.userData.basicInfo
-        ? req.session.userData.basicInfo.scores.history
-        : 0) +
-      (req.session.userData.json
-        ? req.session.userData.json.scores.history
-        : 0),
-    fraud:
-      (req.session.userData.bankAccount
-        ? req.session.userData.bankAccount.scores.fraud
-        : 0) +
-      (req.session.userData.drivingLicence
-        ? req.session.userData.drivingLicence.scores.fraud
-        : 0) +
-      (req.session.userData.passport
-        ? req.session.userData.passport.scores.fraud
-        : 0) +
-      (req.session.userData.basicInfo
-        ? req.session.userData.basicInfo.scores.fraud
-        : 0) +
-      (req.session.userData.json ? req.session.userData.json.scores.fraud : 0),
-    verification:
-      (req.session.userData.bankAccount
-        ? req.session.userData.bankAccount.scores.verification
-        : 0) +
-      (req.session.userData.drivingLicence
-        ? req.session.userData.drivingLicence.scores.verification
-        : 0) +
-      (req.session.userData.passport
-        ? req.session.userData.passport.scores.verification
-        : 0) +
-      (req.session.userData.basicInfo
-        ? req.session.userData.basicInfo.scores.verification
-        : 0) +
-      (req.session.userData.json
-        ? req.session.userData.json.scores.verification
-        : 0),
+    history: getScore(req, "history", list),
+    fraud: getScore(req, "fraud", list),
+    verification: getScore(req, "verification", list),
   };
+
   return validations;
 };

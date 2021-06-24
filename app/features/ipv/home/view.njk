@@ -20,11 +20,11 @@
                         classes: "govuk-tag--green"
                     }) }}
                     {{ govukTag({
-                        text: validations.json.evidence.strength,
+                        text: validations.json.evidence.strength or 0,
                         classes: "govuk-tag--orange"
                     }) }}
                     {{ govukTag({
-                        text: validations.json.evidence.validity,
+                        text: validations.json.evidence.validity or 0,
                         classes: "govuk-tag--yellow"
                     }) }}
                 {% else %}
@@ -51,11 +51,11 @@
                         classes: "govuk-tag--green"
                     }) }}
                     {{ govukTag({
-                        text: validations.basicInfo.evidence.strength,
+                        text: validations.basicInfo.evidence.strength or 0,
                         classes: "govuk-tag--orange"
                     }) }}
                     {{ govukTag({
-                        text: validations.basicInfo.evidence.validity,
+                        text: validations.basicInfo.evidence.validity or 0,
                         classes: "govuk-tag--yellow"
                     }) }}
                 {% else %}
@@ -83,11 +83,11 @@
                         classes: "govuk-tag--green"
                     }) }}
                     {{ govukTag({
-                        text: validations.passport.evidence.strength,
+                        text: validations.passport.evidence.strength or 0,
                         classes: "govuk-tag--orange"
                     }) }}
                     {{ govukTag({
-                        text: validations.passport.evidence.validity,
+                        text: validations.passport.evidence.validity or 0,
                         classes: "govuk-tag--yellow"
                     }) }}
                 {% else %}
@@ -114,11 +114,11 @@
                         classes: "govuk-tag--green"
                     }) }}     
                     {{ govukTag({
-                        text: validations.drivingLicence.evidence.strength,
+                        text: validations.drivingLicence.evidence.strength or 0,
                         classes: "govuk-tag--orange"
                     }) }}
                     {{ govukTag({
-                        text: validations.drivingLicence.evidence.validity,
+                        text: validations.drivingLicence.evidence.validity or 0,
                         classes: "govuk-tag--yellow"
                     }) }}              
                 {% else %}
@@ -128,7 +128,8 @@
                     }) }}                     
                 {% endif %} 
             </dd>     
-            <dd class="govuk-summary-list__actions">              
+            <dd class="govuk-summary-list__actions">   
+                {% set infoText = "Enter" %}           
                 {% if validations.drivingLicence %}
                     {% set infoText = "Change" %} 
                 {% endif %}   
@@ -144,11 +145,11 @@
                         classes: "govuk-tag--green"
                     }) }}
                     {{ govukTag({
-                        text: validations.bankAccount.evidence.strength,
+                        text: validations.bankAccount.evidence.strength or 0,
                         classes: "govuk-tag--orange"
                     }) }}
                     {{ govukTag({
-                        text: validations.bankAccount.evidence.validity,
+                        text: validations.bankAccount.evidence.validity or 0,
                         classes: "govuk-tag--yellow"
                     }) }}
                 {% else %}
@@ -170,15 +171,15 @@
             <dl class="govuk-summary-list govuk-!-margin-bottom-9">
                 <div class="govuk-summary-list__row">  
                     <dt class="govuk-summary-list__key">Activity history<dt>
-                    <dd class="govuk-summary-list__value"> {{validations.scores.history}}</dd>
+                    <dd class="govuk-summary-list__value"> {{validations.scores.history or 0}}</dd>
                 </div>
                 <div class="govuk-summary-list__row">  
                     <dt class="govuk-summary-list__key">Fraud checks<dt>
-                    <dd class="govuk-summary-list__value"> {{validations.scores.fraud}}</dd>
+                    <dd class="govuk-summary-list__value"> {{validations.scores.fraud or 0}}</dd>
                 </div>
                 <div class="govuk-summary-list__row">  
                     <dt class="govuk-summary-list__key">Verification<dt>
-                    <dd class="govuk-summary-list__value"> {{validations.scores.verification}}</dd>
+                    <dd class="govuk-summary-list__value"> {{validations.scores.verification or 0}}</dd>
                 </div>
             </dl>
             <h2>Currently met GPG45 profile: <span>{{gpg45Profile or "None"}}</span></h2>
