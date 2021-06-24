@@ -178,7 +178,7 @@ const postPassport = async (
       // TODO: add this in the ATP
       evidence: {
         strength: 4,
-        validity: 4,
+        validity: 2,
       },
       number: req.body["number"],
       surname: req.body["surname"],

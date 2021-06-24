@@ -41,7 +41,8 @@ export class Engine {
         });
         const gpg45Profile = await postGPG45ProfileJSON(data);
 
-        req.session.gpg45Profile = gpg45Profile.matchedIdentityProfile.name;
+        req.session.gpg45Profile =
+          gpg45Profile.matchedIdentityProfile.description;
         res.redirect(pathName.public.HOME);
 
         break;
@@ -61,7 +62,10 @@ export class Engine {
     redisClient: RedisClient
   ): any => {
     const uuid = req.session.userId;
-    const data = req.session.userData;
+    const data = {
+      ...req.session.userData,
+      _profile: req.session.gpg45Profile,
+    };
     redisClient.set("userid:" + uuid, JSON.stringify(data));
 
     const authCode = uuidv4();
