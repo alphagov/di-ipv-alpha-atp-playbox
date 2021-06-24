@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /*!
  * MIT License
  *
@@ -32,7 +31,6 @@ const template = "ipv/home/view.njk";
 
 const getHome = (req: Request, res: Response): void => {
   const validations = getValidations(req);
-  console.log(validations);
   return res.render(template, {
     language: req.i18n.language,
     validations,
