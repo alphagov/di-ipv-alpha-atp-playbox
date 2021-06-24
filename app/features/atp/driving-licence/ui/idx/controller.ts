@@ -34,8 +34,6 @@ import {
 } from "../../../../common/dateValidation";
 import { Engine } from "../../../../engine";
 import { postDrivingLicenceAPI } from "../../api";
-const jwt = require("jsonwebtoken");
-
 const template = "atp/driving-licence/ui/idx/view.njk";
 
 const drivingLicenceValidationMiddleware = [
@@ -180,13 +178,12 @@ const postDrivingLicence = async (
         "T00:00:00",
     };
 
-    const atpResult = await postDrivingLicenceAPI(atpData);
-    const decoded = jwt.decode(atpResult);
+    const output = await postDrivingLicenceAPI(atpData);
     req.session.userData.drivingLicence = {
+      validation: output.validation,
+      evidence: output.evidence,
+      scores: output.scores,
       ...req.session.userData.drivingLicence,
-      validation: {
-        genericDataVerified: decoded.genericDataVerified,
-      },
       number: req.body["number"],
       surname: req.body["surname"],
       givenNames: req.body["givenNames"],
@@ -204,11 +201,6 @@ const postDrivingLicence = async (
         day: req.body["expiryDay"],
         month: req.body["expiryMonth"],
         year: req.body["expiryYear"],
-      },
-      // TODO: add this in the ATP
-      evidence: {
-        strength: 2,
-        validity: 2,
       },
     };
     const engine = new Engine();

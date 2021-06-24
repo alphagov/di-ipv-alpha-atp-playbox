@@ -29,7 +29,6 @@ import { pathName } from "../../../../../paths";
 import { body } from "express-validator";
 import { postBankAccountJSON } from "../../api";
 import { Engine } from "../../../../engine";
-const jwt = require("jsonwebtoken");
 
 const template = "atp/bank-account/ui/page1/view.njk";
 
@@ -67,15 +66,8 @@ const postBankAccountLastOpened = async (
       };
       const allJson = req.session.userData.bankAccount;
       delete allJson["validation"];
-      const atpResult = await postBankAccountJSON(allJson);
-      const decoded = jwt.decode(atpResult);
-      allJson["validation"] = {
-        genericDataVerified: decoded.genericDataVerified,
-      };
-      allJson["evidence"] = {
-        strength: 0,
-        validity: 0,
-      };
+      await postBankAccountJSON(allJson);
+
       const engine = new Engine();
       engine.next("bank-account", req, res);
     } else {

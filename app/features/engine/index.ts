@@ -40,11 +40,10 @@ export class Engine {
           }
         });
         const gpg45Profile = await postGPG45ProfileJSON(data);
-
-        req.session.gpg45Profile =
-          gpg45Profile.matchedIdentityProfile.description;
+        req.session.gpg45Profile = gpg45Profile.matchedIdentityProfile
+          ? gpg45Profile.matchedIdentityProfile.description
+          : null;
         res.redirect(pathName.public.HOME);
-
         break;
       }
       default:

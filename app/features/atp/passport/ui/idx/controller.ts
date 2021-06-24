@@ -34,7 +34,6 @@ import {
 } from "../../../../common/dateValidation";
 import { Engine } from "../../../../engine";
 import { postPassportAPI } from "../../api";
-const jwt = require("jsonwebtoken");
 
 const template = "atp/passport/ui/idx/view.njk";
 
@@ -168,18 +167,13 @@ const postPassport = async (
         "T00:00:00",
     };
 
-    const atpResult = await postPassportAPI(atpData);
-    const decoded = jwt.decode(atpResult);
+    const output = await postPassportAPI(atpData);
+
     req.session.userData.passport = {
+      validation: output.validation,
+      evidence: output.evidence,
+      scores: output.scores,
       ...req.session.userData.passport,
-      validation: {
-        ...decoded,
-      },
-      // TODO: add this in the ATP
-      evidence: {
-        strength: 4,
-        validity: 2,
-      },
       number: req.body["number"],
       surname: req.body["surname"],
       givenNames: req.body["givenNames"],
