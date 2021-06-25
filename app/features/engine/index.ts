@@ -29,6 +29,7 @@ export class Engine {
         const data = {
           identityVerificationBundle: {
             identityEvidence: [],
+            ...validations.scores,
           },
         };
 
@@ -39,6 +40,7 @@ export class Engine {
             });
           }
         });
+
         const gpg45Profile = await postGPG45ProfileJSON(data);
         req.session.gpg45Profile = gpg45Profile.matchedIdentityProfile
           ? gpg45Profile.matchedIdentityProfile.description
