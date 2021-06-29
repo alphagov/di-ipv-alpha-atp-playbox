@@ -13,8 +13,8 @@ export async function postBasicInfoJSON(data: any): Promise<any> {
     validity: 1,
   };
   data.scores = {
-    history: 0,
-    fraud: 0,
+    activityHistory: 0,
+    identityFraud: 0,
     verification: 1,
   };
   return data;
