@@ -46,8 +46,8 @@ export async function postBankAccountJSON(data: any): Promise<any> {
     }
   }
   data["scores"] = {
-    history: data.evidence.strength,
-    fraud: 1,
+    activityHistory: data.evidence.strength,
+    identityFraud: 1,
     verification: 1,
   };
   return data;

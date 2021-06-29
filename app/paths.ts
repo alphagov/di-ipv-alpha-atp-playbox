@@ -30,6 +30,7 @@ const pathName = {
       USER_INFO: "/oauth2/userinfo",
       JWKS: "/.well-known/jwks.json",
     },
+    ATTRIBUTES: "/attributes",
     PASSPORT_START: "/passport",
     CURRENT_ACCOUNT_LAST_OPENED: "/bank-account",
     CURRENT_ACCOUNT_CVV: "/bank-account/cvv",

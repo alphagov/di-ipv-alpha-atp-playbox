@@ -1,0 +1,84 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "components/languageLink/macro.njk" import languageLink %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% extends "common/layout/view.njk" %}
+{% set pageTitleName = 'pages.start.title' | translate %}
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">            
+            <form action="/attributes?_type={{_type}}" method="post" class="form" novalidate>
+                <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+                <input type="hidden" name="_type" value="{{_type}}"/>
+                {{ govukTextarea({
+                    name: "attributesObj",
+                    id: "attributesObj",
+                    classes: "mono-space",
+                    rows: 20,
+                    value: attributesObj,
+                    label: {
+                        text: "Please supply data in JSON format",
+                        classes: "govuk-label--l",
+                        isPageHeading: true
+                    },
+                    hint: {
+                        text: "Your data should be surounded in { ... } KBV Code: "+_type
+                    },
+                    errorMessage: { text: errors['attributesObj'].text } if (errors['attributesObj'])
+                }) }}
+
+                {{ govukInput({
+                label: {
+                    text: "Activity history",
+                    classes: "govuk-label--l"
+                   
+                },
+                classes: "govuk-!-width-one-quarter",
+                id: "activityHistory",
+                name: "activityHistory",
+                value: activityHistory,
+                errorMessage: {
+                        text: errors['activityHistory'].text
+                    } if (errors['activityHistory'])
+                }) }}
+                {{ govukInput({
+                label: {
+                    text: "Indentity fraud",
+                    classes: "govuk-label--l"
+                   
+                },
+                classes: "govuk-!-width-one-quarter",
+                id: "identityFraud",
+                name: "identityFraud",
+                value: identityFraud,
+                errorMessage: {
+                        text: errors['identityFraud'].text
+                    } if (errors['identityFraud'])
+                }) }}
+                {{ govukInput({
+                label: {
+                    text: "Verification",
+                    classes: "govuk-label--l"
+                   
+                },
+                classes: "govuk-!-width-one-quarter",
+                id: "verification",
+                name: "verification",
+                value: verification,
+                errorMessage: {
+                        text: errors['verification'].text
+                    } if (errors['verification'])
+                }) }}
+                                {{ govukButton({
+                    text: "Append more JSON data",
+                    name: "button-append"
+                }) }}
+                {{ govukButton({
+                    text: "common.buttons.continue" | translate,
+                    name: "button-continue"
+                }) }}
+            </form>
+        </div>
+    </div>
+    
+{% endblock %}

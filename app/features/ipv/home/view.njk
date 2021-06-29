@@ -10,7 +10,54 @@
         <div class="govuk-grid-column-two-thirds">
             <h1 class="govuk-heading-xl">ATP and Orc test page</h1>
             <p>Enter all required information and then click 'Return to Orc'</p>
+            {# <p><pre>{{ validations | toJSON(2) }}</pre></p> #}
             <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+            <div class="govuk-summary-list__row">     
+            <dt class="govuk-summary-list__key">Mothers maiden name</dt>
+            <dd class="govuk-summary-list__value"> 
+                {% if validations.mmn %}
+                    {{ govukTag({
+                        text: "completed",
+                        classes: "govuk-tag--green"
+                    }) }}                
+                {% else %}
+                    {{ govukTag({
+                        text: "pending",
+                        classes: "govuk-tag--blue"
+                    }) }}
+                {% endif %}  
+            </dd>
+            <dd class="govuk-summary-list__actions">
+                {% set infoText = "Enter" %}
+                {% if validations.mmn %}
+                    {% set infoText = "Change" %} 
+                {% endif %}   
+                <a class="govuk-link" href="/attributes?_type=mmn">{{infoText}}</a>
+            </dd>
+            </div>
+            <div class="govuk-summary-list__row">     
+            <dt class="govuk-summary-list__key">NINO</dt>
+            <dd class="govuk-summary-list__value"> 
+                {% if validations.nino %}
+                    {{ govukTag({
+                        text: "completed",
+                        classes: "govuk-tag--green"
+                    }) }}                
+                {% else %}
+                    {{ govukTag({
+                        text: "pending",
+                        classes: "govuk-tag--blue"
+                    }) }}
+                {% endif %}  
+            </dd>
+            <dd class="govuk-summary-list__actions">
+                {% set infoText = "Enter" %}
+                {% if validations.nino %}
+                    {% set infoText = "Change" %} 
+                {% endif %}   
+                <a class="govuk-link" href="/attributes?_type=nino">{{infoText}}</a>
+            </dd>
+            </div>
             <div class="govuk-summary-list__row">     
             <dt class="govuk-summary-list__key">JSON</dt>
             <dd class="govuk-summary-list__value"> 
@@ -171,11 +218,11 @@
             <dl class="govuk-summary-list govuk-!-margin-bottom-9">
                 <div class="govuk-summary-list__row">  
                     <dt class="govuk-summary-list__key">Activity history<dt>
-                    <dd class="govuk-summary-list__value"> {{validations.scores.history or 0}}</dd>
+                    <dd class="govuk-summary-list__value"> {{validations.scores.activityHistory or 0}}</dd>
                 </div>
                 <div class="govuk-summary-list__row">  
-                    <dt class="govuk-summary-list__key">Fraud checks<dt>
-                    <dd class="govuk-summary-list__value"> {{validations.scores.fraud or 0}}</dd>
+                    <dt class="govuk-summary-list__key">Identity fraud<dt>
+                    <dd class="govuk-summary-list__value"> {{validations.scores.identityFraud or 0}}</dd>
                 </div>
                 <div class="govuk-summary-list__row">  
                     <dt class="govuk-summary-list__key">Verification<dt>

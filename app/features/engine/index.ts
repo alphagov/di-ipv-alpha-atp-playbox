@@ -29,7 +29,7 @@ export class Engine {
         const data = {
           identityVerificationBundle: {
             identityEvidence: [],
-            ...validations.scores,
+            //...validations.scores,
           },
         };
 
@@ -45,6 +45,10 @@ export class Engine {
         req.session.gpg45Profile = gpg45Profile.matchedIdentityProfile
           ? gpg45Profile.matchedIdentityProfile.description
           : null;
+        res.redirect(pathName.public.HOME);
+        break;
+      }
+      case "attributes": {
         res.redirect(pathName.public.HOME);
         break;
       }
