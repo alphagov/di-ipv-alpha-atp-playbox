@@ -28,9 +28,13 @@ const doCodeCallback = (
   res: any,
   authorizationCode: string
 ): void => {
-  res.redirect(
-    `${req.session.oauth.redirect_uri}?code=${authorizationCode}&state=${req.session.oauth.state}`
-  );
+  if (req && req.session && req.session.oauth) {
+    res.redirect(
+      `${req.session.oauth.redirect_uri}?code=${authorizationCode}&state=${req.session.oauth.state}`
+    );
+  } else {
+    res.redirect("/error");
+  }
 };
 
 @PageSetup.register

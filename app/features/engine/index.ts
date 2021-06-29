@@ -71,10 +71,13 @@ export class Engine {
       ...req.session.userData,
       _profile: req.session.gpg45Profile,
     };
-    redisClient.set("userid:" + uuid, JSON.stringify(data));
 
     const authCode = uuidv4();
-    redisClient.set("authcode:" + authCode, uuid);
+
+    if (uuid) {
+      redisClient.set("userid:" + uuid, JSON.stringify(data));
+      redisClient.set("authcode:" + authCode, uuid);
+    }
 
     return authCode;
   };
