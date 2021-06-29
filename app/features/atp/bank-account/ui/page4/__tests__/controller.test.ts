@@ -1,10 +1,10 @@
-import { SetupStartController, getStart } from "..";
+import { SetupBankAccountPostcodeController, getBankAccountPostcode } from "..";
 import { pathName } from "../../../../../../paths";
 import { expect, sinon } from "../../../../../../../test/utils/testUtils";
 
 const express = require("express");
 
-describe("Passport Start Controller", function () {
+describe("Bank Account Postcode Controller", function () {
   let sandbox: sinon.SinonSandbox;
 
   beforeEach(() => {
@@ -16,17 +16,17 @@ describe("Passport Start Controller", function () {
     sandbox.restore();
   });
 
-  describe("setupStartController", () => {
+  describe("SetupBankAccountPostcodeController", () => {
     it("should setup the routes", () => {
       const routerGetStub: sinon.SinonStub = sandbox.stub(
         express.Router,
         "get"
       );
 
-      new SetupStartController().initialise();
+      new SetupBankAccountPostcodeController().initialise();
       expect(routerGetStub).to.have.been.calledWith(
-        pathName.public.PASSPORT_START,
-        getStart
+        pathName.public.CURRENT_ACCOUNT_POSTCODE,
+        getBankAccountPostcode
       );
     });
   });

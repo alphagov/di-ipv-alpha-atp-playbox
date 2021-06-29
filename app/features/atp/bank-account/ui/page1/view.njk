@@ -1,0 +1,68 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "components/languageLink/macro.njk" import languageLink %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% extends "common/layout/view.njk" %}
+{% set pageTitleName = 'pages.bankAccount.title' | translate %}
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {% set errorList = errorList | lastErrors(["#dob"]) %}
+            {% include "common/errorSummary/errorSummary.njk" %}
+            <h1 class="govuk-heading-xl">{{ 'pages.bankAccount.header' | translate }}</h1>
+            <p class="govuk-hint govuk-!-margin-bottom-1">{{ 'pages.bankAccount.lastOpened.hint' | translate }}</p>
+            <form action="/bank-account" method="post" class="form" novalidate>
+                <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+                    
+                {{ govukRadios({
+                idPrefix: "last-opened",
+                name: "lastOpened",
+                fieldset: {
+                    legend: {
+                    text:'pages.bankAccount.lastOpened.question' | translate,
+                    isPageHeading: false,
+                    classes: "govuk-fieldset__legend--l"
+                    }
+                },
+                hint: { text :'pages.bankAccount.lastOpened.questionHint' | translate },
+                items: [
+                    {
+                        checked: lastOpened == "lessThan1Year",
+                        value: "lessThan1Year",
+                        text: "Less than a year ago"                    
+                    },
+                    {
+                        checked: lastOpened == "between1And3Years",
+                        value: "between1And3Years",
+                        text: "Between 1 and 3 years ago"
+                    },
+                    {
+                        checked: lastOpened == "between3And5Years",
+                        value: "between3And5Years",
+                        text: "Between 3 and 5 years ago"
+                    },                    
+                    {
+                        checked: lastOpened == "moreThan5Years",
+                        value: "moreThan5Years",
+                        text: "More than 5 years ago"
+                    },
+                    {
+                        checked: lastOpened == "never",
+                        value: "never",
+                        text: "I have never opened a current account"
+                    }
+                ],
+                errorMessage: {
+                        text: errors['lastOpened'].text
+                    } if (errors['lastOpened'])
+                }) }}
+
+                {{ govukButton({
+                    text: "common.buttons.continue" | translate
+                }) }}
+            </form>
+        </div>
+    </div>
+    
+{% endblock %}

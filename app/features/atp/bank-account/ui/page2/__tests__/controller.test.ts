@@ -1,10 +1,10 @@
-import { SetupInfoController, getInfo } from "..";
+import { SetupBankAccountCVVController, getBankAccountCVV } from "..";
 import { pathName } from "../../../../../../paths";
 import { expect, sinon } from "../../../../../../../test/utils/testUtils";
 
 const express = require("express");
 
-describe("Info Controller", function () {
+describe("Bank Account CVV Controller", function () {
   let sandbox: sinon.SinonSandbox;
 
   beforeEach(() => {
@@ -16,17 +16,17 @@ describe("Info Controller", function () {
     sandbox.restore();
   });
 
-  describe("setupInfoController", () => {
+  describe("SetupBankAccountCVVController", () => {
     it("should setup the routes", () => {
       const routerGetStub: sinon.SinonStub = sandbox.stub(
         express.Router,
         "get"
       );
 
-      new SetupInfoController().initialise();
+      new SetupBankAccountCVVController().initialise();
       expect(routerGetStub).to.have.been.calledWith(
-        pathName.public.INFO,
-        getInfo
+        pathName.public.CURRENT_ACCOUNT_CVV,
+        getBankAccountCVV
       );
     });
   });

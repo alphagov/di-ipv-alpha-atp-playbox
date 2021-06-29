@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /*!
  * MIT License
  *
@@ -30,7 +29,6 @@ import { PageSetup } from "../../../../../interfaces/PageSetup";
 import { pathName } from "../../../../../paths";
 import { Engine } from "../../../../engine";
 import { postGenericJSON } from "../../api";
-const jwt = require("jsonwebtoken");
 
 const template = "atp/json/ui/idx/view.njk";
 
@@ -60,9 +58,8 @@ const appendJsonData = async (req: Request): Promise<void> => {
   const json = JSON.parse(jsonObj);
   const allJson = { ...req.session.userData.json, ...json };
   delete allJson["validation"];
-  const atpResult = await postGenericJSON(allJson);
-  const decoded = jwt.decode(atpResult);
-  allJson["validation"] = { genericDataVerified: decoded.genericDataVerified };
+  await postGenericJSON(allJson);
+
   req.session.userData = {
     ...req.session.userData,
     json: allJson,

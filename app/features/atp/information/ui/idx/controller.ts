@@ -34,7 +34,6 @@ import {
 } from "../../../../common/dateValidation";
 import moment from "moment";
 import { postBasicInfoJSON } from "../../api";
-const jwt = require("jsonwebtoken");
 
 const template = "atp/information/ui/idx/view.njk";
 
@@ -151,13 +150,7 @@ const postInfo = async (
     };
 
     const allJson = req.session.userData.basicInfo;
-    delete allJson["validation"];
-    const atpResult = await postBasicInfoJSON(allJson);
-    const decoded = jwt.decode(atpResult);
-    allJson["validation"] = {
-      genericDataVerified: decoded.genericDataVerified,
-    };
-
+    await postBasicInfoJSON(allJson);
     const engine = new Engine();
     engine.next("info", req, res);
   } catch (e) {

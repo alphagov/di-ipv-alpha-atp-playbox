@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /*!
  * MIT License
  *
@@ -29,6 +28,7 @@ import { pathName } from "../../../paths";
 import { getRedisCacheByKey } from "../../../utils/redis";
 import { getTokenFromRequest, isTokenValid } from "../token/token";
 import { getRedisClient } from "../../../session";
+import Logger from "../../../utils/logger";
 
 const getUserInfo = async (req: Request, res: Response): Promise<void> => {
   const token = getTokenFromRequest(req);
@@ -48,23 +48,36 @@ const getUserInfo = async (req: Request, res: Response): Promise<void> => {
     });
     return;
   }
-  const userInfo = await fetchUserInfoFromStore(token);
+  const userInfo = await fetchUserInfoFromStore(token, req);
   res.json(userInfo);
 };
 
-const fetchUserInfoFromStore = async (token: any): Promise<JSON> => {
+const fetchUserInfoFromStore = async (
+  token: any,
+  req: Request
+): Promise<JSON> => {
   const redisClient = getRedisClient();
   const userId = await getRedisCacheByKey(redisClient, "accesstoken:" + token);
 
   if (userId === null) {
-    console.error("User ID could not be found!");
+    const session_id = req.sessionID;
+    const logger: Logger = req.app.locals.logger;
+    req.session.destroy(() =>
+      logger.error("User ID could not be found!", "fetchUserInfoFromStore", {
+        session_id,
+        user_agent: req.useragent,
+      })
+    );
   }
 
   const data = await getRedisCacheByKey(redisClient, "userid:" + userId);
-
+  const json = JSON.parse(data);
+  Object.keys(json).forEach((key) => {
+    delete json[key].scores;
+  });
   return {
     sub: userId,
-    ...JSON.parse(data),
+    ...json,
   };
 };
 

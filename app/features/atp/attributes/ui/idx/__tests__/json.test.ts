@@ -1,10 +1,10 @@
-import { SetupStartController, getStart } from "..";
+import { SetupAttributesController, getAttributes } from "..";
 import { pathName } from "../../../../../../paths";
 import { expect, sinon } from "../../../../../../../test/utils/testUtils";
 
 const express = require("express");
 
-describe("Passport Start Controller", function () {
+describe("Attributes Controller", function () {
   let sandbox: sinon.SinonSandbox;
 
   beforeEach(() => {
@@ -16,17 +16,17 @@ describe("Passport Start Controller", function () {
     sandbox.restore();
   });
 
-  describe("setupStartController", () => {
+  describe("setupAttributesController", () => {
     it("should setup the routes", () => {
       const routerGetStub: sinon.SinonStub = sandbox.stub(
         express.Router,
         "get"
       );
 
-      new SetupStartController().initialise();
+      new SetupAttributesController().initialise();
       expect(routerGetStub).to.have.been.calledWith(
-        pathName.public.PASSPORT_START,
-        getStart
+        pathName.public.ATTRIBUTES,
+        getAttributes
       );
     });
   });

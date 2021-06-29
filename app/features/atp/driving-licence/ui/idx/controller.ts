@@ -33,9 +33,7 @@ import {
   dateValidation,
 } from "../../../../common/dateValidation";
 import { Engine } from "../../../../engine";
-import { postDrivingLicence } from "../../api";
-const jwt = require("jsonwebtoken");
-
+import { postDrivingLicenceAPI } from "../../api";
 const template = "atp/driving-licence/ui/idx/view.njk";
 
 const drivingLicenceValidationMiddleware = [
@@ -125,7 +123,7 @@ const drivingLicenceValidationMiddleware = [
   ),
 ];
 
-const getStart = (req: Request, res: Response): void => {
+const getDrivingLicence = (req: Request, res: Response): void => {
   if (!req.session.userData.drivingLicence) {
     req.session.userData.drivingLicence = {};
   }
@@ -154,7 +152,7 @@ const getStart = (req: Request, res: Response): void => {
   return res.render(template, { ...values });
 };
 
-const postStart = async (
+const postDrivingLicence = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -180,13 +178,12 @@ const postStart = async (
         "T00:00:00",
     };
 
-    const atpResult = await postDrivingLicence(atpData);
-    const decoded = jwt.decode(atpResult);
+    const output = await postDrivingLicenceAPI(atpData);
     req.session.userData.drivingLicence = {
+      validation: output.validation,
+      evidence: output.evidence,
+      scores: output.scores,
       ...req.session.userData.drivingLicence,
-      validation: {
-        genericDataVerified: decoded.genericDataVerified,
-      },
       number: req.body["number"],
       surname: req.body["surname"],
       givenNames: req.body["givenNames"],
@@ -218,18 +215,18 @@ const validationData = (): any => {
 };
 
 @PageSetup.register
-class SetupStartController {
+class SetupDrivingLicenceController {
   initialise(): Router {
     const router = Router();
-    router.get(pathName.public.DRIVING_LICENCE_START, getStart);
+    router.get(pathName.public.DRIVING_LICENCE_START, getDrivingLicence);
     router.post(
       pathName.public.DRIVING_LICENCE_START,
       drivingLicenceValidationMiddleware,
       validate(template, validationData),
-      postStart
+      postDrivingLicence
     );
     return router;
   }
 }
 
-export { SetupStartController, getStart, postStart };
+export { SetupDrivingLicenceController, getDrivingLicence, postDrivingLicence };

@@ -87,9 +87,9 @@ const configureNunjucks = (app: express.Application): void => {
     }
   });
 
-  nunjucksEnv.addFilter("toJSON", function (obj: any) {
+  nunjucksEnv.addFilter("toJSON", function (obj: any, spacing = null) {
     try {
-      return JSON.stringify(obj);
+      return JSON.stringify(obj, null, spacing);
     } catch {
       return "?";
     }

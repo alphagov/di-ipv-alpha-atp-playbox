@@ -1,3 +1,7 @@
-import { SetupStartController, getStart, postStart } from "./controller";
+import {
+  SetupDrivingLicenceController,
+  getDrivingLicence,
+  postDrivingLicence,
+} from "./controller";
 
-export { SetupStartController, getStart, postStart };
+export { SetupDrivingLicenceController, getDrivingLicence, postDrivingLicence };

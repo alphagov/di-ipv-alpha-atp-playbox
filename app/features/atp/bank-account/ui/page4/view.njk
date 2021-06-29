@@ -1,0 +1,39 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "components/languageLink/macro.njk" import languageLink %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% extends "common/layout/view.njk" %}
+{% set pageTitleName = 'pages.ipv.info.title' | translate %}
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {% set errorList = errorList | lastErrors(["#dob"]) %}
+            {% include "common/errorSummary/errorSummary.njk" %}
+            <h1 class="govuk-heading-xl">{{ 'pages.bankAccount.header' | translate }}</h1>
+            <p>{{ 'pages.bankAccount.postcode.hint' | translate }}</p>
+            <form action="/bank-account/postcode" method="post" class="form" novalidate>
+                <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+
+                {{ govukInput({
+                label: {
+                    html: 'pages.bankAccount.postcode.question' | translate({ monthAndYear: monthAndYear }),
+                    classes: "govuk-label--l"                   
+                },                
+                classes: "govuk-!-width-one-third",
+                id: "postcode",
+                name: "postcode",
+                value: postcode,
+                errorMessage: {
+                        text: errors['postcode'].text
+                    } if (errors['postcode'])
+                }) }}
+
+                {{ govukButton({
+                    text: "common.buttons.continue" | translate
+                }) }}
+            </form>
+        </div>
+    </div>
+    
+{% endblock %}

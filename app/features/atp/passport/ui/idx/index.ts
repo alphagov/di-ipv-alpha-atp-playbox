@@ -1,3 +1,7 @@
-import { SetupStartController, getStart, postStart } from "./controller";
+import {
+  SetupPassportController,
+  getPassport,
+  postPassport,
+} from "./controller";
 
-export { SetupStartController, getStart, postStart };
+export { SetupPassportController, getPassport, postPassport };
