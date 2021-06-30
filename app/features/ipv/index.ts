@@ -7,8 +7,15 @@ export const getScore = (
 ): number => {
   let score = 0;
   list.forEach((item) => {
-    if (req.session.userData[item] && req.session.userData[item].scores) {
-      score = score + parseInt(req.session.userData[item].scores[param]);
+    if (
+      req.session.userData[item] &&
+      req.session.userData[item].scores &&
+      !isNaN(parseInt(req.session.userData[item].scores[param]))
+    ) {
+      score = Math.min(
+        score + parseInt(req.session.userData[item].scores[param]),
+        4
+      );
     }
   });
   return score;

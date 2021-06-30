@@ -73,7 +73,9 @@ const fetchUserInfoFromStore = async (
   const data = await getRedisCacheByKey(redisClient, "userid:" + userId);
   const json = JSON.parse(data);
   Object.keys(json).forEach((key) => {
-    delete json[key].scores;
+    if (json[key]) {
+      delete json[key].scores;
+    }
   });
   return {
     sub: userId,

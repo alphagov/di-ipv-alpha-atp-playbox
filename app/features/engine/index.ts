@@ -6,6 +6,7 @@ import { RedisClient } from "redis";
 import { doCodeCallback } from "../oauth2/authorize";
 import { postGPG45ProfileJSON } from "./api";
 import { getValidations } from "../ipv";
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from "http-status-codes";
 
 export class Engine {
   start = (req: Request, res: Response): void => {
@@ -24,39 +25,50 @@ export class Engine {
       case "passport":
       case "bank-account":
       case "json":
-      case "drivingLicence": {
+      case "drivingLicence":
+      case "mmn":
+      case "nino": {
         const validations = getValidations(req);
         const data = {
           identityVerificationBundle: {
             identityEvidence: [],
-            //...validations.scores,
+            bundleScores: {
+              activityCheckScore: validations.scores.activityHistory || 0,
+              fraudCheckScore: validations.scores.identityFraud || 0,
+              identityVerificationScore: validations.scores.verification || 0,
+            },
           },
         };
-
         Object.keys(validations).forEach((key) => {
-          if (validations[key] && validations[key].evidence) {
+          if (
+            validations[key] &&
+            validations[key].evidence &&
+            validations[key].evidence.strength > 0 &&
+            validations[key].evidence.validity > 0
+          ) {
             data.identityVerificationBundle.identityEvidence.push({
               evidenceScore: { ...validations[key].evidence },
             });
           }
         });
+        try {
+          const gpg45Profile = await postGPG45ProfileJSON(data);
+          req.session.gpg45Profile = gpg45Profile.matchedIdentityProfile
+            ? gpg45Profile.matchedIdentityProfile.description
+            : null;
+          res.redirect(pathName.public.HOME);
+        } catch (e) {
+          res.status(BAD_REQUEST);
+          res.render("common/errors/400.njk");
+        }
 
-        const gpg45Profile = await postGPG45ProfileJSON(data);
-        req.session.gpg45Profile = gpg45Profile.matchedIdentityProfile
-          ? gpg45Profile.matchedIdentityProfile.description
-          : null;
-        res.redirect(pathName.public.HOME);
-        break;
-      }
-      case "attributes": {
-        res.redirect(pathName.public.HOME);
         break;
       }
       default:
-        res.redirect("/500");
+        res.status(INTERNAL_SERVER_ERROR);
+        res.render("common/errors/500.njk");
     }
   };
-
   callback = async (req: Express.Request, res: any): Promise<void> => {
     const redisClient = getRedisClient();
     this.doCallback(req, res, redisClient);
@@ -71,10 +83,12 @@ export class Engine {
       ...req.session.userData,
       _profile: req.session.gpg45Profile,
     };
-    redisClient.set("userid:" + uuid, JSON.stringify(data));
-
     const authCode = uuidv4();
-    redisClient.set("authcode:" + authCode, uuid);
+
+    if (uuid) {
+      redisClient.set("userid:" + uuid, JSON.stringify(data));
+      redisClient.set("authcode:" + authCode, uuid);
+    }
 
     return authCode;
   };
