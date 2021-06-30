@@ -166,9 +166,7 @@ const postPassport = async (
         req.body["expiryDay"].padStart(2, "0") +
         "T00:00:00",
     };
-
     const output = await postPassportAPI(atpData);
-
     req.session.userData.passport = {
       validation: output.validation,
       evidence: output.evidence,
