@@ -39,7 +39,6 @@ export class Engine {
             },
           },
         };
-
         Object.keys(validations).forEach((key) => {
           if (
             validations[key] &&
@@ -62,6 +61,7 @@ export class Engine {
           res.status(BAD_REQUEST);
           res.render("common/errors/400.njk");
         }
+
         break;
       }
       default:
@@ -69,7 +69,6 @@ export class Engine {
         res.render("common/errors/500.njk");
     }
   };
-
   callback = async (req: Express.Request, res: any): Promise<void> => {
     const redisClient = getRedisClient();
     this.doCallback(req, res, redisClient);
@@ -84,7 +83,6 @@ export class Engine {
       ...req.session.userData,
       _profile: req.session.gpg45Profile,
     };
-
     const authCode = uuidv4();
 
     if (uuid) {
