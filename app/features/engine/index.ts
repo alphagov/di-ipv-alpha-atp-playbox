@@ -33,9 +33,9 @@ export class Engine {
           identityVerificationBundle: {
             identityEvidence: [],
             bundleScores: {
-              activityCheckScore: validations.scores.activityHistory || 0,
-              fraudCheckScore: validations.scores.identityFraud || 0,
-              identityVerificationScore: validations.scores.verification || 0,
+              activityCheckScore: validations?.scores?.activityHistory || 0,
+              fraudCheckScore: validations?.scores?.identityFraud || 0,
+              identityVerificationScore: validations?.scores?.verification || 0,
             },
           },
         };
@@ -53,9 +53,8 @@ export class Engine {
         });
         try {
           const gpg45Profile = await postGPG45ProfileJSON(data);
-          req.session.gpg45Profile = gpg45Profile.matchedIdentityProfile
-            ? gpg45Profile.matchedIdentityProfile.description
-            : null;
+          req.session.gpg45Profile =
+            gpg45Profile?.matchedIdentityProfile?.description;
           res.redirect(pathName.public.HOME);
         } catch (e) {
           res.status(BAD_REQUEST);
