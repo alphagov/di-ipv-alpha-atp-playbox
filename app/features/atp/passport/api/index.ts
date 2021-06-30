@@ -15,7 +15,7 @@ export async function postPassportAPI(data: any): Promise<any> {
   };
   data.scores = {
     activityHistory: 1,
-    fraud: 0,
+    identityFraud: 0,
     verification: 1,
   };
   return data;

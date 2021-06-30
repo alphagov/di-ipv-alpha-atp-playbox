@@ -157,8 +157,8 @@ const createApp = (): express.Application => {
   app.use(sessionTimeOutDialogStartCheck);
   app.use(setLocalVars);
   app.use(router);
-  app.use(pageNotFoundHandler);
   app.use(serverErrorHandler);
+  app.use(pageNotFoundHandler);
 
   return app;
 };

@@ -102,7 +102,7 @@ const postAttributes = async (req: Request, res: Response): Promise<void> => {
     if (attributesObj == "") {
       if ("button-continue" in req.body) {
         const engine = new Engine();
-        engine.next("attributes", req, res);
+        engine.next(req.session._type, req, res);
         return;
       } else {
         return res.render(template, {
@@ -124,7 +124,7 @@ const postAttributes = async (req: Request, res: Response): Promise<void> => {
 
   if ("button-continue" in req.body) {
     const engine = new Engine();
-    engine.next("attributes", req, res);
+    engine.next(req.session._type, req, res);
     return;
   } else {
     return res.render(template, {

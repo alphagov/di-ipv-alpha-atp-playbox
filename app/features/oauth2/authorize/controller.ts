@@ -2,6 +2,7 @@ import { PageSetup } from "../../../interfaces/PageSetup";
 import { Request, Response, Router } from "express";
 import { pathName } from "../../../paths";
 import { Engine } from "../../engine";
+import { INTERNAL_SERVER_ERROR } from "http-status-codes";
 
 const getAuthorize = (req: Request, res: Response): void => {
   if (
@@ -19,7 +20,8 @@ const getAuthorize = (req: Request, res: Response): void => {
     const engine = new Engine();
     engine.start(req, res);
   } else {
-    res.redirect("/error");
+    res.status(INTERNAL_SERVER_ERROR);
+    res.render("common/errors/500.njk");
   }
 };
 
@@ -28,9 +30,14 @@ const doCodeCallback = (
   res: any,
   authorizationCode: string
 ): void => {
-  res.redirect(
-    `${req.session.oauth.redirect_uri}?code=${authorizationCode}&state=${req.session.oauth.state}`
-  );
+  if (req && req.session && req.session.oauth) {
+    res.redirect(
+      `${req.session.oauth.redirect_uri}?code=${authorizationCode}&state=${req.session.oauth.state}`
+    );
+  } else {
+    res.status(INTERNAL_SERVER_ERROR);
+    res.render("common/errors/500.njk");
+  }
 };
 
 @PageSetup.register
