@@ -6,7 +6,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "skipLibCheck": true, // do not check types in node_modules folder
-    "target": "esnext",
+    "target": "es2019",
     "typeRoots": ["@types", "./node_modules/@types"]
   }
 }
