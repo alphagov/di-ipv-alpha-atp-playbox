@@ -9,7 +9,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             {% set errorList = errorList | lastErrors(["#dob"]) %}
-            {% include "common/errorSummary/errorSummary.njk" %}
+            {% include "components/errorSummary/errorSummary.njk" %}
             <h1 class="govuk-heading-xl">{{ 'pages.bankAccount.header' | translate }}</h1>
             <p class="govuk-hint govuk-!-margin-bottom-1">{{ 'pages.bankAccount.lastOpened.hint' | translate }}</p>
             <form action="/bank-account" method="post" class="form" novalidate>
