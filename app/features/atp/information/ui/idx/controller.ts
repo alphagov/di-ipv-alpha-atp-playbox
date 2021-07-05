@@ -26,7 +26,6 @@ import { Request, Response, Router, NextFunction } from "express";
 import { bodyValidate as validate } from "../../../../../middleware/form-validation-middleware";
 import { PageSetup } from "../../../../../interfaces/PageSetup";
 import { pathName } from "../../../../../paths";
-import { Engine } from "../../../../engine";
 import { body } from "express-validator";
 import {
   dateInputAsMoment,
@@ -151,8 +150,7 @@ const postInfo = async (
 
     const allJson = req.session.userData.basicInfo;
     await postBasicInfoJSON(allJson);
-    const engine = new Engine();
-    engine.next("info", req, res);
+    res.redirect("/ipv/next?source=information");
   } catch (e) {
     next(e);
   }

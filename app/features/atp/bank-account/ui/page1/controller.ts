@@ -28,7 +28,6 @@ import { PageSetup } from "../../../../../interfaces/PageSetup";
 import { pathName } from "../../../../../paths";
 import { body } from "express-validator";
 import { postBankAccountJSON } from "../../api";
-import { Engine } from "../../../../engine";
 
 const template = "atp/bank-account/ui/page1/view.njk";
 
@@ -67,14 +66,11 @@ const postBankAccountLastOpened = async (
       const allJson = req.session.userData.bankAccount;
       delete allJson["validation"];
       await postBankAccountJSON(allJson);
-
-      const engine = new Engine();
-      engine.next("bank-account", req, res);
+      res.redirect("/ipv/next?source=bank-account");
     } else {
       req.session.userData.bankAccount = {
         ...req.session.userData.bankAccount,
         lastOpened: req.body["lastOpened"],
-        // TODO: add this in the ATP
       };
       res.redirect(pathName.public.CURRENT_ACCOUNT_CVV);
     }

@@ -24,6 +24,7 @@
 
 import { NextFunction, Request, Response } from "express";
 import { INTERNAL_SERVER_ERROR, NOT_FOUND, OK } from "http-status-codes";
+import { pathName } from "../paths";
 import hashSessionId from "../utils/hashSessionId";
 
 import Logger, { getLogLabel } from "../utils/logger";
@@ -39,7 +40,7 @@ const pageNotFoundHandler = (
     return next();
   }
   res.status(NOT_FOUND);
-  res.render("common/errors/404.njk");
+  res.redirect(pathName.public.ERROR404);
 };
 
 const serverErrorHandler = (
@@ -58,7 +59,7 @@ const serverErrorHandler = (
       });
     }
     res.status(OK);
-    return res.render("common/errors/session-timeout.njk");
+    return res.redirect(pathName.public.TIMEOUT);
   }
 
   if (logger) {
@@ -70,7 +71,7 @@ const serverErrorHandler = (
   }
 
   res.status(INTERNAL_SERVER_ERROR);
-  res.render("common/errors/500.njk");
+  res.redirect(pathName.public.ERROR500);
 };
 
 export { pageNotFoundHandler, serverErrorHandler };

@@ -27,7 +27,6 @@ import { body } from "express-validator";
 import { bodyValidate as validate } from "../../../../../middleware/form-validation-middleware";
 import { PageSetup } from "../../../../../interfaces/PageSetup";
 import { pathName } from "../../../../../paths";
-import { Engine } from "../../../../engine";
 import { postGenericJSON } from "../../api";
 
 const template = "atp/json/ui/idx/view.njk";
@@ -72,8 +71,7 @@ const postJSON = async (req: Request, res: Response): Promise<void> => {
   try {
     if (jsonObj == "") {
       if ("button-continue" in req.body) {
-        const engine = new Engine();
-        engine.next("json", req, res);
+        res.redirect("/ipv/next?source=json");
         return;
       } else {
         const userData = JSON.stringify(req.session.userData);
@@ -94,8 +92,7 @@ const postJSON = async (req: Request, res: Response): Promise<void> => {
   }
 
   if ("button-continue" in req.body) {
-    const engine = new Engine();
-    engine.next("json", req, res);
+    res.redirect("/ipv/next?source=json");
     return;
   } else {
     const userData = JSON.stringify(req.session.userData);

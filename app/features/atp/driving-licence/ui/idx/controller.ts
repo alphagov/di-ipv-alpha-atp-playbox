@@ -32,7 +32,6 @@ import {
   dateInputAsMoment,
   dateValidation,
 } from "../../../../common/dateValidation";
-import { Engine } from "../../../../engine";
 import { postDrivingLicenceAPI } from "../../api";
 const template = "atp/driving-licence/ui/idx/view.njk";
 
@@ -203,8 +202,7 @@ const postDrivingLicence = async (
         year: req.body["expiryYear"],
       },
     };
-    const engine = new Engine();
-    engine.next("drivingLicence", req, res);
+    res.redirect("/ipv/next?source=driving-licence");
   } catch (e) {
     next(e);
   }

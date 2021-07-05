@@ -41,12 +41,7 @@ const getTimeOutSession = (
         user_agent: req.useragent,
       })
     );
-    return res.render("common/errors/session-timeout.njk", {
-      flowType:
-        req.query["flow"] && /^[A-Z]+$/.test(req.query["flow"].toString())
-          ? req.query["flow"]
-          : undefined,
-    });
+    return res.redirect(pathName.public.TIMEOUT);
   } catch (e) {
     return next(e);
   }
