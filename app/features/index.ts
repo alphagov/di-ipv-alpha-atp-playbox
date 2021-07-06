@@ -30,4 +30,3 @@ import "./atp/driving-licence/ui/idx";
 import "./atp/information/ui/idx";
 import "./atp/json/ui/idx";
 import "./atp/passport/ui/idx";
-import "./common/appIcons";
