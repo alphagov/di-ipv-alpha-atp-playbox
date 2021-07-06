@@ -26,7 +26,6 @@ import { Request, Response, Router, NextFunction } from "express";
 import { bodyValidate as validate } from "../../../../../middleware/form-validation-middleware";
 import { PageSetup } from "../../../../../interfaces/PageSetup";
 import { pathName } from "../../../../../paths";
-import { Engine } from "../../../../engine";
 import { postBankAccountJSON } from "../../api";
 import moment from "moment";
 import { body } from "express-validator";
@@ -74,8 +73,7 @@ const postBankAccountPostcode = async (
     const allJson = req.session.userData.bankAccount;
     delete allJson["validation"];
     await postBankAccountJSON(allJson);
-    const engine = new Engine();
-    engine.next("bank-account", req, res);
+    res.redirect("/ipv/next?source=bank-account");
   } catch (e) {
     next(e);
   }

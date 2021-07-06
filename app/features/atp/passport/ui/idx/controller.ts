@@ -32,7 +32,6 @@ import {
   dateInputAsMoment,
   dateValidation,
 } from "../../../../common/dateValidation";
-import { Engine } from "../../../../engine";
 import { postPassportAPI } from "../../api";
 
 const template = "atp/passport/ui/idx/view.njk";
@@ -191,8 +190,7 @@ const postPassport = async (
         year: req.body["expiryYear"],
       },
     };
-    const engine = new Engine();
-    engine.next("passport", req, res);
+    res.redirect("/ipv/next?source=passport");
   } catch (e) {
     next(e);
   }

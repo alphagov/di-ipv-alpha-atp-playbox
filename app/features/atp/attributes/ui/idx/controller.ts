@@ -27,7 +27,6 @@ import { body } from "express-validator";
 import { bodyValidate as validate } from "../../../../../middleware/form-validation-middleware";
 import { PageSetup } from "../../../../../interfaces/PageSetup";
 import { pathName } from "../../../../../paths";
-import { Engine } from "../../../../engine";
 import { postAttributesCall } from "../../api";
 
 const template = "atp/attributes/ui/idx/view.njk";
@@ -101,8 +100,7 @@ const postAttributes = async (req: Request, res: Response): Promise<void> => {
   try {
     if (attributesObj == "") {
       if ("button-continue" in req.body) {
-        const engine = new Engine();
-        engine.next(req.session._type, req, res);
+        res.redirect(`ipv/next?source=${req.session._type}`);
         return;
       } else {
         return res.render(template, {
@@ -123,8 +121,7 @@ const postAttributes = async (req: Request, res: Response): Promise<void> => {
   }
 
   if ("button-continue" in req.body) {
-    const engine = new Engine();
-    engine.next(req.session._type, req, res);
+    res.redirect(`ipv/next?source=${req.session._type}`);
     return;
   } else {
     return res.render(template, {
