@@ -49,7 +49,7 @@ interface AutoInput {
 interface AutoInputItem {
   type: AutoInputType;
   name: string;
-  values: any[];
+  values: Array[any];
 }
 
-AutoInputType = "autofill" | "dropdown";
+type AutoInputType = "fill" | "list";

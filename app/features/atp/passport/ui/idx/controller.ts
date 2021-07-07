@@ -32,6 +32,7 @@ import {
   dateInputAsMoment,
   dateValidation,
 } from "../../../../common/dateValidation";
+import { addAutoInput } from "../../../../components/autoInput";
 import { postPassportAPI } from "../../api";
 
 const template = "atp/passport/ui/idx/view.njk";
@@ -190,6 +191,7 @@ const postPassport = async (
         year: req.body["expiryYear"],
       },
     };
+    addAutoInput(req, "surname", "list", { surname: req.body["surname"] });
     res.redirect("/ipv/next?source=passport");
   } catch (e) {
     next(e);

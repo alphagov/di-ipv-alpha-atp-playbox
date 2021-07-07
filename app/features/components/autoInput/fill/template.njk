@@ -1,0 +1,7 @@
+{%set fillValue = "" %}
+{% for item in params.list %}
+    {% if item.name == param.name and item.type="fill" %}
+        {% set fillValue = item.values[params.input]%}
+    {% endif %}
+{% endfor %}   
+{{ fillValue }}

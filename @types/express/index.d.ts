@@ -15,5 +15,6 @@ declare namespace Express {
     engine: any;
     basicInfo: any;
     passport: any;
+    autoInput: AutoInput;
   }
 }

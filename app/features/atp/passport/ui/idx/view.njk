@@ -3,6 +3,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "components/languageLink/macro.njk" import languageLink %}
+{% from "components/autoInput/list/macro.njk" import autoList %}
 {% extends "common/layout/view.njk" %}
 {% set pageTitleName = 'pages.passport.start.title' | translate %}
 {% block content %}
@@ -35,6 +36,12 @@
                 errorMessage: {
                         text: errors['surname'].text
                     } if (errors['surname'])
+                }) }}
+
+                {{ autoList({
+                    name: "surname",
+                    list: autoInput,
+                    input: "surname"
                 }) }}
 
                 {{ govukInput({
