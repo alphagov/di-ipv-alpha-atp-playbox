@@ -41,3 +41,15 @@ interface DateInput {
   month: string;
   year: string;
 }
+
+interface AutoInput {
+  items: AutoInputItem[];
+}
+
+interface AutoInputItem {
+  type: AutoInputType;
+  name: string;
+  values: any[];
+}
+
+AutoInputType = "autofill" | "dropdown";
