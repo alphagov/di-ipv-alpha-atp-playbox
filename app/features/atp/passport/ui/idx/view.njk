@@ -4,6 +4,7 @@
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "components/languageLink/macro.njk" import languageLink %}
 {% from "components/autoInput/list/macro.njk" import autoList %}
+{% from "components/autoInput/fill/macro.njk" import autoFill %}
 {% extends "common/layout/view.njk" %}
 {% set pageTitleName = 'pages.passport.start.title' | translate %}
 {% block content %}
@@ -56,6 +57,11 @@
                     } if (errors['givenNames'])
                 }) }}
 
+                {{ autoList({
+                    name: "givenNames",
+                    list: autoInput,
+                    input: "givenNames"
+                }) }}
                 {{ govukDateInput({
                 id: "dob",
                 namePrefix: "",
@@ -65,21 +71,21 @@
                         name:"dobDay", 
                         label: "common.dateInput.day" | translate,
                         classes: 'govuk-input--width-2 govuk-input--error' if (errors['dobDay'] or errors['dob']) else 'govuk-input--width-2',
-                        value: dobDay
+                        value: dobDay or autoFill({ name: "dob", list: autoInput, input: "dobDay" })
                     },
                     {
                         id:"dobMonth",
                         name:"dobMonth", 
                         label: "common.dateInput.month" | translate,
                         classes: 'govuk-input--width-2 govuk-input--error' if (errors['dobMonth'] or errors['dob']) else 'govuk-input--width-2',
-                        value: dobMonth
+                        value: dobMonth or autoFill({ name: "dob", list: autoInput, input: "dobMonth" })
                     },
                     {
                         id:"dobYear",
                         name:"dobYear", 
                         label: "common.dateInput.year" | translate,
                         classes: 'govuk-input--width-4 govuk-input--error' if (errors['dobYear'] or errors['dob']) else 'govuk-input--width-4',
-                        value: dobYear
+                        value: dobYear or autoFill({ name: "dob", list: autoInput, input: "dobYear" })
                     }
                 ],
                 fieldset: {

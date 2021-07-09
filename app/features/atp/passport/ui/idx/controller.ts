@@ -191,7 +191,18 @@ const postPassport = async (
         year: req.body["expiryYear"],
       },
     };
-    addAutoInput(req, "surname", "list", { surname: req.body["surname"] });
+
+    addAutoInput(req, "dob", "fill", {
+      dobDay: req.body["dobDay"],
+      dobMonth: req.body["dobMonth"],
+      dobYear: req.body["dobYear"],
+    });
+    addAutoInput(req, "givenNames", "list", {
+      givenNames: req.body["givenNames"],
+    });
+    addAutoInput(req, "surname", "list", {
+      surname: req.body["surname"],
+    });
     res.redirect("/ipv/next?source=passport");
   } catch (e) {
     next(e);
