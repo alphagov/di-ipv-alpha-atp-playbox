@@ -1,14 +1,11 @@
-{% if params.list and params.name and params.input %}
-    <ul>
-        {% for item in params.list.items %}
-            {% if item.name == params.name and item.type == "list" %}
-            {% for i in item.values %}
-                 <li class="govuk-footer__inline-list-item">
-                    {{ i[params.input] }}
-                </li>
-            {% endfor %}
-               
-            {% endif %}
-        {% endfor %}   
-    </ul>
-{% endif %}
+{%- if params.list and params.name and params.input %}
+    <datalist id="{{params.input}}-list">
+        {%- for item in params.list.items %}
+            {%- if item.name == params.name and item.type == "list" %}
+            {%- for i in item.values %}
+                <option>{{-i[params.input]}}</option>
+            {%- endfor %}               
+            {%- endif %}
+        {%- endfor %}   
+    </datalist>
+{%- endif %}

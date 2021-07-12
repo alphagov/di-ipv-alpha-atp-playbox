@@ -24,11 +24,12 @@
                 id: "surname",
                 name: "surname",
                 value: surname,
+                autocomplete: "off",
+                attributes: {list: "surname-list"},
                 errorMessage: {
                         text: errors['surname'].text
                     } if (errors['surname'])
                 }) }}
-
                 {{ autoList({
                     name: "surname",
                     list: autoInput,
@@ -43,11 +44,12 @@
                 id: "givenNames",
                 name: "givenNames",
                 value: givenNames,
+                autocomplete: "off",
+                attributes: {list: "givenNames-list"},
                 errorMessage: {
                         text: errors['givenNames'].text
                     } if (errors['givenNames'])
                 }) }}
-
                 {{ autoList({
                     name: "givenNames",
                     list: autoInput,
@@ -61,6 +63,7 @@
                     {
                         id:"dobDay",
                         name:"dobDay", 
+                        autocomplete: "off",
                         label: "common.dateInput.day" | translate,
                         classes: 'govuk-input--width-2 govuk-input--error' if (errors['dobDay'] or errors['dob']) else 'govuk-input--width-2',
                         value: dobDay or autoFill({ name: "dob", list: autoInput, input: "dobDay" })
@@ -68,6 +71,7 @@
                     {
                         id:"dobMonth",
                         name:"dobMonth", 
+                        autocomplete: "off",
                         label: "common.dateInput.month" | translate,
                         classes: 'govuk-input--width-2 govuk-input--error' if (errors['dobMonth'] or errors['dob']) else 'govuk-input--width-2',
                         value: dobMonth or autoFill({ name: "dob", list: autoInput, input: "dobMonth" })
@@ -75,6 +79,7 @@
                     {
                         id:"dobYear",
                         name:"dobYear", 
+                        autocomplete: "off",
                         label: "common.dateInput.year" | translate,
                         classes: 'govuk-input--width-4 govuk-input--error' if (errors['dobYear'] or errors['dob']) else 'govuk-input--width-4',
                         value: dobYear or autoFill({ name: "dob", list: autoInput, input: "dobYear" })
@@ -105,7 +110,7 @@
                     id: "addressLine1",
                     name: "addressLine1",
                     value: addressLine1,
-                    autocomplete: "address-line1",
+                    {# autocomplete: "address-line1", #}
                     errorMessage: {
                             text: errors['addressLine1'].text
                         } if (errors['addressLine1'])
@@ -118,7 +123,7 @@
                     id: "addressLine2",
                     name: "addressLine2",
                     value: addressLine2,
-                    autocomplete: "address-line2"
+                    {# autocomplete: "address-line2" #}
                 }) }}
 
                 {{ govukInput({
@@ -129,7 +134,7 @@
                     id: "addressTown",
                     name: "addressTown",
                     value: addressTown,
-                    autocomplete: "address-level2",
+                    {# autocomplete: "address-town", #}
                     errorMessage: {
                             text: errors['addressTown'].text
                         } if (errors['addressTown'])
@@ -143,7 +148,7 @@
                     id: "addressCounty",
                     name: "addressCounty",
                     value: addressCounty,
-                    autocomplete: "address-county"
+                    {# autocomplete: "address-county" #}
                 }) }}
 
                 {{ govukInput({
@@ -154,7 +159,7 @@
                     id: "addressPostcode",
                     name: "addressPostcode",
                     value: addressPostcode,
-                    autocomplete: "postal-code" ,
+                    {# autocomplete: "postal-code" , #}
                     errorMessage: {
                             text: errors['addressPostcode'].text
                         } if (errors['addressPostcode'])
