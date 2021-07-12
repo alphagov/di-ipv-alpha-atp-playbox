@@ -1,7 +1,6 @@
-export const addAutoInput = (
+export const addToFill = (
   req: Express.Request,
   name: string,
-  type: AutoInputType,
   values: any
 ): void => {
   const autoInput = req.session.autoInput;
@@ -12,21 +11,36 @@ export const addAutoInput = (
   if (!found) {
     const v = [];
     v.push(values);
-    autoInput.items.push({ name, type, values: v });
+    autoInput.items.push({ name, type: "fill", values: v });
   } else {
-    const f = found;
-    if (type == "list") {
-      if (
-        !found.values.find((item) => {
-          return JSON.stringify(item) == JSON.stringify(values);
-        })
-      ) {
-        f.values.push(values);
-      }
-    } else if (type == "fill") {
-      const v = [];
-      v.push(values);
-      f.values = v;
+    const newValues = [];
+    newValues.push(values);
+    found.values = newValues;
+  }
+  return;
+};
+
+export const addToList = (
+  req: Express.Request,
+  name: string,
+  values: any
+): void => {
+  const autoInput = req.session.autoInput;
+
+  const found = autoInput.items.find((item) => {
+    return item.name == name;
+  });
+  if (!found) {
+    const v = [];
+    v.push(values);
+    autoInput.items.push({ name, type: "list", values: v });
+  } else {
+    if (
+      !found.values.find((item) => {
+        return JSON.stringify(item) == JSON.stringify(values);
+      })
+    ) {
+      found.values.push(values);
     }
   }
   return;

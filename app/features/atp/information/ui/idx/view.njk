@@ -110,7 +110,7 @@
                     id: "addressLine1",
                     name: "addressLine1",
                     value: addressLine1,
-                    {# autocomplete: "address-line1", #}
+                    autocomplete: "address-line1",
                     errorMessage: {
                             text: errors['addressLine1'].text
                         } if (errors['addressLine1'])
@@ -123,7 +123,7 @@
                     id: "addressLine2",
                     name: "addressLine2",
                     value: addressLine2,
-                    {# autocomplete: "address-line2" #}
+                    autocomplete: "address-line2"
                 }) }}
 
                 {{ govukInput({
@@ -134,7 +134,7 @@
                     id: "addressTown",
                     name: "addressTown",
                     value: addressTown,
-                    {# autocomplete: "address-town", #}
+                    autocomplete: "address-3",
                     errorMessage: {
                             text: errors['addressTown'].text
                         } if (errors['addressTown'])
@@ -148,7 +148,7 @@
                     id: "addressCounty",
                     name: "addressCounty",
                     value: addressCounty,
-                    {# autocomplete: "address-county" #}
+                    autocomplete: "off"
                 }) }}
 
                 {{ govukInput({
@@ -159,7 +159,7 @@
                     id: "addressPostcode",
                     name: "addressPostcode",
                     value: addressPostcode,
-                    {# autocomplete: "postal-code" , #}
+                    autocomplete: "postal-code" ,
                     errorMessage: {
                             text: errors['addressPostcode'].text
                         } if (errors['addressPostcode'])

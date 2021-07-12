@@ -33,7 +33,7 @@ import {
 } from "../../../../common/dateValidation";
 import moment from "moment";
 import { postBasicInfoJSON } from "../../api";
-import { addAutoInput } from "../../../../components/autoInput";
+import { addToFill, addToList } from "../../../../components/autoInput";
 
 const template = "atp/information/ui/idx/view.njk";
 
@@ -149,15 +149,15 @@ const postInfo = async (
       addressPostcode: req.body["addressPostcode"],
     };
 
-    addAutoInput(req, "dob", "fill", {
+    addToFill(req, "dob", {
       dobDay: req.body["dobDay"],
       dobMonth: req.body["dobMonth"],
       dobYear: req.body["dobYear"],
     });
-    addAutoInput(req, "givenNames", "list", {
+    addToList(req, "givenNames", {
       givenNames: req.body["givenNames"],
     });
-    addAutoInput(req, "surname", "list", {
+    addToList(req, "surname", {
       surname: req.body["surname"],
     });
     const allJson = req.session.userData.basicInfo;
