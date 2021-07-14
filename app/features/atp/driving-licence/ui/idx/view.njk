@@ -5,6 +5,7 @@
 {% from "components/languageLink/macro.njk" import languageLink %}
 {% from "components/autoInput/list/macro.njk" import autoList %}
 {% from "components/autoInput/fill/macro.njk" import autoFill %}
+{% from "components/autoInput/arrow/macro.njk" import autoArrow %}
 {% extends "common/layout/view.njk" %}
 {% set pageTitleName = 'pages.drivingLicence.start.title' | translate %}
 {% block content %}
@@ -38,8 +39,9 @@
                 value: surname,
                 autocomplete: "off",
                 attributes: {list: "surname-list"},
+                classes: autoArrow({ name: "surname", list: autoInput}),
                 errorMessage: {
-                        text: errors['surname'].text
+                text: errors['surname'].text
                     } if (errors['surname'])
                 }) }}
                 {{ autoList({
@@ -57,6 +59,7 @@
                 value: givenNames,
                 autocomplete: "off",
                 attributes: {list: "givenNames-list"},
+                classes: autoArrow({ name: "givenNames", list: autoInput}),
                 errorMessage: {
                         text: errors['givenNames'].text
                     } if (errors['givenNames'])
