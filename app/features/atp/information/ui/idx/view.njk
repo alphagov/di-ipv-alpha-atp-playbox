@@ -3,6 +3,9 @@
 {% from "components/languageLink/macro.njk" import languageLink %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "components/autoInput/list/macro.njk" import autoList %}
+{% from "components/autoInput/fill/macro.njk" import autoFill %}
+{% from "components/autoInput/arrow/macro.njk" import autoArrow %}
 {% extends "common/layout/view.njk" %}
 {% set pageTitleName = 'pages.ipv.info.title' | translate %}
 {% block content %}
@@ -22,9 +25,17 @@
                 id: "surname",
                 name: "surname",
                 value: surname,
+                autocomplete: "off",
+                attributes: {list: "surname-list"},
+                classes: autoArrow({ name: "surname", list: autoInput}),
                 errorMessage: {
                         text: errors['surname'].text
                     } if (errors['surname'])
+                }) }}
+                {{ autoList({
+                    name: "surname",
+                    list: autoInput,
+                    input: "surname"
                 }) }}
 
                 {{ govukInput({
@@ -35,9 +46,17 @@
                 id: "givenNames",
                 name: "givenNames",
                 value: givenNames,
+                autocomplete: "off",
+                attributes: {list: "givenNames-list"},
+                classes: autoArrow({ name: "givenNames", list: autoInput}),
                 errorMessage: {
                         text: errors['givenNames'].text
                     } if (errors['givenNames'])
+                }) }}
+                {{ autoList({
+                    name: "givenNames",
+                    list: autoInput,
+                    input: "givenNames"
                 }) }}
 
                 {{ govukDateInput({
@@ -47,23 +66,26 @@
                     {
                         id:"dobDay",
                         name:"dobDay", 
+                        autocomplete: "off",
                         label: "common.dateInput.day" | translate,
                         classes: 'govuk-input--width-2 govuk-input--error' if (errors['dobDay'] or errors['dob']) else 'govuk-input--width-2',
-                        value: dobDay
+                        value: dobDay or autoFill({ name: "dob", list: autoInput, input: "dobDay" })
                     },
                     {
                         id:"dobMonth",
                         name:"dobMonth", 
+                        autocomplete: "off",
                         label: "common.dateInput.month" | translate,
                         classes: 'govuk-input--width-2 govuk-input--error' if (errors['dobMonth'] or errors['dob']) else 'govuk-input--width-2',
-                        value: dobMonth
+                        value: dobMonth or autoFill({ name: "dob", list: autoInput, input: "dobMonth" })
                     },
                     {
                         id:"dobYear",
                         name:"dobYear", 
+                        autocomplete: "off",
                         label: "common.dateInput.year" | translate,
                         classes: 'govuk-input--width-4 govuk-input--error' if (errors['dobYear'] or errors['dob']) else 'govuk-input--width-4',
-                        value: dobYear
+                        value: dobYear or autoFill({ name: "dob", list: autoInput, input: "dobYear" })
                     }
                 ],
                 fieldset: {
@@ -115,7 +137,7 @@
                     id: "addressTown",
                     name: "addressTown",
                     value: addressTown,
-                    autocomplete: "address-level2",
+                    autocomplete: "address-3",
                     errorMessage: {
                             text: errors['addressTown'].text
                         } if (errors['addressTown'])
@@ -129,7 +151,7 @@
                     id: "addressCounty",
                     name: "addressCounty",
                     value: addressCounty,
-                    autocomplete: "address-county"
+                    autocomplete: "off"
                 }) }}
 
                 {{ govukInput({

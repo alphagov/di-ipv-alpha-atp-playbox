@@ -1,0 +1,11 @@
+{%- if params.list and params.name and params.input %}
+    <datalist id="{{params.input}}-list">
+        {%- for item in params.list.items %}
+            {%- if item.name == params.name and item.type == "list" %}
+            {%- for i in item.values %}
+                <option>{{-i[params.input]}}</option>
+            {%- endfor %}               
+            {%- endif %}
+        {%- endfor %}   
+    </datalist>
+{%- endif %}

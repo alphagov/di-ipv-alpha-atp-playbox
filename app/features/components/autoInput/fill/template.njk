@@ -1,0 +1,6 @@
+
+    {%- for item in params.list.items %}         
+        {%- if item.name == params.name and item.type == "fill" %}  
+          {{- item.values[0][params.input] }}       
+        {%- endif %}
+    {%- endfor %}

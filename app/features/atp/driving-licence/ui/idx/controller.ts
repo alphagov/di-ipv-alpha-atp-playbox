@@ -32,6 +32,7 @@ import {
   dateInputAsMoment,
   dateValidation,
 } from "../../../../common/dateValidation";
+import { addToFill, addToList } from "../../../../components/autoInput";
 import { postDrivingLicenceAPI } from "../../api";
 const template = "atp/driving-licence/ui/idx/view.njk";
 
@@ -202,6 +203,18 @@ const postDrivingLicence = async (
         year: req.body["expiryYear"],
       },
     };
+
+    addToFill(req, "dob", {
+      dobDay: req.body["dobDay"],
+      dobMonth: req.body["dobMonth"],
+      dobYear: req.body["dobYear"],
+    });
+    addToList(req, "givenNames", {
+      givenNames: req.body["givenNames"],
+    });
+    addToList(req, "surname", {
+      surname: req.body["surname"],
+    });
     res.redirect("/ipv/next?source=driving-licence");
   } catch (e) {
     next(e);

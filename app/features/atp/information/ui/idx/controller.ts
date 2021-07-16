@@ -33,6 +33,7 @@ import {
 } from "../../../../common/dateValidation";
 import moment from "moment";
 import { postBasicInfoJSON } from "../../api";
+import { addToFill, addToList } from "../../../../components/autoInput";
 
 const template = "atp/information/ui/idx/view.njk";
 
@@ -148,6 +149,17 @@ const postInfo = async (
       addressPostcode: req.body["addressPostcode"],
     };
 
+    addToFill(req, "dob", {
+      dobDay: req.body["dobDay"],
+      dobMonth: req.body["dobMonth"],
+      dobYear: req.body["dobYear"],
+    });
+    addToList(req, "givenNames", {
+      givenNames: req.body["givenNames"],
+    });
+    addToList(req, "surname", {
+      surname: req.body["surname"],
+    });
     const allJson = req.session.userData.basicInfo;
     await postBasicInfoJSON(allJson);
     res.redirect("/ipv/next?source=information");

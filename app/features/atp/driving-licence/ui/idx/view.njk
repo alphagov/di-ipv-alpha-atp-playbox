@@ -3,6 +3,9 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "components/languageLink/macro.njk" import languageLink %}
+{% from "components/autoInput/list/macro.njk" import autoList %}
+{% from "components/autoInput/fill/macro.njk" import autoFill %}
+{% from "components/autoInput/arrow/macro.njk" import autoArrow %}
 {% extends "common/layout/view.njk" %}
 {% set pageTitleName = 'pages.drivingLicence.start.title' | translate %}
 {% block content %}
@@ -21,10 +24,12 @@
                 id: "number",
                 name: "number",
                 value: number,
+                autocomplete: "off",
                 errorMessage: {
                         text: errors['number'].text
                     } if (errors['number'])
                 }) }}
+
                 {{ govukInput({
                 label: {
                     html: 'pages.drivingLicence.start.surname.label' | translate
@@ -32,9 +37,17 @@
                 id: "surname",
                 name: "surname",
                 value: surname,
+                autocomplete: "off",
+                attributes: {list: "surname-list"},
+                classes: autoArrow({ name: "surname", list: autoInput}),
                 errorMessage: {
-                        text: errors['surname'].text
+                text: errors['surname'].text
                     } if (errors['surname'])
+                }) }}
+                {{ autoList({
+                    name: "surname",
+                    list: autoInput,
+                    input: "surname"
                 }) }}
 
                 {{ govukInput({
@@ -44,9 +57,17 @@
                 id: "givenNames",
                 name: "givenNames",
                 value: givenNames,
+                autocomplete: "off",
+                attributes: {list: "givenNames-list"},
+                classes: autoArrow({ name: "givenNames", list: autoInput}),
                 errorMessage: {
                         text: errors['givenNames'].text
                     } if (errors['givenNames'])
+                }) }}
+                {{ autoList({
+                    name: "givenNames",
+                    list: autoInput,
+                    input: "givenNames"
                 }) }}
 
                 {{ govukDateInput({
@@ -56,23 +77,26 @@
                     {
                         id:"dobDay",
                         name:"dobDay", 
+                        autocomplete: "off",
                         label: "common.dateInput.day" | translate,
                         classes: 'govuk-input--width-2 govuk-input--error' if (errors['dobDay'] or errors['dob']) else 'govuk-input--width-2',
-                        value: dobDay
+                        value: dobDay or autoFill({ name: "dob", list: autoInput, input: "dobDay" })
                     },
                     {
                         id:"dobMonth",
                         name:"dobMonth", 
+                        autocomplete: "off",
                         label: "common.dateInput.month" | translate,
                         classes: 'govuk-input--width-2 govuk-input--error' if (errors['dobMonth'] or errors['dob']) else 'govuk-input--width-2',
-                        value: dobMonth
+                        value: dobMonth or autoFill({ name: "dob", list: autoInput, input: "dobMonth" })
                     },
                     {
                         id:"dobYear",
                         name:"dobYear", 
+                        autocomplete: "off",
                         label: "common.dateInput.year" | translate,
                         classes: 'govuk-input--width-4 govuk-input--error' if (errors['dobYear'] or errors['dob']) else 'govuk-input--width-4',
-                        value: dobYear
+                        value: dobYear or autoFill({ name: "dob", list: autoInput, input: "dobYear" })
                     }
                 ],
                 fieldset: {
@@ -92,6 +116,7 @@
                     {
                         id:"issuedDay",
                         name:"issuedDay", 
+                        autocomplete: "off",
                         label: "common.dateInput.day" | translate,
                         classes: 'govuk-input--width-2 govuk-input--error' if (errors['issuedDay'] or errors['issued']) else 'govuk-input--width-2',
                         value: issuedDay
@@ -99,6 +124,7 @@
                     {
                         id:"issuedMonth",
                         name:"issuedMonth", 
+                        autocomplete: "off",
                         label: "common.dateInput.month" | translate,
                         classes: 'govuk-input--width-2 govuk-input--error' if (errors['issuedMonth'] or errors['issued']) else 'govuk-input--width-2',
                         value: issuedMonth
@@ -106,6 +132,7 @@
                     {
                         id:"issuedYear",
                         name:"issuedYear", 
+                        autocomplete: "off",
                         label: "common.dateInput.year" | translate,
                         classes: 'govuk-input--width-4 govuk-input--error' if (errors['issuedYear'] or errors['issued']) else 'govuk-input--width-4',
                         value: issuedYear
@@ -128,6 +155,7 @@
                     {
                         id:"expiryDay",
                         name:"expiryDay", 
+                        autocomplete: "off",
                         label: "common.dateInput.day" | translate,
                         classes: 'govuk-input--width-2 govuk-input--error' if (errors['expiryDay'] or errors['expiry']) else 'govuk-input--width-2',
                         value: expiryDay
@@ -135,6 +163,7 @@
                     {
                         id:"expiryMonth",
                         name:"expiryMonth", 
+                        autocomplete: "off",
                         label: "common.dateInput.month" | translate,
                         classes: 'govuk-input--width-2 govuk-input--error' if (errors['expiryMonth'] or errors['expiry']) else 'govuk-input--width-2',
                         value: expiryMonth
@@ -142,6 +171,7 @@
                     {
                         id:"expiryYear",
                         name:"expiryYear", 
+                        autocomplete: "off",
                         label: "common.dateInput.year" | translate,
                         classes: 'govuk-input--width-4 govuk-input--error' if (errors['expiryYear'] or errors['expiry']) else 'govuk-input--width-4',
                         value: expiryYear

@@ -1,0 +1,9 @@
+{%- if params.list and params.name %}
+{%- set needsArrow = false %}
+        {%- for item in params.list.items %}
+            {%- if item.name == params.name and item.type == "list" %}
+              {%- set needsArrow = true %}
+            {%- endif %}
+        {%- endfor %}   
+{%- endif %}
+{%- if needsArrow %}dropdown{%- endif %}
