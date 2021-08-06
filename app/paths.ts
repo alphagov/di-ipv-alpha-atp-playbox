@@ -24,12 +24,6 @@
 
 const pathName = {
   public: {
-    oauth2: {
-      AUTHORIZE: "/oauth2/authorize",
-      TOKEN: "/oauth2/token",
-      USER_INFO: "/oauth2/userinfo",
-      JWKS: "/.well-known/jwks.json",
-    },
     ATTRIBUTES: "/attributes",
     PASSPORT_START: "/passport",
     INFO: "/information",
@@ -38,7 +32,6 @@ const pathName = {
     CURRENT_ACCOUNT_MORTGAGE: "/bank-account/mortgage",
     CURRENT_ACCOUNT_POSTCODE: "/bank-account/postcode",
     DRIVING_LICENCE_START: "/driving-licence",
-    JSON: "/json",
     IPV: "/ipv",
     RETURN: "/ipv/return",
     HOME: "/ipv/home",

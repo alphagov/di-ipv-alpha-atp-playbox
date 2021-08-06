@@ -14,7 +14,7 @@ export const getRedisAuthToken = (): string => {
   return process.env.REDIS_AUTH_TOKEN;
 };
 export const getRedisSessionUrl = (): string => {
-  return  process.env.REDIS_SESSION_URL || getRedisServiceUrl();
+  return process.env.REDIS_SESSION_URL || getRedisServiceUrl();
 };
 export const getRedisSessionSecret = (): string => {
   return process.env.SESSION_SECRET;
