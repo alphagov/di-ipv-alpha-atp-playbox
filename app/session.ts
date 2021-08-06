@@ -38,19 +38,15 @@ import express from "express";
 
 const getRedisClientOptions = (): ClientOpts => {
   const redisUrl = getRedisSessionUrl();
+
   // regex match for rediss from vcap env.
   if (redisUrl.match(/rediss:\/\/\w+:\w+@[\w.-]*:[0-9]+/)) {
     return { url: redisUrl };
   }
 
-  return process.env.NODE_ENV.trim() === "production"
-    ? {
-        url: "rediss://" + getRedisSessionUrl() + ":" + getRedisPort(),
-        password: getRedisAuthToken(),
-      }
-    : {
-        url: "redis://" + getRedisSessionUrl() + ":" + getRedisPort(),
-      };
+  return {
+    url: "redis://" + getRedisSessionUrl() + ":" + getRedisPort(),
+  };
 };
 
 export const getRedisClient = (): redis.RedisClient => {
