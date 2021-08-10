@@ -36,6 +36,15 @@ interface Passport {
   expired?: DateInput;
 }
 
+interface IdentityEvidence {
+  type: string;
+  strength: number;
+  validity: number;
+  attributes: string;
+  atpResponse?: any;
+  jws?: string;
+}
+
 interface DateInput {
   day: string;
   month: string;
