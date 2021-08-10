@@ -40,7 +40,7 @@ interface IdentityEvidence {
   type: string;
   strength: number;
   validity: number;
-  attributes: string;
+  attributes: any;
   atpResponse?: any;
   jws?: string;
 }
