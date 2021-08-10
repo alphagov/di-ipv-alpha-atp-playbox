@@ -35,6 +35,8 @@ import {
 import { addToFill, addToList } from "../../../../components/autoInput";
 import { postPassportAPI } from "../../api";
 
+import * as jwt from "jsonwebtoken";
+
 const template = "atp/passport/ui/idx/view.njk";
 
 const passportValidationMiddleware = [
@@ -147,7 +149,7 @@ const postPassport = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const atpData = {
+    const attributes = {
       passportNumber: req.body["number"],
       surname: req.body["surname"],
       forenames: req.body["givenNames"].split(" "),
@@ -166,31 +168,20 @@ const postPassport = async (
         req.body["expiryDay"].padStart(2, "0") +
         "T00:00:00",
     };
-    const output = await postPassportAPI(atpData);
-    req.session.userData.passport = {
-      validation: output.validation,
-      evidence: output.evidence,
-      scores: output.scores,
-      ...req.session.userData.passport,
-      number: req.body["number"],
-      surname: req.body["surname"],
-      givenNames: req.body["givenNames"],
-      dob: {
-        day: req.body["dobDay"],
-        month: req.body["dobMonth"],
-        year: req.body["dobYear"],
-      },
-      issued: {
-        day: req.body["issuedDay"],
-        month: req.body["issuedMonth"],
-        year: req.body["issuedYear"],
-      },
-      expiry: {
-        day: req.body["expiryDay"],
-        month: req.body["expiryMonth"],
-        year: req.body["expiryYear"],
-      },
+
+    const identityEvidence: IdentityEvidence = {
+      type: "UK_PASSPORT",
+      strength: 0,
+      validity: 0,
+      attributes: JSON.stringify(attributes),
     };
+
+    const output = await postPassportAPI(attributes);
+    const decoded = jwt.decode(output);
+    identityEvidence.jws = output;
+    identityEvidence.atpResponse = decoded;
+    req.session.identityEvidence = req.session.identityEvidence || [];
+    req.session.identityEvidence.push(identityEvidence);
 
     addToFill(req, "dob", {
       dobDay: req.body["dobDay"],
