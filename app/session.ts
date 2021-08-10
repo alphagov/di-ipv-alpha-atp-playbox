@@ -27,7 +27,6 @@ import session from "express-session";
 import redis, { ClientOpts } from "redis";
 
 import {
-  getRedisAuthToken,
   getRedisPort,
   getRedisSessionSecret,
   getRedisSessionUrl,
