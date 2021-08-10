@@ -40,8 +40,8 @@ interface IdentityEvidence {
   type: string;
   strength: number;
   validity: number;
-  attributes: any;
-  atpResponse?: any;
+  attributes: Record<string, any>;
+  atpResponse?: null | { [key: string]: any } | string;
   jws?: string;
 }
 
