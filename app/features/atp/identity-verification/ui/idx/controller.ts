@@ -38,6 +38,10 @@ const postIdentityVerification = async (
   req.session.sessionData.identityVerification =
     req.session.sessionData.identityVerification || [];
   req.session.sessionData.identityVerification.push(identityVerification);
+  logger.info(
+    "Pushed identity verification data to session data in redis",
+    "identity-verification"
+  );
   res.redirect("/ipv/next?source=identity-verification");
 };
 

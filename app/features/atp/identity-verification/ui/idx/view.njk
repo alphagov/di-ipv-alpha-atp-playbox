@@ -14,8 +14,8 @@
         <div class="govuk-grid-column-two-thirds">
             {% set errorList = errorList | lastErrors(["#dob"]) %}
             {% include "components/errorSummary/errorSummary.njk" %}
-        <h1 class="govuk-heading-xl">{{ 'pages.ipv.identity-evidence.header' | translate }}</h1>
-            <p>{{ 'pages.ipv.info.info' | translate }}</p>
+        <h1 class="govuk-heading-xl">Please enter the following information</h1>
+            <p>Please enter the following information</p>
             <form action="/identity-verification" method="post" class="form" novalidate>
                 <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
                 {{ govukSelect({
