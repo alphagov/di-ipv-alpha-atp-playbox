@@ -116,17 +116,27 @@ const passportValidationMiddleware = [
 ];
 
 const getPassport = (req: Request, res: Response): void => {
-  if (!req.session.userData.passport) {
-    req.session.userData.passport = {};
-  }
-  const {
-    number,
-    surname,
-    givenNames,
-    dob,
-    issued,
-    expiry,
-  } = req.session.userData.passport;
+  // if (!req.session.userData.passport) {
+  //   req.session.userData.passport = {};
+  // }
+
+  // const {
+  //   number,
+  //   surname,
+  //   givenNames,
+  //   dob,
+  //   issued,
+  //   expiry,
+  // } = req.session.userData.passport;
+
+  const number = null;
+  const surname = null;
+  const givenNames = null;
+
+  const dob = null;
+  const issued = null;
+  const expiry = null;
+
   const values = {
     number,
     surname,
