@@ -36,6 +36,7 @@ import { addToFill, addToList } from "../../../../components/autoInput";
 import { postPassportAPI } from "../../api";
 
 import * as jwt from "jsonwebtoken";
+import { EvidenceType } from "../../../../../data";
 
 const template = "atp/passport/ui/idx/view.njk";
 
@@ -170,10 +171,10 @@ const postPassport = async (
     };
 
     const identityEvidence: IdentityEvidence = {
-      type: "UK_PASSPORT",
+      type: EvidenceType.UK_PASSPORT,
       strength: 0,
       validity: 0,
-      attributes: JSON.stringify(attributes),
+      attributes: attributes,
     };
 
     const output = await postPassportAPI(attributes);

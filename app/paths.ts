@@ -27,6 +27,7 @@ const pathName = {
     ATTRIBUTES: "/attributes",
     PASSPORT_START: "/passport",
     INFO: "/information",
+    IDENTITY_EVIDENCE: "/identity-evidence",
     CURRENT_ACCOUNT_LAST_OPENED: "/bank-account",
     CURRENT_ACCOUNT_CVV: "/bank-account/cvv",
     CURRENT_ACCOUNT_MORTGAGE: "/bank-account/mortgage",
