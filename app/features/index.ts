@@ -30,3 +30,4 @@ import "./atp/driving-licence/ui/idx";
 import "./atp/identity-evidence/ui/idx";
 import "./atp/information/ui/idx";
 import "./atp/passport/ui/idx";
+import "./atp/identity-verification/ui/idx";

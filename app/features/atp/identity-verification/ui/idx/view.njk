@@ -1,0 +1,64 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "components/languageLink/macro.njk" import languageLink %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "components/autoInput/list/macro.njk" import autoList %}
+{% from "components/autoInput/fill/macro.njk" import autoFill %}
+{% from "components/autoInput/arrow/macro.njk" import autoArrow %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% extends "common/layout/view.njk" %}
+{% set pageTitleName = 'pages.ipv.identity-evidence.title' | translate %}
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {% set errorList = errorList | lastErrors(["#dob"]) %}
+            {% include "components/errorSummary/errorSummary.njk" %}
+        <h1 class="govuk-heading-xl">Please enter the following information</h1>
+            <p>Please enter the following information</p>
+            <form action="/identity-verification" method="post" class="form" novalidate>
+                <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+                {{ govukSelect({
+                    id: "type",
+                    name: "type",
+                    label: {
+                        text: "Type"
+                    },
+                    items: [
+                        {
+                            value: "MNO_CHECK",
+                            text: "Mobile Network Operator Check",
+                            selected: true
+                        },
+                        {
+                            value: "CRA_CHECK",
+                            text: "Credit Reference Agency Check"
+                        },
+                        {
+                            value: "SELFIE_CHECK",
+                            text: "Selfie Check"
+                        }
+                    ]
+                }) }}
+
+                {{ govukTextarea({
+                    name: "verificationData",
+                    id: "verificationData",
+                    label: {
+                        text: "Verification Data",
+                        classes: "govuk-label--l",
+                        isPageHeading: true
+                    },
+                    hint: {
+                        text: "Enter verification data as JSON"
+                    }
+                }) }}
+
+                {{ govukButton({
+                    text: "common.buttons.continue" | translate
+                }) }}
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
