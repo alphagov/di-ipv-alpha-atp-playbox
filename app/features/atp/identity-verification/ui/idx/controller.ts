@@ -3,7 +3,7 @@ import { PageSetup } from "../../../../../interfaces/PageSetup";
 import { pathName } from "../../../../../paths";
 import Logger from "../../../../../utils/logger";
 
-const template = "atp/identity-evidence/ui/idx/view.njk";
+const template = "atp/identity-verification/ui/idx/view.njk";
 const logger: Logger = new Logger();
 
 interface IdentityVerification {
