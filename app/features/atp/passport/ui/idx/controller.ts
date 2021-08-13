@@ -116,26 +116,19 @@ const passportValidationMiddleware = [
 ];
 
 const getPassport = (req: Request, res: Response): void => {
-  // if (!req.session.userData.passport) {
-  //   req.session.userData.passport = {};
-  // }
+  if (!req.session.identityEvidence) {
+    req.session.identityEvidence = [];
+  }
 
-  // const {
-  //   number,
-  //   surname,
-  //   givenNames,
-  //   dob,
-  //   issued,
-  //   expiry,
-  // } = req.session.userData.passport;
-
-  const number = null;
-  const surname = null;
-  const givenNames = null;
-
-  const dob = null;
-  const issued = null;
-  const expiry = null;
+  const sessionAttributes =
+    req.session.identityEvidence.map((evidence) => evidence.attributes)[0] ||
+    {};
+  const number = sessionAttributes ? sessionAttributes.passportNumber : null;
+  const surname = sessionAttributes ? sessionAttributes.surname : null;
+  const givenNames = sessionAttributes ? sessionAttributes.forenames : null;
+  const dob = sessionAttributes ? sessionAttributes.dateOfBirth : null;
+  const issued = sessionAttributes ? sessionAttributes.issued : null;
+  const expiry = sessionAttributes ? sessionAttributes.expiryDate : null;
 
   const values = {
     number,
@@ -171,6 +164,13 @@ const postPassport = async (
         "-" +
         req.body["dobDay"].padStart(2, "0") +
         "T00:00:00",
+      issued:
+        req.body["issuedDay"] +
+        "-" +
+        req.body["issuedMonth"].padStart(2, "0") +
+        "-" +
+        req.body["issuedDay"].padStart(2, "0") +
+        "T00:00:00",
       expiryDate:
         req.body["expiryYear"] +
         "-" +
@@ -193,11 +193,20 @@ const postPassport = async (
     identityEvidence.atpResponse = decoded;
     req.session.identityEvidence = req.session.identityEvidence || [];
     req.session.identityEvidence.push(identityEvidence);
-
     addToFill(req, "dob", {
       dobDay: req.body["dobDay"],
       dobMonth: req.body["dobMonth"],
       dobYear: req.body["dobYear"],
+    });
+    addToFill(req, "expiry", {
+      expiryDay: req.body["expiryDay"],
+      expiryMonth: req.body["expiryMonth"],
+      expiryYear: req.body["expiryYear"],
+    });
+    addToFill(req, "issued", {
+      issuedDay: req.body["issuedDay"],
+      issuedMonth: req.body["issuedMonth"],
+      issuedYear: req.body["issuedYear"],
     });
     addToList(req, "givenNames", {
       givenNames: req.body["givenNames"],
