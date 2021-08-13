@@ -32,3 +32,4 @@ import "./atp/information/ui/idx";
 import "./atp/passport/ui/idx";
 import "./atp/identity-verification/ui/idx";
 import "./atp/activity-history/ui/idx";
+import "./atp/fraud-check/ui/idx";
