@@ -29,6 +29,7 @@ const pathName = {
     INFO: "/information",
     IDENTITY_EVIDENCE: "/identity-evidence",
     IDENTITY_VERIFICATION: "/identity-verification",
+    ACTIVITY_HISTORY: "/activity-history",
     CURRENT_ACCOUNT_LAST_OPENED: "/bank-account",
     CURRENT_ACCOUNT_CVV: "/bank-account/cvv",
     CURRENT_ACCOUNT_MORTGAGE: "/bank-account/mortgage",
