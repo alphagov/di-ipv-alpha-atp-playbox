@@ -34,6 +34,8 @@ import {
 } from "../../../../common/dateValidation";
 import { addToFill, addToList } from "../../../../components/autoInput";
 import { postDrivingLicenceAPI } from "../../api";
+import * as jwt from "jsonwebtoken";
+import { EvidenceType } from "../../../../../data";
 const template = "atp/driving-licence/ui/idx/view.njk";
 
 const drivingLicenceValidationMiddleware = [
@@ -124,17 +126,27 @@ const drivingLicenceValidationMiddleware = [
 ];
 
 const getDrivingLicence = (req: Request, res: Response): void => {
-  if (!req.session.userData.drivingLicence) {
-    req.session.userData.drivingLicence = {};
+  if (!req.session.sessionData.identityEvidence) {
+    req.session.sessionData.identityEvidence = [];
   }
-  const {
-    number,
-    surname,
-    givenNames,
-    dob,
-    issued,
-    expiry,
-  } = req.session.userData.drivingLicence;
+
+  let drivingLicenceAttributes;
+  const allIdentityEvidence = req.session.sessionData.identityEvidence;
+  if (allIdentityEvidence) {
+    drivingLicenceAttributes = allIdentityEvidence.filter(filterDrivingLicence).slice(-1).map((evidence) => evidence.attributes)[0];
+  }
+
+  function filterDrivingLicence(allIdentityEvidence) {
+    return allIdentityEvidence.type == EvidenceType.DRIVING_LICENCE;
+  }
+
+  const number = drivingLicenceAttributes ? drivingLicenceAttributes.licenceNumber : null;
+  const surname = drivingLicenceAttributes ? drivingLicenceAttributes.surname : null;
+  const givenNames = drivingLicenceAttributes ? drivingLicenceAttributes.forenames : null;
+  const dob = drivingLicenceAttributes ? drivingLicenceAttributes.dateOfBirth : null;
+  const issued = drivingLicenceAttributes ? drivingLicenceAttributes.issued : null;
+  const expiry = drivingLicenceAttributes ? drivingLicenceAttributes.expiryDate : null;
+
   const values = {
     number,
     surname,
@@ -158,7 +170,7 @@ const postDrivingLicence = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const atpData = {
+    const attributes = {
       licenceNumber: req.body["number"],
       surname: req.body["surname"],
       forenames: req.body["givenNames"].split(" "),
@@ -169,6 +181,13 @@ const postDrivingLicence = async (
         "-" +
         req.body["dobDay"].padStart(2, "0") +
         "T00:00:00",
+      issued:
+        req.body["issuedDay"] +
+        "-" +
+        req.body["issuedMonth"].padStart(2, "0") +
+        "-" +
+        req.body["issuedDay"].padStart(2, "0") +
+        "T00:00:00",
       expiryDate:
         req.body["expiryYear"] +
         "-" +
@@ -178,36 +197,34 @@ const postDrivingLicence = async (
         "T00:00:00",
     };
 
-    const output = await postDrivingLicenceAPI(atpData);
-    req.session.userData.drivingLicence = {
-      validation: output.validation,
-      evidence: output.evidence,
-      scores: output.scores,
-      ...req.session.userData.drivingLicence,
-      number: req.body["number"],
-      surname: req.body["surname"],
-      givenNames: req.body["givenNames"],
-      dob: {
-        day: req.body["dobDay"],
-        month: req.body["dobMonth"],
-        year: req.body["dobYear"],
-      },
-      issued: {
-        day: req.body["issuedDay"],
-        month: req.body["issuedMonth"],
-        year: req.body["issuedYear"],
-      },
-      expiry: {
-        day: req.body["expiryDay"],
-        month: req.body["expiryMonth"],
-        year: req.body["expiryYear"],
-      },
+    const identityEvidence: IdentityEvidence = {
+      type: EvidenceType.DRIVING_LICENCE,
+      strength: 0,
+      validity: 0,
+      attributes: attributes,
     };
+
+    const output = await postDrivingLicenceAPI(attributes);
+    const decoded = jwt.decode(output);
+    identityEvidence.jws = output;
+    identityEvidence.atpResponse = decoded;
+    req.session.sessionData.identityEvidence = req.session.sessionData.identityEvidence || [];
+    req.session.sessionData.identityEvidence.push(identityEvidence);
 
     addToFill(req, "dob", {
       dobDay: req.body["dobDay"],
       dobMonth: req.body["dobMonth"],
       dobYear: req.body["dobYear"],
+    });
+    addToFill(req, "expiry", {
+      expiryDay: req.body["expiryDay"],
+      expiryMonth: req.body["expiryMonth"],
+      expiryYear: req.body["expiryYear"],
+    });
+    addToFill(req, "issued", {
+      issuedDay: req.body["issuedDay"],
+      issuedMonth: req.body["issuedMonth"],
+      issuedYear: req.body["issuedYear"],
     });
     addToList(req, "givenNames", {
       givenNames: req.body["givenNames"],

@@ -119,7 +119,7 @@
                         autocomplete: "off",
                         label: "common.dateInput.day" | translate,
                         classes: 'govuk-input--width-2 govuk-input--error' if (errors['issuedDay'] or errors['issued']) else 'govuk-input--width-2',
-                        value: issuedDay
+                        value: issuedDay or autoFill({ name: "issued", list: autoInput, input: "issuedDay" })
                     },
                     {
                         id:"issuedMonth",
@@ -127,7 +127,7 @@
                         autocomplete: "off",
                         label: "common.dateInput.month" | translate,
                         classes: 'govuk-input--width-2 govuk-input--error' if (errors['issuedMonth'] or errors['issued']) else 'govuk-input--width-2',
-                        value: issuedMonth
+                        value: issuedMonth or autoFill({ name: "issued", list: autoInput, input: "issuedMonth" })
                     },
                     {
                         id:"issuedYear",
@@ -135,7 +135,7 @@
                         autocomplete: "off",
                         label: "common.dateInput.year" | translate,
                         classes: 'govuk-input--width-4 govuk-input--error' if (errors['issuedYear'] or errors['issued']) else 'govuk-input--width-4',
-                        value: issuedYear
+                        value: issuedYear or autoFill({ name: "issued", list: autoInput, input: "issuedYear" })
                     }
                 ],
                 fieldset: {
@@ -158,7 +158,7 @@
                         autocomplete: "off",
                         label: "common.dateInput.day" | translate,
                         classes: 'govuk-input--width-2 govuk-input--error' if (errors['expiryDay'] or errors['expiry']) else 'govuk-input--width-2',
-                        value: expiryDay
+                        value: expiryDay or autoFill({ name: "expiry", list: autoInput, input: "expiryDay" })
                     },
                     {
                         id:"expiryMonth",
@@ -166,7 +166,7 @@
                         autocomplete: "off",
                         label: "common.dateInput.month" | translate,
                         classes: 'govuk-input--width-2 govuk-input--error' if (errors['expiryMonth'] or errors['expiry']) else 'govuk-input--width-2',
-                        value: expiryMonth
+                        value: expiryMonth or autoFill({ name: "expiry", list: autoInput, input: "expiryMonth" })
                     },
                     {
                         id:"expiryYear",
@@ -174,7 +174,7 @@
                         autocomplete: "off",
                         label: "common.dateInput.year" | translate,
                         classes: 'govuk-input--width-4 govuk-input--error' if (errors['expiryYear'] or errors['expiry']) else 'govuk-input--width-4',
-                        value: expiryYear
+                        value: expiryYear or autoFill({ name: "expiry", list: autoInput, input: "expiryYear" })
                     }
                 ],
                 fieldset: {
