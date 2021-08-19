@@ -37,8 +37,9 @@ const postIdentityEvidence = async (
     jws: atpResponseJws,
   };
 
-  req.session.identityEvidence = req.session.identityEvidence || [];
-  req.session.identityEvidence.push(identityEvidence);
+  req.session.sessionData.identityEvidence =
+    req.session.sessionData.identityEvidence || [];
+  req.session.sessionData.identityEvidence.push(identityEvidence);
   res.redirect("/ipv/next?source=identity-evidence");
 };
 

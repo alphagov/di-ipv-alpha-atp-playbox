@@ -104,24 +104,36 @@ const getInfo = (req: Request, res: Response): void => {
     req.session.identityEvidence = [];
   }
 
-  let informationAttributes;
   const allIdentityEvidence = req.session.sessionData.identityEvidence;
-  if (allIdentityEvidence) {
-    informationAttributes = allIdentityEvidence.filter(filterInformation).slice(-1).map((evidence) => evidence.attributes)[0];
-  }
 
-  function filterInformation(allIdentityEvidence) {
-    return allIdentityEvidence.type == EvidenceType.BASIC_INFO;
+  let informationAttributes;
+  if (allIdentityEvidence) {
+    informationAttributes = allIdentityEvidence
+      .filter((evidence) => evidence.type == EvidenceType.BASIC_INFO)
+      .slice(-1)
+      .map((evidence) => evidence.attributes)[0];
   }
 
   const surname = informationAttributes ? informationAttributes.surname : null;
-  const givenNames = informationAttributes ? informationAttributes.forenames : null;
+  const givenNames = informationAttributes
+    ? informationAttributes.forenames
+    : null;
   const dob = informationAttributes ? informationAttributes.dateOfBirth : null;
-  const addressLine1 = informationAttributes ? informationAttributes.addressLine1 : null;
-  const addressLine2 = informationAttributes ? informationAttributes.addressLine2 : null;
-  const addressTown = informationAttributes ? informationAttributes.addressTown : null;
-  const addressCounty = informationAttributes ? informationAttributes.addressCounty : null;
-  const addressPostcode = informationAttributes ? informationAttributes.addressPostcode : null;
+  const addressLine1 = informationAttributes
+    ? informationAttributes.addressLine1
+    : null;
+  const addressLine2 = informationAttributes
+    ? informationAttributes.addressLine2
+    : null;
+  const addressTown = informationAttributes
+    ? informationAttributes.addressTown
+    : null;
+  const addressCounty = informationAttributes
+    ? informationAttributes.addressCounty
+    : null;
+  const addressPostcode = informationAttributes
+    ? informationAttributes.addressPostcode
+    : null;
 
   const values = {
     surname,
@@ -143,7 +155,6 @@ const postInfo = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  // call something
   try {
     const attributes = {
       surname: req.body["surname"],
@@ -171,7 +182,8 @@ const postInfo = async (
     const decoded = jwt.decode(output);
     identityEvidence.jws = output;
     identityEvidence.atpResponse = decoded;
-    req.session.sessionData.identityEvidence = req.session.sessionData.identityEvidence || [];
+    req.session.sessionData.identityEvidence =
+      req.session.sessionData.identityEvidence || [];
     req.session.sessionData.identityEvidence.push(identityEvidence);
 
     addToFill(req, "dob", {
@@ -200,10 +212,12 @@ const postInfo = async (
     addToList(req, "addressPostcode", {
       surname: req.body["addressPostcode"],
     });
-    function filterInformation(allIdentityEvidence) {
-      return allIdentityEvidence.type == EvidenceType.BASIC_INFO;
-    }
-    const allJson = req.session.sessionData.identityEvidence.filter(filterInformation).slice(-1).map((evidence) => evidence.attributes)[0];
+
+    const allJson = req.session.sessionData.identityEvidence
+      .filter((evidence) => evidence.type == EvidenceType.BASIC_INFO)
+      .slice(-1)
+      .map((evidence) => evidence.attributes)[0];
+
     await postBasicInfoJSON(allJson);
     res.redirect("/ipv/next?source=information");
   } catch (e) {
