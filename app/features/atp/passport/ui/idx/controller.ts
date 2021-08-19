@@ -116,19 +116,26 @@ const passportValidationMiddleware = [
 ];
 
 const getPassport = (req: Request, res: Response): void => {
-  if (!req.session.identityEvidence) {
-    req.session.identityEvidence = [];
+  if (!req.session.sessionData.identityEvidence) {
+    req.session.sessionData.identityEvidence = [];
   }
 
-  const sessionAttributes =
-    req.session.identityEvidence.map((evidence) => evidence.attributes)[0] ||
-    {};
-  const number = sessionAttributes ? sessionAttributes.passportNumber : null;
-  const surname = sessionAttributes ? sessionAttributes.surname : null;
-  const givenNames = sessionAttributes ? sessionAttributes.forenames : null;
-  const dob = sessionAttributes ? sessionAttributes.dateOfBirth : null;
-  const issued = sessionAttributes ? sessionAttributes.issued : null;
-  const expiry = sessionAttributes ? sessionAttributes.expiryDate : null;
+  let passportAttributes;
+  const allIdentityEvidence = req.session.sessionData.identityEvidence;
+  if (allIdentityEvidence) {
+    passportAttributes = allIdentityEvidence.filter(filterPassport).slice(-1).map((evidence) => evidence.attributes)[0];
+  }
+
+  function filterPassport(allIdentityEvidence) {
+    return allIdentityEvidence.type == EvidenceType.UK_PASSPORT;
+  }
+
+  const number = passportAttributes ? passportAttributes.passportNumber : null;
+  const surname = passportAttributes ? passportAttributes.surname : null;
+  const givenNames = passportAttributes ? passportAttributes.forenames : null;
+  const dob = passportAttributes ? passportAttributes.dateOfBirth : null;
+  const issued = passportAttributes ? passportAttributes.issued : null;
+  const expiry = passportAttributes ? passportAttributes.expiryDate : null;
 
   const values = {
     number,
@@ -191,8 +198,9 @@ const postPassport = async (
     const decoded = jwt.decode(output);
     identityEvidence.jws = output;
     identityEvidence.atpResponse = decoded;
-    req.session.identityEvidence = req.session.identityEvidence || [];
-    req.session.identityEvidence.push(identityEvidence);
+    req.session.sessionData.identityEvidence = req.session.sessionData.identityEvidence || [];
+    req.session.sessionData.identityEvidence.push(identityEvidence);
+
     addToFill(req, "dob", {
       dobDay: req.body["dobDay"],
       dobMonth: req.body["dobMonth"],

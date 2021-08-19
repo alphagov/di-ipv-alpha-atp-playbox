@@ -118,7 +118,11 @@
                             text: errors['addressLine1'].text
                         } if (errors['addressLine1'])
                 }) }}
-
+                {{ autoList({
+                    name: "addressLine1",
+                    list: autoInput,
+                    input: "addressLine1"
+                }) }}
                 {{ govukInput({
                     label: {
                     html: 'pages.ipv.info.addressLine2.label' | translate | safe
@@ -128,7 +132,11 @@
                     value: addressLine2,
                     autocomplete: "address-line2"
                 }) }}
-
+                {{ autoList({
+                    name: "addressLine2",
+                    list: autoInput,
+                    input: "addressLine2"
+                }) }}
                 {{ govukInput({
                     label: {
                     text: 'pages.ipv.info.addressTown.label' | translate
@@ -153,6 +161,11 @@
                     value: addressCounty,
                     autocomplete: "off"
                 }) }}
+                {{ autoList({
+                    name: "addressCounty",
+                    list: autoInput,
+                    input: "addressCounty"
+                }) }}
 
                 {{ govukInput({
                     label: {
@@ -166,6 +179,11 @@
                     errorMessage: {
                             text: errors['addressPostcode'].text
                         } if (errors['addressPostcode'])
+                }) }}
+                {{ autoList({
+                    name: "addressPostcode",
+                    list: autoInput,
+                    input: "addressPostcode"
                 }) }}                   
 
                 {% endcall %}

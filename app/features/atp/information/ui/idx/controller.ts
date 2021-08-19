@@ -34,6 +34,8 @@ import {
 import moment from "moment";
 import { postBasicInfoJSON } from "../../api";
 import { addToFill, addToList } from "../../../../components/autoInput";
+import { EvidenceType } from "../../../../../data";
+import * as jwt from "jsonwebtoken";
 
 const template = "atp/information/ui/idx/view.njk";
 
@@ -98,30 +100,40 @@ const infoValidationMiddleware = [
 
 // This is the root route and will redirect back to the appropriate gov.uk start page
 const getInfo = (req: Request, res: Response): void => {
-  if (!req.session.userData.basicInfo) {
-    req.session.userData.basicInfo = {};
+  if (!req.session.sessionData.identityEvidence) {
+    req.session.identityEvidence = [];
   }
-  const {
-    surname,
-    givenNames,
-    dob,
-    addressLine1,
-    addressLine2,
-    addressTown,
-    addressCounty,
-    addressPostcode,
-  } = req.session.userData.basicInfo;
+
+  let informationAttributes;
+  const allIdentityEvidence = req.session.sessionData.identityEvidence;
+  if (allIdentityEvidence) {
+    informationAttributes = allIdentityEvidence.filter(filterInformation).slice(-1).map((evidence) => evidence.attributes)[0];
+  }
+
+  function filterInformation(allIdentityEvidence) {
+    return allIdentityEvidence.type == EvidenceType.BASIC_INFO;
+  }
+
+  const surname = informationAttributes ? informationAttributes.surname : null;
+  const givenNames = informationAttributes ? informationAttributes.forenames : null;
+  const dob = informationAttributes ? informationAttributes.dateOfBirth : null;
+  const addressLine1 = informationAttributes ? informationAttributes.addressLine1 : null;
+  const addressLine2 = informationAttributes ? informationAttributes.addressLine2 : null;
+  const addressTown = informationAttributes ? informationAttributes.addressTown : null;
+  const addressCounty = informationAttributes ? informationAttributes.addressCounty : null;
+  const addressPostcode = informationAttributes ? informationAttributes.addressPostcode : null;
+
   const values = {
     surname,
     givenNames,
     dobDay: dob ? dob.day : null,
     dobMonth: dob ? dob.month : null,
     dobYear: dob ? dob.year : null,
-    addressLine1: addressLine1,
-    addressLine2: addressLine2,
-    addressTown: addressTown,
-    addressCounty: addressCounty,
-    addressPostcode: addressPostcode,
+    addressLine1,
+    addressLine2,
+    addressTown,
+    addressCounty,
+    addressPostcode,
   };
   return res.render(template, { language: req.i18n.language, ...values });
 };
@@ -133,8 +145,7 @@ const postInfo = async (
 ): Promise<void> => {
   // call something
   try {
-    req.session.userData.basicInfo = {
-      ...req.session.userData.basicInfo,
+    const attributes = {
       surname: req.body["surname"],
       givenNames: req.body["givenNames"],
       dob: {
@@ -149,6 +160,20 @@ const postInfo = async (
       addressPostcode: req.body["addressPostcode"],
     };
 
+    const identityEvidence: IdentityEvidence = {
+      type: EvidenceType.BASIC_INFO,
+      strength: 0,
+      validity: 0,
+      attributes: attributes,
+    };
+
+    const output = await postBasicInfoJSON(attributes);
+    const decoded = jwt.decode(output);
+    identityEvidence.jws = output;
+    identityEvidence.atpResponse = decoded;
+    req.session.sessionData.identityEvidence = req.session.sessionData.identityEvidence || [];
+    req.session.sessionData.identityEvidence.push(identityEvidence);
+
     addToFill(req, "dob", {
       dobDay: req.body["dobDay"],
       dobMonth: req.body["dobMonth"],
@@ -160,7 +185,25 @@ const postInfo = async (
     addToList(req, "surname", {
       surname: req.body["surname"],
     });
-    const allJson = req.session.userData.basicInfo;
+    addToList(req, "addressLine1", {
+      surname: req.body["addressLine1"],
+    });
+    addToList(req, "addressLine2", {
+      surname: req.body["addressLine2"],
+    });
+    addToList(req, "addressTown", {
+      surname: req.body["addressTown"],
+    });
+    addToList(req, "addressCounty", {
+      surname: req.body["addressCounty"],
+    });
+    addToList(req, "addressPostcode", {
+      surname: req.body["addressPostcode"],
+    });
+    function filterInformation(allIdentityEvidence) {
+      return allIdentityEvidence.type == EvidenceType.BASIC_INFO;
+    }
+    const allJson = req.session.sessionData.identityEvidence.filter(filterInformation).slice(-1).map((evidence) => evidence.attributes)[0];
     await postBasicInfoJSON(allJson);
     res.redirect("/ipv/next?source=information");
   } catch (e) {
