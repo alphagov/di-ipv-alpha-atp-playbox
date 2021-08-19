@@ -134,13 +134,9 @@ const getDrivingLicence = (req: Request, res: Response): void => {
   const allIdentityEvidence = req.session.sessionData.identityEvidence;
   if (allIdentityEvidence) {
     drivingLicenceAttributes = allIdentityEvidence
-      .filter(filterDrivingLicence)
+      .filter((evidence) => evidence.type == EvidenceType.DRIVING_LICENCE)
       .slice(-1)
       .map((evidence) => evidence.attributes)[0];
-  }
-
-  function filterDrivingLicence(allIdentityEvidence) {
-    return allIdentityEvidence.type == EvidenceType.DRIVING_LICENCE;
   }
 
   const number = drivingLicenceAttributes

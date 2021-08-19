@@ -124,13 +124,9 @@ const getPassport = (req: Request, res: Response): void => {
   const allIdentityEvidence = req.session.sessionData.identityEvidence;
   if (allIdentityEvidence) {
     passportAttributes = allIdentityEvidence
-      .filter(filterPassport)
+      .filter((evidence) => evidence.type == EvidenceType.UK_PASSPORT)
       .slice(-1)
       .map((evidence) => evidence.attributes)[0];
-  }
-
-  function filterPassport(allIdentityEvidence) {
-    return allIdentityEvidence.type == EvidenceType.UK_PASSPORT;
   }
 
   const number = passportAttributes ? passportAttributes.passportNumber : null;
