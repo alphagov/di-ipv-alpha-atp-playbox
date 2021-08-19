@@ -133,19 +133,34 @@ const getDrivingLicence = (req: Request, res: Response): void => {
   let drivingLicenceAttributes;
   const allIdentityEvidence = req.session.sessionData.identityEvidence;
   if (allIdentityEvidence) {
-    drivingLicenceAttributes = allIdentityEvidence.filter(filterDrivingLicence).slice(-1).map((evidence) => evidence.attributes)[0];
+    drivingLicenceAttributes = allIdentityEvidence
+      .filter(filterDrivingLicence)
+      .slice(-1)
+      .map((evidence) => evidence.attributes)[0];
   }
 
   function filterDrivingLicence(allIdentityEvidence) {
     return allIdentityEvidence.type == EvidenceType.DRIVING_LICENCE;
   }
 
-  const number = drivingLicenceAttributes ? drivingLicenceAttributes.licenceNumber : null;
-  const surname = drivingLicenceAttributes ? drivingLicenceAttributes.surname : null;
-  const givenNames = drivingLicenceAttributes ? drivingLicenceAttributes.forenames : null;
-  const dob = drivingLicenceAttributes ? drivingLicenceAttributes.dateOfBirth : null;
-  const issued = drivingLicenceAttributes ? drivingLicenceAttributes.issued : null;
-  const expiry = drivingLicenceAttributes ? drivingLicenceAttributes.expiryDate : null;
+  const number = drivingLicenceAttributes
+    ? drivingLicenceAttributes.licenceNumber
+    : null;
+  const surname = drivingLicenceAttributes
+    ? drivingLicenceAttributes.surname
+    : null;
+  const givenNames = drivingLicenceAttributes
+    ? drivingLicenceAttributes.forenames
+    : null;
+  const dob = drivingLicenceAttributes
+    ? drivingLicenceAttributes.dateOfBirth
+    : null;
+  const issued = drivingLicenceAttributes
+    ? drivingLicenceAttributes.issued
+    : null;
+  const expiry = drivingLicenceAttributes
+    ? drivingLicenceAttributes.expiryDate
+    : null;
 
   const values = {
     number,
@@ -208,7 +223,8 @@ const postDrivingLicence = async (
     const decoded = jwt.decode(output);
     identityEvidence.jws = output;
     identityEvidence.atpResponse = decoded;
-    req.session.sessionData.identityEvidence = req.session.sessionData.identityEvidence || [];
+    req.session.sessionData.identityEvidence =
+      req.session.sessionData.identityEvidence || [];
     req.session.sessionData.identityEvidence.push(identityEvidence);
 
     addToFill(req, "dob", {

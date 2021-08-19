@@ -123,7 +123,10 @@ const getPassport = (req: Request, res: Response): void => {
   let passportAttributes;
   const allIdentityEvidence = req.session.sessionData.identityEvidence;
   if (allIdentityEvidence) {
-    passportAttributes = allIdentityEvidence.filter(filterPassport).slice(-1).map((evidence) => evidence.attributes)[0];
+    passportAttributes = allIdentityEvidence
+      .filter(filterPassport)
+      .slice(-1)
+      .map((evidence) => evidence.attributes)[0];
   }
 
   function filterPassport(allIdentityEvidence) {
@@ -198,7 +201,8 @@ const postPassport = async (
     const decoded = jwt.decode(output);
     identityEvidence.jws = output;
     identityEvidence.atpResponse = decoded;
-    req.session.sessionData.identityEvidence = req.session.sessionData.identityEvidence || [];
+    req.session.sessionData.identityEvidence =
+      req.session.sessionData.identityEvidence || [];
     req.session.sessionData.identityEvidence.push(identityEvidence);
 
     addToFill(req, "dob", {
