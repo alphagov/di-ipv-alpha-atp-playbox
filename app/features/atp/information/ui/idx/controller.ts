@@ -109,7 +109,7 @@ const getInfo = (req: Request, res: Response): void => {
   let informationAttributes;
   if (allIdentityEvidence) {
     informationAttributes = allIdentityEvidence
-      .filter((evidence) => evidence.type == EvidenceType.BASIC_INFO)
+      .filter((evidence) => evidence.type == EvidenceType.ATP_GENERIC_DATA)
       .slice(-1)
       .map((evidence) => evidence.attributes)[0];
   }
@@ -172,7 +172,7 @@ const postInfo = async (
     };
 
     const identityEvidence: IdentityEvidence = {
-      type: EvidenceType.BASIC_INFO,
+      type: EvidenceType.ATP_GENERIC_DATA,
       strength: 0,
       validity: 0,
       attributes: attributes,
@@ -214,7 +214,7 @@ const postInfo = async (
     });
 
     const allJson = req.session.sessionData.identityEvidence
-      .filter((evidence) => evidence.type == EvidenceType.BASIC_INFO)
+      .filter((evidence) => evidence.type == EvidenceType.ATP_GENERIC_DATA)
       .slice(-1)
       .map((evidence) => evidence.attributes)[0];
 
