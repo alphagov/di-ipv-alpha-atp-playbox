@@ -21,15 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import "./atp/activity-history/ui/idx";
 import "./atp/attributes/ui/idx";
 import "./atp/bank-account/ui/page1";
 import "./atp/bank-account/ui/page2";
 import "./atp/bank-account/ui/page3";
 import "./atp/bank-account/ui/page4";
 import "./atp/driving-licence/ui/idx";
+import "./atp/fraud-check/ui/idx";
 import "./atp/identity-evidence/ui/idx";
+import "./atp/identity-verification/ui/idx";
 import "./atp/information/ui/idx";
 import "./atp/passport/ui/idx";
-import "./atp/identity-verification/ui/idx";
-import "./atp/activity-history/ui/idx";
-import "./atp/fraud-check/ui/idx";
