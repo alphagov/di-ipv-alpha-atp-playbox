@@ -7,6 +7,7 @@ const template = "atp/activity-history/ui/idx/view.njk";
 const logger: Logger = new Logger();
 
 interface ActivityHistory {
+  activityHistoryScore?: any;
   activityHistoryData: any;
 }
 
@@ -31,7 +32,12 @@ const postActivityHistory = async (
     req.body["activityHistoryData"]
   );
 
+  const activityHistoryScore = getJsonFromString(
+    req.body["activityHistoryScore"]
+  );
+
   const activityHistory: ActivityHistory = {
+    activityHistoryScore: activityHistoryScore,
     activityHistoryData: activityHistoryData,
   };
 
