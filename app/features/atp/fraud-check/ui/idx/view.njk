@@ -18,6 +18,16 @@
             <p>Please enter the following information</p>
             <form action="/fraud-check" method="post" class="form" novalidate>
                 <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+                {{ govukInput({
+                    label: {
+                        text: "Fraud Score",
+                        classes: "govuk-label--l"
+                    },
+                    id: "fraudCheckScore",
+                    name: "fraudCheckScore",
+                    value: number,
+                    autocomplete: "off"
+                }) }}
                 {{ govukTextarea({
                     name: "fraudCheckData",
                     id: "fraudCheckData",

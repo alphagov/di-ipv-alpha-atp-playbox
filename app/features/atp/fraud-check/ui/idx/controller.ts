@@ -7,6 +7,7 @@ const template = "atp/fraud-check/ui/idx/view.njk";
 const logger: Logger = new Logger();
 
 interface FraudCheck {
+  fraudCheckScore?: any;
   fraudCheckData: any;
 }
 
@@ -24,10 +25,12 @@ const getJsonFromString = (data: string): Record<string, any> => {
 };
 
 const postFraudCheck = async (req: Request, res: Response): Promise<void> => {
-  const fraudCheckData = getJsonFromString(req.body["activityHistoryData"]);
+  const fraudCheckData = getJsonFromString(req.body["fraudCheckData"]);
+  const fraudCheckScore = getJsonFromString(req.body["fraudCheckScore"]);
 
   const fraudCheck: FraudCheck = {
     fraudCheckData: fraudCheckData,
+    fraudCheckScore: fraudCheckScore
   };
 
   req.session.sessionData.fraudChecks =
