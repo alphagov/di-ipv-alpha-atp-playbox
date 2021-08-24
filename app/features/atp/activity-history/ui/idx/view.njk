@@ -18,6 +18,16 @@
             <p>Please enter the following information</p>
             <form action="/activity-history" method="post" class="form" novalidate>
                 <input type="hidden" name="_csrf" value="{{csrfToken}}"/>
+                {{ govukInput({
+                    label: {
+                        text: "Activity History Score",
+                        classes: "govuk-label--l",
+                    },
+                    id: "activityHistoryScore",
+                    name: "activityHistoryScore",
+                    value: number,
+                    autocomplete: "off",
+                }) }}
                 {{ govukTextarea({
                     name: "activityHistoryData",
                     id: "activityHistoryData",
