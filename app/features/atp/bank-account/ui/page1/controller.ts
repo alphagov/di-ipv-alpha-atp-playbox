@@ -44,10 +44,10 @@ const bankAccountValidationMiddleware = [
 
 // This is the root route and will redirect back to the appropriate gov.uk start page
 const getBankAccountLastOpened = (req: Request, res: Response): void => {
-  if (!req.session.userData.bankAccount) {
-    req.session.userData.bankAccount = {};
-  }
-  const { lastOpened } = req.session.userData.bankAccount;
+  req.session.bankAccount = req.session.bankAccount || {}
+
+  const { lastOpened } = req.session.bankAccount;
+
   const values = { lastOpened: lastOpened };
   return res.render(template, { language: req.i18n.language, ...values });
 };
@@ -60,16 +60,16 @@ const postBankAccountLastOpened = async (
   // call something
   try {
     if (req.body["lastOpened"] == "never") {
-      req.session.userData.bankAccount = {
+      req.session.bankAccount = {
         lastOpened: req.body["lastOpened"],
       };
-      const allJson = req.session.userData.bankAccount;
+      const allJson = req.session.bankAccount;
       delete allJson["validation"];
       await postBankAccountJSON(allJson);
       res.redirect("/ipv/next?source=bank-account");
     } else {
-      req.session.userData.bankAccount = {
-        ...req.session.userData.bankAccount,
+      req.session.bankAccount = {
+        ...req.session.bankAccount,
         lastOpened: req.body["lastOpened"],
       };
       res.redirect(pathName.public.CURRENT_ACCOUNT_CVV);

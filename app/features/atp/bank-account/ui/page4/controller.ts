@@ -45,10 +45,9 @@ const bankAccountValidationMiddleware = [
 
 // This is the root route and will redirect back to the appropriate gov.uk start page
 const getBankAccountPostcode = (req: Request, res: Response): void => {
-  if (!req.session.userData.bankAccount) {
-    req.session.userData.bankAccount = {};
-  }
-  const { postcode } = req.session.userData.bankAccount;
+  req.session.bankAccount = req.session.bankAccount || {};
+  
+  const { postcode } = req.session.bankAccount;
   const values = { postcode: postcode };
   const monthAndYear = moment().subtract(5, "years").format("MMMM YYYY");
   return res.render(template, {
@@ -65,12 +64,12 @@ const postBankAccountPostcode = async (
 ): Promise<void> => {
   // call something
   try {
-    req.session.userData.bankAccount = {
-      ...req.session.userData.bankAccount,
+    req.session.bankAccount = {
+      ...req.session.bankAccount,
       postcode: req.body["postcode"],
     };
 
-    const allJson = req.session.userData.bankAccount;
+    const allJson = req.session.bankAccount;
     delete allJson["validation"];
     await postBankAccountJSON(allJson);
     res.redirect("/ipv/next?source=bank-account");
