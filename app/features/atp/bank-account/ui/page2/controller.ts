@@ -56,10 +56,10 @@ const bankAccountValidationMiddleware = [
 
 // This is the root route and will redirect back to the appropriate gov.uk start page
 const getBankAccountCVV = (req: Request, res: Response): void => {
-  if (!req.session.userData.bankAccount) {
-    req.session.userData.bankAccount = {};
-  }
-  const { cvv } = req.session.userData.bankAccount;
+  req.session.bankAccount = req.session.bankAccount || {};
+  
+  
+  const { cvv } = req.session.bankAccount;
   const values = { cvv: cvv };
   return res.render(template, { language: req.i18n.language, ...values });
 };
@@ -71,8 +71,8 @@ const postBankAccountCVV = async (
 ): Promise<void> => {
   // call something
   try {
-    req.session.userData.bankAccount = {
-      ...req.session.userData.bankAccount,
+    req.session.bankAccount = {
+      ...req.session.bankAccount,
       cvv: req.body["cvv"],
     };
     res.redirect(pathName.public.CURRENT_ACCOUNT_MORTGAGE);
